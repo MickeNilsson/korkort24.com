@@ -1,0 +1,12 @@
+[
+    {
+        "id": 1,
+        "name": "Grundläggande teori",
+        "text": "Text för grundläggande teori."
+    },
+    {
+        "id": 2,
+        "name": "A-körkort",
+        "text": "Text för A-körkort."
+    }
+]

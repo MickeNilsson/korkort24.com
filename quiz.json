@@ -1,0 +1,38 @@
+{
+    "Section 1": {
+        "Question 1": {
+            "Answer 1": true,
+            "Answer 2": false,
+            "Answer 3": false
+        },
+        "Question 2": {
+            "Answer 1": true,
+            "Answer 2": false,
+            "Answer 3": false
+        }
+    },
+    "Section 2": {
+        "Question 1": {
+            "Answer 1": true,
+            "Answer 2": false,
+            "Answer 3": false
+        },
+        "Question 2": {
+            "Answer 1": true,
+            "Answer 2": false,
+            "Answer 3": false
+        }
+    },
+    "Section 3": {
+        "Question 1": {
+            "Answer 1": true,
+            "Answer 2": false,
+            "Answer 3": false
+        },
+        "Question 2": {
+            "Answer 1": true,
+            "Answer 2": false,
+            "Answer 3": false
+        }
+    }
+}

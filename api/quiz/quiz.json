@@ -1,0 +1,1223 @@
+{
+    "B-körkort": {
+        "Vad är ytinlärning?": {
+            "När kunskaperna sitter längre tid.": false,
+            "Du lär dig bara inför provet och har ingen förståelse för vad du lärt dig.": true,
+            "Man har förståelse för vad man lärt sig.": false,
+            "id": "ef9ac3b775"
+        },
+        "Vad är djupinlärning?": {
+            "Du lär dig bara inför provet och har ingen förståelse för vad du lärt dig.": false,
+            "Du söker förståelsen och sammanhang.": true,
+            "Något som utvecklas när man fyllt 18 år.": false,
+            "Man lär sig om mönsterdjupet i olika sorters däck.": false,
+            "id": "ef66312739"
+        },
+        "Hur gammal måste man vara för att få övningsköra med så kallad lättlastbil samt lätt släpvagn?": {
+            "18": false,
+            "15,5": false,
+            "17,5": true,
+            "16,5": false,
+            "id": "2fb5117afa"
+        },
+        "Vem utfärdar körkortstillstånd?": {
+            "Transportstyrelsen.": true,
+            "Vägverket.": false,
+            "Trafikverket.": false,
+            "Polismyndigheterna.": false,
+            "id": "fb36312e4f"
+        },
+        "Vad innebär ett defensivt körsätt?": {
+            "Det handlar om  att försvara sin rätt att hålla en angiven hastighet.": false,
+            "Det handlar om att signalera tydligt innan man ska svänga.": false,
+            "Det handlar om att köra på ett tydligt och omsorgsfullt sätt och vara medveten om de risker som finns.": true,
+            "Det handlar om att ha bromsberedskap vid övergångsställen.": false,
+            "id": "24abf67ca8"
+        },
+        "Vad betyder hastighetsanpassning?": {
+            " Du ska anpassa körningen och hastigheten  efter hur många passagerare du har.": false,
+            "Du ska sträva efter att alltid hålla högsta tillåtna hastighet för att inte hindra trafiken.": false,
+            "Du ska vara medveten om riskerna med att köra på halt väglag.": false,
+            "Du ska anpassa hastigheten efter vad trafiksäkerheten i situationen kräver.*": true,
+            "id": "4efce4a1fe"
+        },
+        "Vad ska du tänka på för att minska olycksrisken när du passerar ett vägarbete?": {
+            " Passera vägarbetet så snabbt som möjligt.": false,
+            "Hålla tillräckligt låg hastighet.": true,
+            "Signalera till vägarbetarna så att de vet att du sett dem.": false,
+            "Hålla samma hastighet som om det inte pågick ett vägarbete.": false,
+            "id": "e5291c9463"
+        },
+        "Hur kan du förbereda bakomvarande trafikanter i tät trafik och vid landsvägskörning på att du snart ska bromsa?": {
+            " Genom att bromsa försiktigt en gång omedelbart innan du bromsar på allvar": true,
+            "Genom att blinka med helljuset.": false,
+            "Genom att använda ljudsignalen.": false,
+            "Genom att köra väldigt långsamt.": false,
+            "id": "361076e081"
+        },
+        "Varför är det viktigt att lära sig tolka andra trafikanters avsikter genom ögonkontakt?": {
+            "För att lättare kunna avgöra om det är lämpligt att öka hasigheten i tätbebyggda områden.": false,
+            "För att lättare förstå vad andra trafikanter tänker göra.": true,
+            "För att kunna framföra fordonet på ett säkert sätt i stadstrafik.": false,
+            "För att lättare kunna hålla en trevlig stämning i trafiken.": false,
+            "id": "8e1f23b42d"
+        },
+        "Vad gäller vid möten på smala gator där exempelvis parkerade bilar utgör hinder?": {
+            "Yrkesförare så som taxibilar och hantverkare med skyltade firmabilar har företräde.": false,
+            "Tung trafik och lätta lastbilar har företräde, övriga ska vänta.": false,
+            "Den som har eventuella hinder på sin väghalva ska vänta.": true,
+            "Samma regler gäller som vid möten på gator med normalbredd.": false,
+            "id": "c942c91fa2"
+        },
+        " Vilket av följande påståenden är falskt?": {
+            "Högerregeln gäller inte vid infart och körning på huvudled.": false,
+            "Högerregeln gäller inte i cirkulationsplats.": false,
+            "Högerregeln gäller inte på livligt trafikerade större gator i stadsmiljö.": true,
+            "Högerregeln gäller inte där accelerationsfält förekommer.": false,
+            "id": "8916dc4371"
+        },
+        "Varför  gör barns syn att de har svårare att se i trafiken?": {
+            "Barn är mer närsynta än vuxna.": false,
+            "Barn är mer långsynta än vuxna.": false,
+            " Barn har svårare att uppfatta konturer.": false,
+            "Barns avståndsbedömning är inte fullt utvecklad.*": true,
+            "id": "8c432e1740"
+        },
+        "Vilket av följande påståenden om barn och trafik är sant?": {
+            "Barns hörsel är outvecklad och gör att de har svårare att höra från vilket håll ljud (exempelvis bilars ljud) kommer.": true,
+            "Det går bra att lära små barn om risker i trafiken och på så sätt få dem att kunna vistas och agera i trafiken på ett säkert sätt.": false,
+            "Barn är små till växten men deras färgglada kläder gör att de är lättare att upptäcka i trafiken än vuxna.": false,
+            "Om bilföraren får ögonkontakt med lekande barn i trafiken så är det en god garanti för att barnet inte springer eller cyklar ut framför bilen.": false,
+            "id": "5eaf749883"
+        },
+        "Vilken av följande grupper är bilisterna ålagda att visa extra särskild hänsyn?": {
+            "Äldre personer och personer med synliga eller osynliga funktionsnedsättningar.": true,
+            "Fotgängare som talar i mobiltelefonen.": false,
+            " Cyklister utan hjälm som skjutsar en passagerare på pakethållaren.": false,
+            "Joggare.": false,
+            "id": "bd09e79dd2"
+        },
+        "Vad kallas en väg där bilar som kommer både från höger och vänster har väjningsplikt?": {
+            "Landsväg.": false,
+            "Huvudled.": true,
+            "Enkelriktad väg.": false,
+            "Flerfilig väg.": false,
+            "id": "d53e9e3349"
+        },
+        "Vad innebär stopplikt?": {
+            "Att du måste stanna och iaktta väjningsplikt innan du kör vidare.": true,
+            "Att du måste stanna innan du kör vidare såvida du inte är ensam på vägen.": false,
+            "Att du måste stanna för fotgängare.": false,
+            "Att du måste iaktta extra försiktighet vid körning i hög hastighet.": false,
+            "id": "8178e75021"
+        },
+        "Hur vet man att man närmar sig en korsning med en huvudled?": {
+            "De som närmar sig en korsning med en huvudled märker det genom att huvudleden är bredare och mer trafikerad än sidogatorna": false,
+            "Man vet det genom att tänka på regeln att huvudleder alltid är större än sidogator.": false,
+            "De som närmar sig korsningen från sidogatorna varnas genom ett vägmärke om väjningsplikten.": true,
+            "De som närmar sig korsningen varnas genom en skylt där det står huvudled.": false,
+            "id": "9def20ac46"
+        },
+        "Det förekommer korsningar där alla som är på väg in i korsningen har stopplikt. Vad kallas detta?": {
+            "Flervägsstopp.": true,
+            "Cirkulationsplats.": false,
+            "Huvudledskorsning.": false,
+            "Huvudledsstopp.": false,
+            "id": "c42c961887"
+        },
+        "Vad gäller om flera fordon kommer in samtidigt till en korsning med flervägsväjning?": {
+            "Att iaktta högerregeln samt signalera tydligt med blinkers.": false,
+            " Att ta det extra försiktigt och försöka lösa situationen genom att visa ömsesidig hänsyn.": true,
+            "Att köra i jämn hastighet för att inte stoppa upp trafiken.": false,
+            "Att vänta tills mötande trafik passerat korsningen.": false,
+            "id": "a4ef6a99ab"
+        },
+        "Vad ska man tänka på när man svänger vänster i en korsning?": {
+            "Att du har företräde.": false,
+            "Att väja för mötande trafik samt vara beredd att väja för andra fordon som är skymda samt vara extra uppmärksam om man har en mötande som också ska svänga vänster.": true,
+            "Att ha uppsikt åt alla håll men inte väja för mötande trafik.": false,
+            "Att ta det lugnt och inte stressa.": false,
+            "id": "5361395203"
+        },
+        "När har en buss företräde?": {
+            "Vid möten på smala vägar i tätbebyggda områden.": false,
+            "Vid körfältsbyten på gator med hastighetsgräns 50 km\/ h eller lägre.": false,
+            "I stadstrafiken.": false,
+            "När bussen startar från en hållplats på gator med hastighetsgräns 50 km\/ h eller lägre.": true,
+            "id": "09193415d9"
+        },
+        "Vad innebär blockeringsregeln?": {
+            "Att anpassa motorvägskörning efter trafikens rytm för att undvika trafikstockningar.": false,
+            "Att anpassa sitt körsätt in i korsningar för att inte tvingas stanna på ett ställe där du blockerar körfältet för den mötande trafiken.": true,
+            "Att inte parkera så man blockerar utfarter från exempelvis parkeringshus.": false,
+            "Att inte blockera körfältet för utryckningsfordon i tjänst.": false,
+            "id": "a125b7ce9e"
+        },
+        "Vad innebär det att lämna fri väg åt utryckningsfordon med roterade blått ljus och\/eller påslagna sirener?": {
+            "Att öka den egna hastigheten för att inte blockera vägen för utryckningsfordonet.": false,
+            "Att sakta ner och köra åt sidan och\/ eller stanna för att underlätta framkomligheten för utryckningsfordonet.": true,
+            "Att sätta på varningsblinkers och\/ eller köra över i mötande körfält om det behövs för att utryckningsfordonet ska komma förbi.": false,
+            "Att signalera med ljudsignal för att uppmärksamma övriga trafikanter om att det kommer ett utryckningsfordon.": false,
+            "id": "5e66986ff6"
+        },
+        "Vad ska du göra om du ser ett gult roterande ljus som indikerar att det pågår vägarbete?": {
+            "Endast följa gällande hastighetsbegränsningar och köra förbi vägarbetet så fort som möjligt för att undvika att orsaka trafikstockningar.": false,
+            "Alltid sänka farten och visa hänsyn mot vägarbetarna.": true,
+            "Sänka farten om du bedömer att det behövs.": false,
+            "Bibehålla normal hastighet beroende på väglag och årstid, det händer sällan olyckor vid vägarbeten.": false,
+            "id": "420f2fb054"
+        },
+        "Vilket av följande exempel räknas inte som en procession som du som bilist ej ska bryta?": {
+            "Ett begravningsfölje.": false,
+            "En grupp med förskolebarn och förskollärare.": false,
+            "En militärkolon.": false,
+            "En flock renar i fjällen.": true,
+            "id": "efbaee6500"
+        },
+        "Varför ska du placera fordonet nära vägens mitt när du ska svänga till vänster? Ett av följande alternativ är falskt -vilket?": {
+            "Det underlättar för andra trafikanter att se dig.": false,
+            "Det underlättar för dig att se andra trafikanter.": false,
+            ". Det kallas blockeringsregeln och är till för att du inte ska blockera körfältet.": true,
+            "Andra trafikanter bakom dig kan köra om dig på höger sida.": false,
+            "id": "841fb4087b"
+        },
+        " Ett av följande påståenden är falskt -vilket?": {
+            "När du kör ut ur en cirkulationsplats så gäller alltid högerregeln.": true,
+            "När du kör ut ur en cirkulationsplats ska du använda höger blinkers för att visa din avsikt.": false,
+            "När du kör ut ur en cirkulationsplats ska du ha god uppsikt bakåt, kontrollera döda vinkeln och alltid ge tecken innan körfältsbyte.": false,
+            "När du kör ut ur en cirkulationsplats ska du köra med låg fart och vara uppmärksam på och släppa över eventuella cyklister och mopedister vid cykelöverfarter": false,
+            "id": "9532ba8d86"
+        },
+        "Vilket av följande alternativ är falskt?": {
+            " Över en tredjedel av alla gående som skadas i trafiken befinner sig på ett övergångsställe.": false,
+            "Ett sätt att undvika missförstånd vid övergångsställen är att vinka fram de gående.": true,
+            " När du närmar dig ett obevakat övergångsställe har du väjningsplikt mot gående.": false,
+            "Ett sätt att minska risken för missförstånd vid övergångsställen är att söka ögonkontakt med de gående.": false,
+            "id": "1ce0f26931"
+        },
+        "Vilket av följande påståenden stämmer inte?": {
+            "På en körbana med fyra körfält eller fler får du inte köra på vänster sida av mitten på körbanan.": false,
+            "På en körbana med tre körfält får du inte köra i körfältet längst till vänster.": false,
+            "På en gata med markerade körfält och där högsta tillåtna hastighet är 70 km\/ h så ska du välja det körfält som passar din destination bäst.": false,
+            "Om körbanan är enkelriktad så gäller precis samma trafikregler som på andra körbanor.": true,
+            "id": "7f0719f061"
+        },
+        "Vilken av följande får inte gå\/köra på cykelbanan?": {
+            "Moped klass I": true,
+            "Moped klass II": false,
+            "El- moped för funktionshindrade": false,
+            "Gående": false,
+            "id": "ce98cabc0f"
+        },
+        " Vad gäller när en cyklist eller mopedförare åker i körbanan på de platser där det saknas cykelbana och ska svänga vänster?": {
+            "De kan välja mellan att hålla sig längs med mittlinjen i svängen eller hålla sig intill körbanans högra kant i svängen.": true,
+            " De måste hålla sig längs med mittlinjen i svängen.": false,
+            "De måste hålla sig intill körbanans högra kant i svängen.": false,
+            "Det är inte tillåtet för cyklister och mopedister att köra på vägen.": false,
+            "id": "debd7cc90e"
+        },
+        "Vad får en cyklist inte göra?": {
+            "Köra om andra fordon på höger sida.": false,
+            "Använda ett körfält avsett för enbart högersväng i en korsning för färd rakt fram eller till vänster.": true,
+            "Väja för övrig trafik på körbanan.": false,
+            "Använda ett körfält avsett för enbart högersväng i en korsning för färd till eller från ett kollektivkörfält i anslutning till korsningen.": false,
+            "id": "51832e92bb"
+        },
+        "Hur lång är stoppsträckan om du kör i 110 km\/ h på torr barmark?": {
+            "110 m.": false,
+            "90 m.": true,
+            "70 m.": false,
+            "65 m.": false,
+            "id": "e99cb5628d"
+        },
+        "Vilket av följande påståenden är falskt?": {
+            "Det är förbjudet att köra om på vänster sida om framförvarande ger tecken för vänstersväng.": false,
+            "Det är förbjudet att köra om före eller på en obevakad cykelöverfart på gator med ett körfält i vardera riktningen.": false,
+            " Det är förbjudet att köra om andra fyrhjuliga fordon före en järnvägskorsning som saknar trafikljus av samma sort som används i vägkorsning.": false,
+            "Det är förbjudet att köra om tvåhjuliga fordon före en järnvägskorsning som saknar trafikljus av samma sort som används i vägkorsning.": true,
+            "id": "7fb80a2990"
+        },
+        " En polisbil bakom dig med blinkande blått och rött ljus betyder att...?": {
+            " Polisen vill göra dig uppmärksam på att du av misstag har helljus på.": false,
+            "Du ska omedelbart öka farten.": false,
+            "Polisen vill passera dig för att den är på uppdrag och har bråttom att komma fram till en brottsplats.": false,
+            " Du ska stanna vid kanten.": true,
+            "id": "c2dce48987"
+        },
+        "Vad gäller inte om trafikljusen är ur funktion?": {
+            "Kör du på huvudled genom korsningen ska korsande trafik lämna dig företräde.": false,
+            "Är vägmärket väjningsplikt uppsatt ska du väja för korsande trafik.": false,
+            "Om det saknas vägmärken i korsningen så gäller högerregeln.": false,
+            "Är vägmärket väjningsplikt uppsatt ska du ignorera det.": true,
+            "id": "0bbef24e6e"
+        },
+        "Vilken rangordning gäller om du möter flera anvisningar samtidigt?": {
+            "Polismans tecken, trafiksignal, vägmärke, regler.": true,
+            "Poliamans tecken, regler, trafiksignal, vägmärke.": false,
+            "Regler, trafiksignal, vägmärke, polismans tecken.": false,
+            "Vägmärke, polismans tecken, regler, trafiksignal.": false,
+            "id": "31f4ee5b7c"
+        },
+        "Vilket fordon får ej färdas på ett kollektivkörfält?": {
+            "Fordon i linjetrafik.": false,
+            "Cykel.": false,
+            "Moped klass II.": false,
+            "Personbil.": true,
+            "id": "21f6c55bd6"
+        },
+        "Vad gäller vid vägmärket Stopp Signal?": {
+            "Stanna vid stopplinjen om det är rött ljust och du ska svänga till vänster.": false,
+            "Stanna vid stopplinjen om det är rött ljus och du ska rakt fram.": true,
+            "Stanna vid stopplinjen om det är rött ljust och du ska svänga till höger.": false,
+            "Stanna vid stopplinjen enbart om trafikljusen är ur funktion.": false,
+            "id": "d0cbdf50c2"
+        },
+        " Vilket av följande påståenden stämmer inte?": {
+            "Det är förbjudet att köra om före korsning där högerregeln gäller.": false,
+            "Det är förbjudet att köra om och passera på höger sida om ett fordon, vars förare tydligt visar att han eller hon tänker svänga till vänster.": true,
+            "Det är förbjudet att köra om när du inte kan komma tillbaka in på höger sida, till exempel i bilköer.": false,
+            "Det är förbjudet att köra om före eller på ett obevakat övergångsställe på gator med ett körfält i vardera riktningen.": false,
+            "id": "744cc02779"
+        },
+        "Vad är det bästa du kan göra om du av någon anledning råkat välja fel körfält?": {
+            "Signalera med blinkers och köra över i rätt körfält omgående.": false,
+            "Fortsätta för att sedan vända på någon lämplig plats.": true,
+            "Sakta in och invänta rätt tillfälle att köra över i rätt körfält": false,
+            "Det är bara att svänga över i rätt körfält igen.": false,
+            "id": "80bf5dc7d5"
+        },
+        "Av vilken anledning byggs kollektivkörfält?": {
+            "För att förbättra stadsluften genom att underlätta eco driving i stadsmiljöer.": false,
+            "För att minska risken för olyckor.": false,
+            "För att minska risken för trafikstockningar.": false,
+            "För att stadsbussarna ska kunna hålla sina tidtabeller och inte hindras av trafikstockningar.": true,
+            "id": "2c1e345732"
+        },
+        " Vad innebär reversibelt körfält?": {
+            "Körfält reserverat för taxi och utryckningsfordon.": false,
+            "Körfält med plats för tre fordon i bredd.": false,
+            " Vändbart körfält vars för tillfället tillåtna körriktning styrs av trafiksignaler.": true,
+            "Körfält med plats för att göra så kallade u-svängar.": false,
+            "id": "3edf50b4ef"
+        },
+        "Vilket av alternativen ska man normalt inte göra vid körfältsbyten?": {
+            "Avvakta ett kort ögonblick efter att du gett tecken om att du tänker byta körfält för att se hur dina medtrafikanter reagerar, innan du byter körfält": false,
+            "Sänk farten innan ditt körfältsbyte.": true,
+            "Öka eventuellt farten något för att få större avstånd till de bakomvarande.": false,
+            "Planera ditt körfältsbyte i god tid och kontrollera över axeln i döda vinkeln.": false,
+            "id": "6726dfe624"
+        },
+        "Vad ska du göra om någon medtrafikant med tecken visar att hon eller han vill byta körfält?": {
+            "Ignorera alltid sådana tecken, du bör hålla fokus på din egen bilkörning.": false,
+            "Blinka kort med helljusen för att signalera att du uppmärksammat att din medtrafikant vill byta fil.": false,
+            "Hjälp till genom att öka avståndet till framförvarande fordon.": true,
+            " Signalera alltid med ljudsignalen för att markera att du inte accepterar att någon försöker störa din körning genom att ge onödiga tecken.": false,
+            "id": "8c93ae616a"
+        },
+        " När är bästa tillfället att göra ett körfältsbyte?": {
+            "Omedelbart innan en korsning.": false,
+            "Omedelbart efter en korsning.": true,
+            "Det bästa tillfället varierar beroende på hur livligt trafikerad vägen är.": false,
+            " Varje tillfälle är ett bra tillfälle, i trafiken kan man inte hålla på att vänta och tveka, det kan leda till missförstånd och i värsta fall olyckor.": false,
+            "id": "8d26d75159"
+        },
+        "Vad innebär blixtlåsprincipen?": {
+            "Att det ofta bildas trafikstockningar i rusningstid och trafiken stoppas upp som när man drar igen ett blixtlås.": false,
+            "Att man ska följa hastighetsbegränsningarna på motorvägar och landsvägar och inte lockas att överskrida hastighetsbegränsningarna, det vill säga att man ska låsa sin impuls att köra snabbt som en blixt och istället tillämpar defensiv körning.": false,
+            "Att man inte ska låta sin körning påverkas och stressas av om medtrafikanter signalerar med ljudsignalen, gör gester och arga miner eller varvar motorn i trafikstockningar.": false,
+            "Så kallad sammanvävning, det vill säga att varannan bil kör i situationer där mycket trafik ska samsas om litet utrymme, exempelvis där två körfält övergår till ett körfält eller där två körfält löper samman.": true,
+            "id": "9a88b93169"
+        },
+        "När är omkörning på höger sida tillåtet?": {
+            "I stadstrafik.": false,
+            "På landsvägar.": false,
+            "På gator där hastigheten är max 70 km\/h och det är minst två markerade körfält i vardera riktningen.": true,
+            "På gator där hastigheten är max 50 km\/h och det är minst två markerade körfält i vardera riktningen.": false,
+            "id": "0b493af19d"
+        },
+        "På gator med flera körfält i vardera riktningen är det förbjudet att köra om före eller på ett obevakat övergångsställe eller cykelöverfart. Dock finns det vissa situationer då du får passera med så låg hastighet att du hinner stanna. Vilket av följande exempel beskriver inte sådana situationer?": {
+            "När du har full uppsikt över det obevakade övergångsstället\/ cykelöverfarten och ser att ingen gående eller cyklist är på väg att korsa vägbanan.": true,
+            "När det är tät köbildning i alla körfält.": false,
+            "När körfälten har körfältsvägvisare för olika färdmål.": false,
+            "När övergångsstället är i anslutning till en korsning.": false,
+            "id": "c89ba98bbb"
+        },
+        "Vilket av exemplen som följer stämmer?": {
+            "Ett fordon som används i samband med vägarbete får du endast passera på gator som har flera markerade körfält i samma riktning.": false,
+            "Ett fordon som används i samband med vägarbete måste du alltid passera på vänster sida.": false,
+            "Ett fordon som används i samband med vägarbete får du endast passera på den sida som är mest lämplig om du blinkar innan med helljusen för att signalera att du tänker passera.": false,
+            "Ett fordon som används i samband med vägarbete får du passera på den sida som är mest lämplig.": true,
+            "id": "b4b2638a49"
+        },
+        "Vad är överinlärning?": {
+            "Man kommer ihåg hur man kör bil, även efter många års uppehåll.": true,
+            "Man kommer inte ihåg hur man kör bil efter en längre tids uppehåll.": false,
+            "Man går igenom teoriboken innan man börjar köra.": false,
+            "Man övar på olika moment i en viss ordning.": false,
+            "id": "0b4df9e63a"
+        },
+        "Vad krävs för att du ska få övningsköra privat?": {
+            "Din handledare måste vara fyra år äldre än du.": false,
+            "Din handledare måste vara godkänd.": true,
+            "Handledaren måste sitta i baksätet medan du kör.": false,
+            "Handledaren måste äga minst ett eget fordon.": false,
+            "id": "c8954d41e3"
+        },
+        "Måste du med din handledare genomgå en handledarutbildning?": {
+            "Nej.": false,
+            "Ja.": true,
+            "Bara om din handledare är under 24 år gammal.": false,
+            "Bara om handledaren inte har haft körkortsbehörighet i mer än fem år.": false,
+            "id": "56da9e8932"
+        },
+        "Måste man ha körkortstillstånd för att få övningsköra?": {
+            "Inte om man övningskör i tätbebyggda områden.": false,
+            "Man behöver inte ha körkortstillstånd om man övningskör med en trafikskola.": false,
+            "Man måste ha körkortstillstånd för att få övningsköra.": true,
+            "Man behöver inte ha körtkortstillstånd om man har två handledare i bilen.": false,
+            "id": "69f15ee92a"
+        },
+        "Gäller trafikreglerna även i terrängen (dit räknas all mark som inte är väg)?": {
+            "Nej, trafikregler gäller endast på vägar.": false,
+            "Ja, nästan alla trafikregler gäller överallt.": true,
+            "Nej, trafikregler gäller endast på vägar i tätbebyggda områden.": false,
+            "Trafikreglerna gäller endast på vägar som ägs och underhålls av staten.": false,
+            "id": "257441c1b9"
+        },
+        "När får du använda ljudsignalen?": {
+            "Exempelvis om du vill markera att du blir irriterad på andra trafikanter.": false,
+            "För att vara social i trafiken, exempelvis för att heja på någon.": false,
+            "För att varna andra när du tror att de inte upptäckt dig.": true,
+            "Om du upplever att andra trafikanter håller för låg hastighet i tätbebyggda områden.": false,
+            "id": "616778a5dc"
+        },
+        "Vad ska man tänka på i en korsning med flervägsstopp?": {
+            "Att den som stannat först bör få köra sist, att ha ögonkontakt med de andra förarna för att undvika missförstånd och visa hänsyn.": false,
+            "Att den som stannat sist bör få köra först , att ha ögonkontakt med de andra förarna för att undvika missförstånd och visa hänsyn.": false,
+            "Att den som stannat först bör få köra först, att ha ögonkontakt med de andra förarna för att undvika missförstånd och visa hänsyn.": true,
+            "Att den som stannat först bör respektera högerregeln, att ha ögonkontakt med de andra förarna för att undvika missförstånd och visa hänsyn.": false,
+            "id": "a8b0d8285e"
+        },
+        "Vad gäller när man är på väg in i en cirkulationsplats?": {
+            "Kör in lugnt och fint utan att blockera trafiken.": false,
+            "Alla fordon på väg in i cirkulationsplatsen har väjningsplikt mot fordon inne i cirkulationsplatsen.": true,
+            "Alla fordon inne i cirkulationsplatsen har väjningsplikt mot fordon på väg in i cirkulationsplatsen.": false,
+            "Högerregeln gäller.": false,
+            "id": "f200b021c8"
+        },
+        "Vilken av följande yrkesgrupp har ingen rätt att stoppa och dirigera trafiken.": {
+            "Parkeringsvakter.": false,
+            "Skolpatrulledare.": true,
+            "Vägarbetare.": false,
+            "Vägtransportledare.": false,
+            "id": "0d8007da65"
+        },
+        "Vid vilken situation på bilderna bör du använda förnuftet?": {
+            "A. Du bör köra ut på vägrenen för att undvika kollisionsrisk.": true,
+            "B. Du bör inte låta bilen som kommer in i rondellen köra före eftersom du har förkörsrätt.": false,
+            "C. Eftersom du kom först till korsningen, ska du alltid köra först.": false,
+            "id": "640800fc70"
+        },
+        " Vilken skillnad finns det mellan en oerfaren och en erfaren förare när det gäller avsökningsområdet?": {
+            "Avsökningsområdet är längre hos en oerfaren förare. ": false,
+            "Avsökningsområdet är bredare hos en oerfaren förare.": false,
+            " Oerfarna förare ser mer efter fasta hinder än rörliga hinder.": true,
+            "id": "60dfde1ad4"
+        },
+        "Vilken egenskap är utmärkande för en impulsiv förare?  ": {
+            "Klarar svåra situationer lätt.  ": false,
+            "Handlar först, tänker sen.": true,
+            "Snabb reaktionsförmåga. ": false,
+            "id": "0af7091f70"
+        },
+        "Vilket av följande påståenden är riktigt?  ": {
+            "Unga killar underskattar ofta sin körförmåga.": false,
+            "Tjejer och killar 18-24 år gamla uppskattar sin körförmåga likadant.": false,
+            "Äldre förare råkar mindre sällan ut för singelolycker än unga förare.": true,
+            "id": "6d90a269f5"
+        },
+        "Vilket av följande påståenden är sant vid mörkerkörning? ": {
+            "Föraren uppskattar bilens placering på synintryck långt bort.": false,
+            "Föraren uppskattar vägens sträckning på omgivande skogsområden och slänter.": true,
+            "Halvljusets räckvidd är ca 150 m.": false,
+            "id": "b3103d91c0"
+        },
+        "Vad är riktigt beträffande synen hos förare? ": {
+            "En försämrad syn är allvarligare i mörker än i dagsljus.  ": true,
+            "En förare som bär glasögon vid uppkörning är skyldig att kontrollera synen vart femte år.  ": false,
+            "Alla förare är skyldiga till regelbundna synkontroller.": false,
+            "id": "2d9fbf99e1"
+        },
+        "Vilket är det första tecknet på trötthet hos en bilförare? ": {
+            "Långsammare reaktionsförmåga.": false,
+            "Slö och oengagerad. ": true,
+            "Känner sig frusen.": false,
+            "id": "7e15f9f89f"
+        },
+        "Vilket alternativ är mest effektivt då föraren skall minska svårighetsgraden i körningen?": {
+            "Att föraren är i bra kondition. ": false,
+            "Att föraren håller bilen i bra kondition. ": false,
+            "Att föraren har gott om tid till sin körning.": true,
+            "id": "bf1da1f0a7"
+        },
+        "Vilket sätt är det bästa för att kontrollera om en medicin inverkar på bilkörningen? ": {
+            "Läsa informationen som medföljer medicinen. ": true,
+            "Medicin kan inte påverka bilkörningen. ": false,
+            "ntag en mindre mängd medicin, kör och se resultatet.": false,
+            "id": "ed5bbd1234"
+        },
+        "Vad är sant angående alkohol?  ": {
+            "Vuxna män förbränner lika stor mängd alkohol. ": false,
+            "Dagen efter alkoholförtäring kan man alltid köra bil. ": false,
+            "Högsta tillåtna alkoholhalt är 0,2 promille.": true,
+            "id": "1836cc6f29"
+        },
+        "I hur stor procent av de olyckor som leder till dödsfall är alkohol inblandat?": {
+            "Ca 10%.": false,
+            "Ca 25%. ": true,
+            "Ca 40%.": false,
+            "id": "a840ffcd13"
+        },
+        "Vilket av följande svarsalternativ stämmer in på en mogen förare? ": {
+            "Man är noga med att följa trafikreglerna till punkt och pricka. ": false,
+            "Man inser att man har vissa begränsningar.  ": true,
+            "Man skyller ofta ifrån sig på andra.": false,
+            "id": "cd09d3d53c"
+        },
+        "Vad är sant beträffande en människas moralutveckling?  ": {
+            "Moral utvecklas under åren genom kunskap och insikt. ": true,
+            "Moral påverkar inte beteendet i trafiken. ": false,
+            "Moral är medfött och kan inte påverkas.": false,
+            "id": "d6941579d2"
+        },
+        "Vid körning med för hög fart på landsväg påverkas förarens seende. Vilket påstående är rätt?": {
+            "Föraren låser fast blicken vid en punkt som ligger ca 50 meter framför bilen. ": false,
+            "Seendet anpassar sig själv oberoende om hastigheten är hög eller låg.": false,
+            "Det kan bli svårare att upptäcka exempelvis en älg som rusar ut i körbanan.": true,
+            "id": "8f9a6ec7a0"
+        },
+        "Vilket påstående är sant angående tunnelseende? ": {
+            "Synfältet krymper hastigt.": true,
+            "Du har bra mörkerseende.": false,
+            "Du förutser trafiksituationer innan de uppstår och klarar dig bättre i trafiken.": false,
+            "id": "93b86fa7e9"
+        },
+        "Ger en förare som uppnått moget trafikuppträdande lätt efter för grupptryck?  ": {
+            "Ja.": false,
+            "Ja, om han är av manligt kön. ": false,
+            "Nej, han litar mer på sitt eget omdöme.": true,
+            "id": "84a5947689"
+        },
+        "Grupptryck, att bli påverkad av exempelvis en grupp medpassagerare, kan orsaka olyckor i trafiken. Vid vilket tillfälle utsätts föraren för grupptryck? ": {
+            "När föraren blir irriterad av andra medtrafikanter. ": false,
+            "Då föraren mer följer medpassagerarnas råd än sitt eget omdöme. ": true,
+            "Då föraren störs av medpassagerarnas oljud.": false,
+            "id": "74844b1f83"
+        },
+        "Vilket av följande alternativ är den vanligaste anledningen till singelolyckor?": {
+            "Föraren saknar körkort. ": false,
+            "Trötthet eller sjukdom. ": false,
+            "Föraren kör spritpåverkad.": true,
+            "id": "b8ba521c46"
+        },
+        "Du kör på en landsväg i 90 km\/h. I den yttre backspegeln upptäcker Du en bil strax bakom din bil. Vilket påstående är rätt?": {
+            "Jag bör varna bakomvarande bil med lätta tryck på bromspedalen. ": false,
+            "Vill bakomvarande bil köra om är jag skyldig att hålla till höger. ": true,
+            "Vill bakomvarande bil köra om är jag skyldig att ge tecken med höger blinkers.": false,
+            "id": "dad110c679"
+        },
+        "I vilken situation är risken störst att Du omedvetet håller för hög hastighet? ": {
+            "På grusväg.": false,
+            "I ett tyst fordon.": true,
+            "På landsväg.": false,
+            "id": "6e48fc7e34"
+        },
+        "Du har på en landsväg påbörjat en omkörning. Samtidigt som det ligger en bil bakom dig kommer det mötande bilar. Hur ska Du bete dig?": {
+            " Eftersom den omkörda bilen ska sakta farten, fortsätter jag omkörningen.": false,
+            "För att inte hindra bakomvarande bil fortsätter jag omkörningen.": false,
+            "Saktar farten och återgår i mitt körfält.": true,
+            "id": "c8d11095b5"
+        },
+        "Vad är största risken med fartblindhet?": {
+            "Felbedömning av stoppsträckan.": true,
+            "Svårigheter att upptäcka mötande fordon.": false,
+            "Man upptäcker ej föremål placerade vid sidan av vägen.": false,
+            "id": "b8c435c019"
+        },
+        "Vilket av följande däck ger längst bromssträcka på torrt underlag? ": {
+            "Brett däck med djup mönstring.": false,
+            " Smalt dubbdäck.": true,
+            "Smalt däck med djup mönstring. ": false,
+            "id": "ee47a420fd"
+        },
+        "Du kör på en landsväg i 90 km\/h. I den yttre backspegeln upptäcker Du en bil strax bakom din bil. Vilket påstående är rätt? ": {
+            "Jag bör varna bakomvarande bil med lätta tryck på bromspedalen.": false,
+            "Vill bakomvarande bil köra om är jag skyldig att ge tecken med höger blinkers.": false,
+            "Vill bakomvarande bil köra om är jag skyldig att hålla till höger. ": true,
+            "id": "cd3afc6fc0"
+        },
+        ". Du tänker köra en bil som vid normal belastning ska ha ett lufttryck på 190 kPa i varje däck. Hur bör Du ändra lufttrycket vid körning med tung last baktill i bilen?": {
+            "Bibehålla normalt lufttryck.  ": false,
+            "Öka lufttrycket till 210 kPa både fram och bak.": false,
+            "Öka lufttrycket till 210 kPa fram och 230 kPa bak.": true,
+            "id": "0e79a2206f"
+        },
+        "Vad är sant om låsningsfria bromsar av ABS-typ?": {
+            "De är helt underhållsfria. ": false,
+            "De förkortar bromssträckan.": false,
+            "Trots hård inbromsning går bilen att styra.": true,
+            "id": "a439736003"
+        },
+        "Du framför en bil med tillkopplad släpvagn. Hur stort får släpvagnens kultryck på dragbilens kulkoppling vara?": {
+            "30-50 kg. ": false,
+            "50-70 kg.": true,
+            "90-110 kg.": false,
+            "id": "d5db76572a"
+        },
+        "Vilka åtgärder bör Du vidta om följande lampor tänds (se bilen t.h.)?": {
+            "Om batterilampan tänds bör Du köra till en verkstad eller servicestation": true,
+            "Om röd varningslampa tänds bör Du göra en utvändig säkerhetskontroll.": false,
+            "Om temperaturmätarens visare står på rött fält tänds alltid en varningslampa.": false,
+            "id": "7374c470f6"
+        },
+        "Vad är utmärkande för en understyrd bil? ": {
+            "Om Du har för lite luft i framdäcken blir bilen mera understyrd.": false,
+            "Bilen vill svänga mindre än vad som motsvaras av vridningen på ratten.": true,
+            "Om du ökar lufttrycket i framdäcken blir bilen mer understyrd.": false,
+            "id": "e7c2e1145a"
+        },
+        "Man talar ofta om en bils tjänstevikt. Vad innebär uttrycket? ": {
+            "Den vikt som vid ett visst tillfälle uppbärs av bilens samtliga hjul, oberoende om den är lastad eller olastad. ": false,
+            " Det är skillnaden mellan totalvikten och bruttovikten.  ": false,
+            "Den är vikten på bilen i fullt driftfärdigt skick. Även förarens vikt räknas in.": true,
+            "id": "b9d932a314"
+        },
+        "Med hjälp av startkablar skall Du med bil 1 via bilbatteriet försöka starta bil 2. Hur skall Du säkrast koppla startkablarna? ": {
+            "Pluspolen på batteri bil 1 kopplas till pluspolen på batteri bil 2 och minuspolen på batteri bil 1 till chassit på bil 2. ": true,
+            "Minuspolen på batteri bil 1 kopplas till minuspolen på batteri bil 2.  ": false,
+            " Pluspolen på batteri bil 1 kopplas till chassit på bil 2.": false,
+            "id": "17384123d7"
+        },
+        "Hur mycket vinner Du i tid per mil om Du håller en konstant hastighet av 100 km\/h jämfört med 80 km\/h? ": {
+            "En minut.": false,
+            "1,5 minuter. ": true,
+            "2 minuter.": false,
+            "id": "6fb7a504ca"
+        },
+        "Din hastighet är 36 km\/h.Din reaktionssträcka är 10 m. Din bromssträcka är 8 m. Stoppsträckan är 18 m. Hur lång blir din reaktionssträcka om du fördubblar hastigheten? ": {
+            "20 meter.  ": true,
+            " 30 meter.": false,
+            "40 meter.": false,
+            "id": "fea6ab7430"
+        },
+        "Hur lång blir din bromssträcka om Du fördubblar hastigheten?": {
+            "6 meter. ": false,
+            "24 meter.  ": false,
+            "32 meter.": true,
+            "id": "4af83659c9"
+        },
+        "Du kör på en landsväg och tänker köra om en cyklist. Vad gäller?  ": {
+            "Du behöver i vissa fall tuta för att varna cyklisten. ": true,
+            " Du skall alltid tuta.": false,
+            "Du får inte tuta.": false,
+            "id": "dda2ccafd5"
+        },
+        "Vilket påstående är rätt om en bilförares uppträdande vid gatu- och vägkorsningar?": {
+            "Det är inte tillåtet att stanna så att bilen i onödan blockerar korsningen för annan trafik. ": true,
+            "I tät trafik skall alltid högerregeln tillämpas.": false,
+            "Hastigheten skall alltid anpassas så att man kan stanna före korsningen.": false,
+            "id": "c3445f9656"
+        },
+        "När är Du som fordonsförare skyldig att stanna? ": {
+            "Då jag nalkas en korsning med rött ljus och polis vinkar fram.": false,
+            "Då jag nalkas en korsning med grönt ljus och polis gör stopptecken.  ": true,
+            "Då jag nalkas en korsning där skolpolis gör stopptecken. ": false,
+            "id": "f9f4e5455e"
+        },
+        "Vid vilket tillfälle får Du fortsätta att köra utan att stanna?  ": {
+            "En polisbil kör om dig och en polisman håller höger arm utsträckt genom bilrutan med handflatan mot dig. ": false,
+            "Polisen håller en stoppskylt mot dig.": false,
+            "Polisen har handflatan mot vägbanan och gör upprepade pendelrörelser upp och ned. ": true,
+            "id": "5eec39dfda"
+        },
+        "Du kör på en våt asfaltsbelagd landsväg då du upptäcker en mötande lastbil. Hur skall du bete dig? ": {
+            "Jag startar vindrutetorkarna vid mötet.  ": false,
+            "Jag bromsar in mjukt före mötet. ": true,
+            "Jag bromsar in kraftigt.": false,
+            "id": "8d57832396"
+        },
+        "Trafiksignalen visar grönt sken på bilden till höger. Du ska svänga till vänster i korsningen. Vilket påstående är riktigt?  ": {
+            "Du kan svänga utan risk. ": false,
+            "Bussen kan skymma två körfält. ": true,
+            "Du har väjningsplikt mot bussen.": false,
+            "id": "c0e3bbcc29"
+        },
+        "Vad är sant beträffande motorväg? ": {
+            "Det är tillåtet att bogsera bil till närmaste avfart.  ": true,
+            "Att stanna bilen är endast tillåtet vid på- och avfart.": false,
+            "Lägsta tillåtna hastighet är 40 km\/h.": false,
+            "id": "cde7fa4350"
+        },
+        "Du tänker svänga in på en väg med skylten enskild väg. Vilket påstående är rätt?": {
+            "Vägen är endast tillåten att köra på för boende invid vägen.": false,
+            "Högsta tillåtna hastighet är 50 km\/h. ": false,
+            "Vägmärken som varnar för faror kan saknas.": true,
+            "id": "5b4b36de97"
+        },
+        "Vem får parkera i en parkeringsruta som är avsedd för handikappade? ": {
+            "Rörelsehindrade bilförare. ": false,
+            "Rörelsehindrade bilförare med särskilt tillstånd.": true,
+            "Rullstolsbundna bilförare.  ": false,
+            "id": "393b063cb4"
+        },
+        "I vilket fall är det olämpligt att svänga vänster på bilden till höger? Vad är sant angående bogsering?  ": {
+            "För att få bogsera krävs minst körkort klass BE.": false,
+            "Högsta tillåtna hastighet 30 km\/h.": true,
+            "Bogserlinans högsta tillåtna längd är 2 meter.": false,
+            "id": "38b5946fd4"
+        },
+        "Vad är sant angående bogsering?": {
+            "För att få bogsera krävs minst körkort klass BE.": false,
+            "Högsta tillåtna hastighet 30 km\/h. ": true,
+            "Bogserlinans högsta tillåtna längd är 2 meter.": false,
+            "id": "e13055cacf"
+        },
+        "Vad är rätt beträffande körning med tillkopplad släpvagn? ": {
+            "Bromsad släpvagn har högsta tillåtna hastighet 80 km\/h.": true,
+            "Bromsad släpvagn har högsta tillåtna hastighet 50 km\/h. ": false,
+            "Bromsad släpvagn har högsta tillåtna hastighet 90 km\/h.": false,
+            "id": "d9f0f9127a"
+        },
+        "Hur ska du bete dig i situationen på bilden till höger?": {
+            "Om du ska svänga till höger skall Du använda vägrenen som accelerationsfält.": false,
+            "Om du ska svänga vänster behöver Du inte lämna företräde för bilen som ska köra rakt fram. ": false,
+            "Du ska lämna företräde åt all korsande trafik. ": true,
+            "id": "3aaa0aa481"
+        },
+        " Vad är sant beträffande motorvägskörning?": {
+            "Lägsta tillåtna hastighet är 40 km\/h. ": false,
+            "Samma högsta tillåtna hastighet för lätt lastbil och personbil.": true,
+            "Du får endast stanna vid av- och påfartssträckorna.": false,
+            "id": "8275ebf09c"
+        },
+        "Hur ska Du bete dig i situationen på bilden till höger?": {
+            "Stanna före skylten tills hela bussen är inne på din väg. ": true,
+            "Kör fram till skylten.  ": false,
+            "Du är skyldig att stanna i korsningen.": false,
+            "id": "7cd411e66a"
+        },
+        "Vad gäller vid cykelöverfart och övergångsställen? ": {
+            "Jag släpper fram cyklister och gående som kommer ifrån höger. ": true,
+            "Jag släpper fram cyklister och gående som kommer ifrån vänster.": false,
+            "Jag har alltid skyldighet att  släppa fram cyklister och gåenden som vill korsa vägen.": false,
+            "id": "45303d3be9"
+        },
+        "Vilket av följande regler gäller för användningen av bilbälten i privatbilar? ": {
+            "Bilbältet behöver inte vara påtaget när man backar?": false,
+            "Två små barn kan få vara fastspända i samma bilbälte, under förutsättning att de sitter på en bälteskudde.": false,
+            "Bilföraren har ansvaret för att barn som är under 15 år använder bilbältet.": true,
+            "id": "cbb76acd10"
+        },
+        "Vilket fordon eller vilken fordonskombination får du köra på ett B-körkort? ": {
+            "Lätt lastbil med tillkopplad  släpvagn. ": false,
+            "Trehjulig motorcykel.": true,
+            "Tung, tvåhjulig motorcykel. ": false,
+            "Tung lastbil.": false,
+            "id": "6ae8a29878"
+        },
+        "För vilken av följande förseelser ska körkortet återkallas?": {
+            "Om föraren ställt upp sin bil inom ett område av 10 meter före ett övergångsställe. ": false,
+            "Om föraren kört 45 km\/h på en plats där hastigheten är begränsad till 30 km\/h. ": false,
+            "Om föraren kört om strax före eller på ett obevakat övergångsställe. ": true,
+            ") Om föraren stannat närmare än 10 meter från en vägkorsning.": false,
+            "id": "deed7a82f3"
+        },
+        "Vad är riktigt angående körkort? ": {
+            "Du har inte skyldighet att ha körkortet med dig när du kör. ": false,
+            "Om du byter namn måste du ansöka om förnyelse av ditt körkort. ": false,
+            "Du måste ansöka om förnyelse av ditt körkort efter tio år.": false,
+            "Du måste ansöka om förnyelse av ditt körkort om det förkommit. ": true,
+            "id": "1ab8faf45e"
+        },
+        "Vilken av följande påståenden är viktigast om man som förare vill medverka till att minska olycksriskerna i trafiken?": {
+            "Att öva upp reaktionssnabbheten": false,
+            "Att köra extremt långsamt och försiktigt.": false,
+            "Att köra på ett defensivt sätt.": true,
+            "id": "4f27096934"
+        },
+        "Vilken skyldighet har du, bland annat, om du haft del i uppkomsten av en trafikolycka?": {
+            "Att kontrollera att motparten har körkort.": false,
+            "Att alltid kalla på polis.": false,
+            "Att stanna kvar på olycksplatsen, hjälpa eventuella skadade och varna andra trafikanter. ": true,
+            "Att klara upp med motparten vem som gjort fel. ": false,
+            "id": "94d31c74b8"
+        },
+        "Vad bör Du först göra om du kommer till en plats där en olycka skett?": {
+            "Hjälpa svårt skadade personer.": true,
+            "Varna andra trafikanter.": false,
+            "Larma polis och ambulans.": false,
+            "id": "c770444e44"
+        },
+        "Vilken av följande uppgifter är onödigt att lämna när du larmar ambulans?": {
+            "Att berätta var olyckan inträffat och vilken typ av olycka det är. ": false,
+            "Hur många som skadats och vilken typ av skador de har. ": false,
+            "Vilket telefonnummer du ringer från.": false,
+            "Vilken av de inblandade förarna du anser haft skuld till olyckan.": true,
+            "id": "10350059de"
+        },
+        "Vad är rätt om hur man kan hjälpa skadade personer vid en trafikolycka?": {
+            "En medvetslös person ska ligga på rygg med huvudet högt": false,
+            "Skadade personer bör alltid hjälpas ut ur bilarna. ": false,
+            "En stark blödning kräver tryckförband.": true,
+            "id": "891c756741"
+        },
+        "Hur bör du hjälpa en person som efter en trafikolycka är blek, kallsvettig, orolig och törstig?": {
+            "Ge den skadade vatten att dricka. ": false,
+            "Lägg över den skadade en filt eller ett klädesplagg så att han\/hon inte fryser.": true,
+            " Placera den skadade med huvudet högt.": false,
+            "id": "f06961ba60"
+        },
+        " Vad är den första åtgärd Du bör vidta om du på en parkeringsplats råkat köra på och skada en bil vars förare inte finns där?": {
+            " Att anmäla händelsen till Vägverket. ": false,
+            "Att anmäla händelsen till trafikförsäkringsföreningen. ": false,
+            "Att sätta en lapp under vindrutetorkaren på den skadade bilen och på den uppge ditt namn och telefonnummer samt berätta vad som hänt.": true,
+            "id": "d188a6fd76"
+        },
+        "Vad betyder gula vägmarkeringar? ": {
+            "De gula kantlinjernas huvudsakliga uppgift är enbart att tydligt markera vägbanan. ": false,
+            "Det är förbjudet att köra på de gula zig-zag-linjer som ibland finns i gatan. ": false,
+            "En heldragen gul kantlinje betyder att det är tillåtet att stanna, men förbjudet att parkera där linjen finns": false,
+            "En heldragen gul kantlinje betyder att det är förbjudet att stanna där linjen finns. ": true,
+            "id": "67a9b16044"
+        },
+        "När är det tillåtet att köra i eller över ett spärrområde?": {
+            "För att öka framkomligheten i tät trafik. ": false,
+            "Om det är nödvändigt, t ex för att passera en parkerad bil.": true,
+            "För att passera ett långsamtgående fordon.": false,
+            " Det är alltid förbjudet att köra i eller över ett spärrområde. ": false,
+            "id": "7b196a354a"
+        },
+        "Vilket påstående är riktigt angående vägarbete?": {
+            "En gul lykta på en vägbock betyder att vägen är helt avstängd. ": false,
+            "Vita vägmarkeringar gäller före orangegula om de förekommer samtidigt, t ex vid ett vägarbete": false,
+            "När du passerar ett vägarbete måste du ha så låg fart att du omedelbart kan stanna om det skulle behövas. ": true,
+            "Att inte överskrida hastighetsbegränsningarna är en tillräckligt bra hastighetsanpassning när man passerar ett vägarbete.": false,
+            "id": "476762f6a6"
+        },
+        "Vilken tolkning av ljussignalernas betydelse är felaktig? ": {
+            "Rött ljus betyder stopp.": false,
+            "Rött ljus tillsammans med gult betyder kör. ": true,
+            "Grönt ljus betyder kör. ": false,
+            "Blinkande gult ljus betyder att signalen för tillfället inte har någon trafikreglerande funktion. ": false,
+            "id": "2c0a32dd1f"
+        },
+        "Vilket fordon räknas som bil? ": {
+            "Ett tvåhjuligt motorfordon vars tjänstevikt är 250 kg.": false,
+            " Ett trehjuligt motorfordon vars tjänstevikt är 500 kg. ": true,
+            "Ett fyrhjuligt motordrivet fordon som är avsett att användas som dragfordon.": false,
+            "id": "8ceab46cc1"
+        },
+        "Vad innefattas i begreppet fordon?  ": {
+            "Anordningar på hjul, band eller medar (ej rälsbundna).": true,
+            "Spårvagnar och tåg.": false,
+            "Båtar. ": false,
+            "Flygmaskiner.": false,
+            "id": "84048a282d"
+        },
+        "Vad innefattas i begreppet väg?": {
+            " Enbart allmänna vägar. ": false,
+            "Enbart allmänna och enskilda vägar. ": false,
+            "Allmänna och enskilda vägar och cykelväg samt ridväg som löper intill en allmän väg eller cykelväg.": true,
+            "id": "76fe39cde7"
+        },
+        "Vilka räknas som vägtrafikanter?": {
+            "Endast de som går eller cyklar på en väg.": false,
+            " Endast de som går, färdas på cykel eller i bil på väg.": false,
+            "Alla som färdas på väg, uppehåller sig på väg eller i fordon på väg.": true,
+            "id": "51a5ceb739"
+        },
+        "Vilket av följande körsätt kan räknas som defensivt? ": {
+            "Att alltid köra sakta och försiktigt. ": false,
+            "Att alltid hålla på sin rätt i trafiken, men att aldrig bryta mot reglerna. ": false,
+            "Att räkna med att andra trafikanter gör rätt i trafiken och följer reglerna. ": false,
+            " Att räkna med att andra trafikanter kan göra fel och undvika faror i trafiken genom att vara förutseende.": true,
+            "id": "333406ea2b"
+        },
+        "Vad innebär grundregeln? ": {
+            "Den talar om på vilken sida av vägen vi ska köra.": false,
+            "Den talar om vilka vi ska lämna företräde åt i korsningar. ": false,
+            "Den bestämmer vilken anda som ska råda i trafiken.": true,
+            "Den ger enbart grundläggande anvisningar om hastighetsanpassning.": false,
+            "id": "4e6762dc19"
+        },
+        "Vad är riktigt om förbudsmärken?": {
+            "Förbudsmärken gäller, med få undantag, från den plats där märket står till nästa vägkorsning. ": true,
+            "Förbudszon gäller från den plats märket står till nästa vägkorsning. ": false,
+            "Begränsad hastighet gäller från den plats märket står till du passerat ett slutmärke.": false,
+            "id": "9400d72d75"
+        },
+        "Vilket beteende är riktigt vid vägkorsningar? ": {
+            "Att stanna på ett sådant sätt att man endast blockerar ett körfält på den korsande vägen. ": false,
+            "Att i tät trafik, vid korsningar, tillämpa den så kallade blixtlåsprincipen.  (": true,
+            "Att tillämpa högerregeln vid alla vägkorsningar.": false,
+            "id": "706f967814"
+        },
+        " I vilken ordning ska du inte tillämpa utfartsregeln?": {
+            "När de kör ut från en bensinstation, parkeringsplats eller från en tomt. ": false,
+            " När du korsat en gångbana för att köra ut på en väg.": false,
+            "När du kommer från en gågata och ska köra ut på en väg.": false,
+            "När du kommer från en enskild väg och ska köra ut på en allmän väg.": true,
+            "id": "25f0611ce9"
+        },
+        "Vad innebär högerregeln? ": {
+            "Den innebär att du ska hålla till höger på vägen.": false,
+            "Den innebär att du ska lämna företräde åt förare av fordon som närmar sig på en annan väg från höger. ": true,
+            "Den innebär att du ska lämna företräde åt förare som närmar sig på en annan väg från vänster.": false,
+            "id": "e208966944"
+        },
+        "När är du skyldig att lämna företräde åt en buss som vill svänga ut från en hållplats? ": {
+            "När hastigheten är begränsad till 50 km\/h.": true,
+            "När hastigheten är begränsad till 70 km\/h": false,
+            "När hastigheten är begränsad till 90 km\/h.": false,
+            "id": "8c2f103475"
+        },
+        "Vilken åtgärd är riktig att göra när ett utryckningsfordon påkallar fri väg?": {
+            "Du ska omedelbart stanna på den plats du befinner dig. ": false,
+            "Du ska alltid köra in till kanten och stanna. ": false,
+            "Du ska lämna plats åt utryckningsfordonet att passera, minska farten eller stanna om det behövs. ": true,
+            "Du ska öka farten och köra före utryckningsfordonet.": false,
+            "id": "32ca7bd249"
+        },
+        "Du kör ifatt en cyklist som cyklar på höger sida. Vägen har normal bredd. Hur skall Du uppträda? ": {
+            " Förbjudet att signalera. ": false,
+            "Alltid ge signal.": false,
+            "Signalera om situationen påkallar fara.": true,
+            "id": "5c7947f56c"
+        },
+        "När är det lämpligt att använda vägrenen för att underlätta omkörning?": {
+            "När sikten framåt är fri. ": true,
+            "Under mörker. ": false,
+            "När sikten framåt, genom kurva eller backkrön, är skymd. ": false,
+            "När sikten genom snöyra, slagregn, dimma eller liknande är oklar.": false,
+            "id": "78ce1e1c90"
+        },
+        "Vilka trafikanter skall använda vägren när sådan finns? ": {
+            "Tunga lastbilar. ": false,
+            "Cyklister och mopedister om cykelbana saknas. ": true,
+            "Motorredskap klass 1. ": false,
+            " Fordon med tillkopplad släpvagn.": false,
+            "id": "d23cbfd688"
+        },
+        "Vad gäller vid körning på vägren?": {
+            " Det är tillåtet att parkera på en huvudleds vägren utanför tättbebyggt område.": false,
+            "Du är skyldig att köra ut på vägrenen om bakomvarande förare tydligt visar att han vill köra om.": false,
+            "Om du från vägrenen vill köra in på körbanan ska du lämna företräde åt förare som redan kör där. ": true,
+            "id": "90b7a76543"
+        },
+        "Du har hamnat med bilens högerhjul utanför körbanekanten. Hur ska du handla för att på ett säkert sätt få upp bilen på vägen igen? ": {
+            "Sakta farten mjukt och när farten minskat, med en mjuk rattrörelse försiktigt styra upp bilen på vägen. ": true,
+            "Med snabb rattrörelse genast styra upp bilen på vägen. ": false,
+            "Bromsa kraftigt  och samtidigt med en snabb rattrörelse styra upp bilen på vägen. ": false,
+            "id": "1f99015f1a"
+        },
+        " Vad är riktigt om att passera en järnvägskorsning?": {
+            "Endast om korsningen saknar bommar eller ljud- och ljussignaler är du skyldig att anpassa farten efter sikten över järnvägen.  ": false,
+            "Du måste alltid, oavsett förekommande säkerhetsanordningar, genom uppsikt på järnvägen, förvissa dig om att inget tåg kommer innan du passerar. ": true,
+            "Hastigheten får inte överstiga 40 km\/h när du befinner dig inom ett område av 50 meter från järnvägskorsningen.": false,
+            "id": "a37c1fde13"
+        },
+        "Vilken av följande regler gäller när du närmar dig en järnvägskorsning?": {
+            "Det är förbjudet att stanna inom ett område av 30 meter före och efter järnvägskorsningen. ": false,
+            "30 meter före korsning.": false,
+            "Parkeringsförbud råder inom ett område av 30 meter före och efter järnvägskorsningen.": true,
+            "Omkörning är tillåten strax före och i alla typer av järnvägskorsningar.": false,
+            "id": "dec47e8df5"
+        },
+        "En del vägar kan under vintertid bli speciellt hala. Vid vilket tillfälle tycker Du att risken är störst?": {
+            "På en sandad rak vinterväg genom en allé. ": false,
+            "På en kraftigt sandad väg i en kurva.  ": false,
+            "På en smal väg med en kurva i medlut.": true,
+            "id": "6a9ea98f86"
+        },
+        "Vad är riktigt om säkerhetsanordningar vid järnvägskorsningar? ": {
+            "Järnvägsbommar är gjorda av ett sprött material som lätt går sönder om man hamnat mellan bommarna och tvingas köra på dem för att ta sig ut.": true,
+            "Endast ett fåtal järnvägskorsningar i landet saknar säkerhetsanordningar i form av ljus-, ljudsignaler eller bommar.": false,
+            ") De flesta olyckor som händer vid järnvägskorsningar beror på att fordonsförare blivit instängda mellan bommarna.": false,
+            "id": "8f7d64324e"
+        },
+        "På vilken typ av vägar finns de flesta järnvägskorsningarna?    ": {
+            "På allmänna vägar klassade som huvudled. ": false,
+            "På andra allmänna vägar än huvudleder. ": false,
+            "På enskilda vägar.": true,
+            "id": "39a92d1bae"
+        },
+        "Även om det är osannolikt finns det en risk att få motorfel i en järnvägskorsning. Om detta skulle hända, hur bör du handla? ": {
+            " Ensam eller med passagerares hjälp försöka skjuta bilen från spårområdet. ": false,
+            "På snabbast möjliga sätt försöka hitta personer som kan hjälpa dig att skjuta bilen från spårområdet. ": false,
+            " Flytta bilen med hjälp av startmotorn.": true,
+            "id": "12468095be"
+        },
+        " Vilket påstående är riktigt angående motortrafikleder? ": {
+            "De har ofta olika körbanor, skilda med hjälp av en skiljeremsa.": false,
+            "Det är förbjudet att köra långsammare än 40 km\/h  på motortrafikled.": false,
+            "Alla fordon som kan och får köras med en hastighet av minst 40 km\/h  får använda motortrafikled. ": false,
+            "Endast motorfordon som kan och får köras med en hastighet av minst 40 km\/h får använda motortrafikled.": true,
+            "id": "2d46d2834e"
+        },
+        "Vilket påstående är riktigt angående motorvägar? ": {
+            "Det är förbjudet att stanna på motorvägen, men tillåtet att stanna på vägrenen. ": false,
+            "Den har inte mötande trafik på samma körbana.": true,
+            "Den som ska köra in på motorväg har skyldighet att stanna före infart. ": false,
+            "id": "7340c251a5"
+        },
+        "Vad är riktigt om motorväg och motortrafikled?  ": {
+            "Du får använda vägrenen på motorväg för att underlätta omkörning. ": false,
+            "När du kör på motorväg kan du, för att underlätta vid påfart, tillfälligt byta till motorvägens vänstra körfält.": true,
+            " Vid påfart på motorväg och motortrafikled ska du lämna fartökningssträckan så sent som möjligt. ": false,
+            "": false,
+            "id": "8ff9f7caa7"
+        },
+        "Vad är rätt om motorväg?  ": {
+            "Öppningarna i motorvägens skiljeremsa är avsedd för trafikanter som, av någon anledning, vill vända. ": false,
+            " Motorredskap klass 2 får köras på motorväg.": false,
+            "Vissa mobilkranar får köras på motorväg. ": true,
+            "id": "f48dc7de72"
+        },
+        "Vad är riktigt om körning på motorväg och motortrafikled? ": {
+            "En risk med omkörning på motorväg är att någon förare plötsligt kan bryta sig ut ur sitt körfält. ": true,
+            "Tunga lastbilar med släp får på motorväg och motortrafikled köra med högst 90 km\/h.": false,
+            "Omkörning är tillåten såväl på höger som på vänster sida när man kör på motorväg och motortrafikled.": false,
+            "id": "62539eea5e"
+        },
+        "Vad är riktigt om avfarter från motorväg och motortrafikled?  ": {
+            "Fartminskningen ska påbörjas i god tid före avfartssträckan.": false,
+            "Fartblindhet kan göra att du missbedömer din hastighet på avfartsvägen.": true,
+            "Det är förbjudet att stanna på motorväg och motortrafikled, men tillåtet på avfartsvägarna. ": false,
+            "id": "7a82706078"
+        },
+        "Vad är riktigt om bogsering på motorväg? ": {
+            "Bogsering med personbil på motorväg är tillåten eftersom man vid bogsering för köra 40 km\/h. ": false,
+            "Bogsering på motorväg är endast tillåten med bogserbil som är försedd med upphängningsanordning. ": false,
+            "Bogsering på motorväg är förbjuden utom i nödsituationer och då får bogsering bara ske till närmaste avfart.": true,
+            "id": "541b47ccf4"
+        },
+        "I vilken av följande situationer är risken stor att man omedvetet kör för fort?    ": {
+            "I tät stadstrafik. ": false,
+            "När hastigheten på en 90-väg begränsas till 50 km\/h.": true,
+            "När du kör på en smal och krokig väg.": false,
+            "id": "1a20f8ab45"
+        },
+        "Du kör med en fart av 70 km\/h och ökar den till 90 km\/h. Vilken tidsvinst gör du per mil?": {
+            "En minut och fyra sekunder.": false,
+            "En minut och femtiofyra sekunder. ": true,
+            "Två minuter och trettiofyra sekunder.": false,
+            " Fyra minuter och trettiotre sekunder.": false,
+            "id": "01a8ee7aae"
+        },
+        "När har du mest anledning att signalera? ": {
+            "När barn leker på eller vid sidan av vägen. ": true,
+            "När du ska passera gående.": false,
+            "När du ska passera en person som rider. (": false,
+            "Före omkörning av tung lastbil.": false,
+            "id": "8306906d1a"
+        },
+        "Vilket påstående är riktigt om teckengivning med blinkern? ": {
+            "Även om du använder blinkern måste du förvissa dig om att ditt körsätt inte innebär fara för andra trafikanter.": true,
+            "Du behöver inte ge tecken när du ska vända på en väg.": false,
+            "Du behöver inte ge tecken när du kör igång från en vägkant.": false,
+            "id": "6f07b17e93"
+        },
+        "Vilket påstående är riktigt om tecken och signaler? ": {
+            "Ljussignal får endast ersätta ljudsignal under mörker.": false,
+            "Det är förbjudet att ge ljudsignal inom tättbebyggt område. ": false,
+            "Varningsblinker får användas när bilen bogseras. ": false,
+            "Du är alltid skyldig att avge varningssignal för att förebygga fara.": true,
+            "id": "f20a1cffa0"
+        },
+        "Vilket påstående är riktigt om avsökning? ": {
+            "Dålig avsökning kan leda till sena reaktioner som kan resultera i trafikolyckor.": true,
+            "Du bör hålla blicken nära bilen för att inte missa viktiga detaljer i trafikmiljön. ": false,
+            "Nyblivna förare har en mera aktiv avsökning än erfarna förare.": false,
+            "id": "d8c9e3a901"
+        },
+        "Vilket av följande beteende är viktigast för att få den information man behöver i trafiken? ": {
+            " Att vara allmänt uppmärksam. ": false,
+            "Att hålla blicken fixerad långt borta efter vägen.": false,
+            "Att hålla blicken rörlig och långt bort efter vägen.": true,
+            "id": "28f04a8437"
+        },
+        "Vilket påstående om parkering är riktigt? ": {
+            "På smala gator är det tillåtet att parkera med två av bilens hjul på gångbanan. ": false,
+            "Det är förbjudet att parkera på vänster sida av en dubbelriktad gata. ": true,
+            "Det räknas inte som parkering om föraren sitter kvar i sitt uppställda fordon.": false,
+            "Det är förbjudet att parkera på vänster sida av en enkelriktad gata.": false,
+            "id": "317a258b1c"
+        },
+        "Vad är tillåtet på en plats där det råder stoppförbud? ": {
+            "Att stanna för av- och pålastning.  ": false,
+            "Att stanna för av- och påstigning.  ": false,
+            "Enbart att stanna om trafiksituationen kräver det.": true,
+            "Att stanna för vilket ändamål som helst under en tid av högst fem minuter. ": false,
+            "id": "e43c9160e6"
+        },
+        "På vilket av följande platser är det tillåtet att stanna för av- och påstigning?  ": {
+            "På busshållplats om det kan ske utan att hindra eller störa busstrafiken. ": true,
+            "I tunnel om det kan ske utan att hindra eller störa trafiken. ": false,
+            "C) I  vägport om det kan ske utan att hindra och störa trafiken. ": false,
+            "I närheten av skymd kurva om det kan ske utan att hindra och störa trafiken.": false,
+            "id": "ccf606cbb6"
+        },
+        "Vad är riktigt om stannande och parkering?   ": {
+            "Stannande för av- och pålastning av gods räknas som parkering.  ": false,
+            "Stannande för passagerares av- och påstigning räknas inte som parkering. ": true,
+            "Det är tillåtet att parkera 10 meter från en busshållplatsskylt. ": false,
+            "Utanför tättbebyggt område är det tillåtet att parkera på en huvudleds vägren.": false,
+            "id": "645283678e"
+        },
+        "På vilken plats är det förbjudet att stanna?   ": {
+            "Inom ett område av 10 meter efter ett övergångsställe.": false,
+            " Inom ett område av 10 meter före ett övergångsställe. ": true,
+            "Inom ett område av 10 meter efter en cykelöverfart.": false,
+            "id": "5f7bcc5bbc"
+        },
+        "På vilken av följande platser är det förbjudet att stanna?": {
+            "I en skymd kurva.": true,
+            "I en kurva där sikten är fri. ": false,
+            "Inom ett område av 30 meter från en järnvägskorsning.": false,
+            "På körbana bredvid ett annat fordon som stannat vid vägkanten.": false,
+            "id": "2a26a4f2d1"
+        },
+        "Vad är sant beträffande en bils bromssträcka?": {
+            "Vid ökning från 30 km\/h till 60 km\/h blir bromssträckan 2 gånger så lång. ": false,
+            "Vid ökning från 30 km\/h till 90 km\/h blir bromssträckan 3 gånger så lång.": false,
+            " Vid hastighetsökning från 30 km\/h till 60 km\/h  blir bromssträckan 4 gånger så lång. ": true,
+            "id": "5271fa62a3"
+        },
+        "På vilket sätt är ABS-bromsar bättre än vanliga bromsar? ": {
+            "ABS-bromsar förkortar bromssträckan avsevärt. ": false,
+            "Bilen kan ofta styras trots hård inbromsning. ": true,
+            "Med ABS-bromsar har du perfekt bromsgrepp oavsett hastighet och väglag. ": false,
+            "ABS-bromsar tål frost mer än andra bromssystem.": false,
+            "id": "bb1abda71f"
+        },
+        "Vad är riktigt angående bilens bromssystem?": {
+            "Om en bromsledning brister på en bil som har tvåkrets bromssystem försvinner bromsverkan på samtliga hjul.": false,
+            "Ett bromsservosystem fungerar även när motorn inte är igång. ": false,
+            "Om en bromsledning går av på en bil som har ett tvåkrets bromssystem finns bromsverkan kvar på två eller tre hjul.": true,
+            "id": "dacfcec959"
+        },
+        "Vilken kontroll måste du göra dagligen på din bils bromssystem?": {
+            "Kontrollera bromsvätskenivån. ": true,
+            " Kontrollera bromsbelägg.": false,
+            "Kontrollera bromsskivorna.": false,
+            "id": "26e5e101c8"
+        },
+        "Under körning börjar ABS-lampan på instrumentpanelen att lysa. Vilken effekt kan du vänta dig? ": {
+            " Vid en hård inbromsning kan hjulen komma att låsa sig. (": true,
+            "Du måste bromsa hårdare än vanligt för att få normal effekt.": false,
+            "Bromsarna är helt ur funktion.": false,
+            "Du har bromsar enbart på två eller tre hjul.": false,
+            "id": "51578a475d"
+        },
+        "Din bil, som är utrustad med bromsservo- och styrservosystem, ska bogseras med avstängd motor. Vilken effekt kan du förvänta dig?": {
+            "Broms- och styrsystem fungerar inte. ": false,
+            "Bilen blir tungbromsad och tungstyrd. ": true,
+            "Broms- och styrsystem fungerar på samma sätt som när motorn går.": false,
+            "id": "51f19bfc94"
+        },
+        "Fel på bromsarna är i allmänhet allvarliga och kräver ofta omedelbar reparation. I ett av följande fall krävs inte omedelbar reparation. Vilket? ": {
+            " Om du inte får full bromsverkan förrän bromspedalen är tätt intill golvet. ": false,
+            "Om bromspedalen känns mjuk och svampig. ": false,
+            "Om parkeringsbromsen tar högt upp, dock utan att nå sitt högsta läge. ": true,
+            "Om det hörs ett skrapande ljud i samband med inbromsning.": false,
+            "id": "dbf49f147d"
+        },
+        "Vad kan vissa reaktioner i framvagn eller styrinrättning bero på?": {
+            "Om bilen vill dra snett under körning kan lasten vara felplacerad. ": false,
+            "Vibrationer i ratten kan bero på att du har för mycket luft i framhjulen. ": false,
+            "Stort glapp i ratten är normalt för en bil som är utrustad med styrservosystem. ": false,
+            "Om det hugger i ratten kan smuts eller luft ha kommit in i servosystemet.": true,
+            "id": "20b9b380c1"
+        },
+        "Vilken av följande åtgärder bör ingå i säkerhetskontrollen av styrinrättningen?   ": {
+            "Kontroll av eventuellt glapp i ratten. ": true,
+            "Kontroll av styrservopumpen. ": false,
+            "Kontroll av styrväxelns infästning.": false,
+            "id": "86d941fbd4"
+        },
+        "Vid en viss hastighet upptäcker du vibrationer i ratten. Vad kan detta bl a bero på? ": {
+            "För lite luft i framdäcken. ": false,
+            "Obalanserade framhjul.": true,
+            "För lite styrservovätska.": false,
+            "Trasig styrservorem. ": false,
+            "id": "23c5f6cc61"
+        },
+        "Vilken regel om dubbdäck är riktig?  ": {
+            "Dubbdäck får inte användas från och med första måndagen efter påsk till och med den 31 november.  ": false,
+            "Om släpvagnen har dubbdäck måste även dragbilen ha sådana. ": false,
+            "Om dubbdäck används måste sådana finnas på bilens samtliga hjul.": true,
+            "id": "736a7b7bf6"
+        },
+        "Vad är riktigt angående däck?": {
+            "Det är förbjudet att använda ett däck vars mönster på det mest slitna stället, har ett mönsterdjup som är mindre än 1,6 mm.": true,
+            "Om du använder ett reservhjul av nödhjulstyp får du inte köra fortare än 50 km\/h.": false,
+            " Det är tillåtet att ha olika däcktyper på samma hjulaxel.": false,
+            "id": "dd9588d400"
+        },
+        "Hur påverkar farten däckslitaget? ": {
+            "Hög hastighet ger ett mindre däckslitage än låg fart.": false,
+            " Häftiga ökningar och minskningar av farten ger ett stort däckslitage.": true,
+            "Bilens hastighet har ingen inverkan på däckslitaget.": false,
+            "id": "ad125bdc85"
+        },
+        "Din bil har en benägenhet att dra till vänster. Vad kan detta bero på?    ": {
+            "Felaktig framhjulsinställning. ": true,
+            "För lite luft i höger framhjul.": false,
+            "För mycket luft i vänster framhjul. ": false,
+            "För lite luft i höger bakhjul.": false,
+            "id": "67e4a4f9ac"
+        },
+        "Vilken av följande anordningar måste en bil vara utrustad med?": {
+            "Dimljus. ": false,
+            "Hastighetsmätare.": true,
+            "Två trekantiga reflexer baktill. ": false,
+            "Dimbakljus.": false,
+            "id": "b3df55a401"
+        },
+        "Vilken utrustning måste du medföra i bilen under körning?  ": {
+            "Bogserlina.": false,
+            "Varningstriangel. ": true,
+            "Hjälpstartkablar.": false,
+            "Domkraft.": false,
+            "id": "1e154bf702"
+        },
+        " Vilket av följande fel kan inte leda till bländande halvljus? ": {
+            "Felaktigt inställda strålkastare. ": false,
+            "Tung last baktill. ": false,
+            "Trasig säkring.  ": true,
+            "Spräckta strålkastarglas.": false,
+            "id": "e3c71ba406"
+        },
+        "Två lyktor slocknar samtidigt på din bil. Vilken åtgärd bör du först vidta? ": {
+            " Kontrollera generatorremmen. ": false,
+            "Kontrollera glödlamporna. ": false,
+            "Kontrollera anslutningarna vid batteriet.": false,
+            "Kontrollera säkringarna. ": true,
+            "id": "7379ebf049"
+        },
+        "Vilken av följande kontroller ingår inte i säkerhetskontrollen?   ": {
+            "Blinkers, belysning och reflexer. ": false,
+            "Registreringsskyltar.  ": false,
+            "Oljenivån i motorn.": true,
+            "Hjul och däck.": false,
+            "id": "a3977a2d25"
+        },
+        "När får du börja övningsköra för körkort klass 1?": {
+            "16år": true,
+            "17år": false,
+            "15år": false,
+            "18år": false,
+            "id": "e72975b9b0"
+        }
+    }
+}

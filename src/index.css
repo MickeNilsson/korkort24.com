@@ -1,0 +1,117 @@
+body {
+    background-color: black;
+}
+
+/* Classes */
+
+.correct-answer {
+
+    color: green;
+}
+
+.delete-section-button {
+
+    display: inline-block;
+    margin-left: 10px;
+    margin-top: -15px;
+}
+
+.nav-link {
+    color: white;
+}
+
+.nav-link:hover {
+    color: white;
+}
+
+.new-questions-textarea {
+
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.page-header {
+
+    color: white;
+}
+
+.page-item {
+    background-image: url('./assets/checkmark.jpg');
+    background-color: green;
+}
+
+.page-link {
+    background-color: rgba(0,0,0,0);
+}
+
+.question-image {
+    height: 200px;
+}
+
+.quiz {
+    background-color: white;
+}
+
+.quiz-items {
+    padding-top: 150px;
+}
+
+.section {
+
+    border-bottom: 1px solid #ddd;
+    padding: 5px;
+}
+
+.section-header {
+
+    display: inline-block;
+}
+
+.header-box {
+    position: fixed;
+    padding-top: 70px;
+    background-color: #cbecbf;
+}
+
+.main-content {
+    height: 1000px;
+    padding-top: 100px;
+    background-image: url('./assets/background2000x931.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.login-card {
+    width: 300px;
+    margin: 30px auto;
+}
+
+.startpage-link {
+    cursor: pointer;
+}
+
+.vertical-center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translatex(-100px);
+    transform: translatex(-100px);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.form-check-input[disabled] ~ .form-check-label, .form-check-input:disabled ~ .form-check-label {
+    opacity: 1 !important;
+}
+
+.answer:hover {
+    background-color: rgb(101, 181, 218);
+}
+
+.forgot-pw {
+    color: rgb(25, 135, 84);
+    cursor: pointer;
+}
+.forgot-pw:hover {
+    text-decoration: underline;
+}

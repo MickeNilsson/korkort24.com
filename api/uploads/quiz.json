@@ -1,0 +1,26 @@
+{
+    "B-körkort": {
+        "Vad är ytinlärning?": {
+            "När kunskaperna sitter längre tid.": false,
+            "Du lär dig bara inför provet och har ingen förståelse för vad du lärt dig.": true,
+            "Man har förståelse för vad man lärt sig.": false,
+            "id": "ef9ac3b775"
+        },
+        "Vad är djupinlärning?": {
+            "Du lär dig bara inför provet och har ingen förståelse för vad du lärt dig.": false,
+            "Du söker förståelsen och sammanhang.": true,
+            "Något som utvecklas när man fyllt 18 år.": false,
+            "Man lär sig om mönsterdjupet i olika sorters däck.": false,
+            "id": "ef66312739"
+        }
+    },
+    "B körkort": {
+        "När får du börja övningsköra för körkort klass 1?": {
+            "16år": true,
+            "17år": false,
+            "15år": false,
+            "18år": false,
+            "id": "e72975b9b0"
+        }
+    }
+}
