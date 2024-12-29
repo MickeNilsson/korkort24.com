@@ -7,7 +7,11 @@ export default function AdminPage(props) {
 
     const [quizInJsxFormat, setQuizInJsxFormat] = useState(<h1>Loading...</h1>);
 
+    const [quiz, setQuiz] = useState({});
+
     const [showModal, setShowModal] = useState(false);
+
+    const [category, setCategory] = useState('');
 
     const [newInfo, setNewInfo] = useState('');
 
@@ -23,24 +27,24 @@ export default function AdminPage(props) {
 
     useEffect(() => {
 
-        axios.get('https://korkort24.com/api/quiz/')
+        getQuiz();
 
-            .then(function (getQuizResponse_o) {
+        async function getQuiz() {
 
-                if (getQuizResponse_o.status === 200) {
+            const response_o = await fetch('https://korkort24.com/api/quiz/');
 
-                    quiz_o.current = getQuizResponse_o.data;
+            if (response_o.status === 200) {
 
-                    const quiz_jsx = convertQuizToJsxFormat(quiz_o.current);
+                const body_o = await response_o.json();
 
-                    setQuizInJsxFormat(quiz_jsx);
-                }
-            })
+                setQuiz(body_o.data);
 
-            .catch(function (error_o) {
+                const quiz_jsx = convertQuizToJsxFormat(body_o.data);
 
-                debugger;
-            });
+                setQuizInJsxFormat(quiz_jsx);
+            }
+        }
+
     }, []);
 
     function updateNewQuestions(e) {
@@ -49,7 +53,7 @@ export default function AdminPage(props) {
     }
 
     function deleteQ(section_s, question_s) {
-
+        debugger;
         if (question_s) {
 
             delete quiz_o.current[section_s][question_s];
@@ -200,19 +204,29 @@ export default function AdminPage(props) {
 
             const section_jsx = (
 
-                <div className='section'>
+                <div className='section' style={{ marginBottom: '12px' }}>
 
-                    <h1 className='section-header'>{section_s}</h1>
+                    {/* <h1 className='section-header'>{section_s}</h1> */}
+                    <details>
+                        <summary style={{marginBottom: '10px'}}>{section_s}<Button className='delete-section-button'
+                            onClick={() => deleteCategory(section_s)}
+                            size='sm'
+                            type='button'
+                            variant='outline-danger'>
+                            Ta bort
+                        </Button></summary>
+                        {questions_a}
+                    </details>
 
-                    <Button className='delete-section-button'
-                        onClick={() => deleteQ(section_s)}
+                    {/* <Button className='delete-section-button'
+                        onClick={() => deleteCategory(section_s)}
                         size='sm'
                         type='button'
                         variant='outline-danger'>
                         Ta bort
-                    </Button>
+                    </Button> */}
 
-                    {questions_a}
+
 
                 </div>
             );
@@ -293,6 +307,52 @@ export default function AdminPage(props) {
         setNewInfo(e.target.value);
     }
 
+    async function deleteCategory(category_s) {
+
+        const temp = quiz;
+
+        delete temp[category_s];
+
+        setQuiz(temp);
+
+        const response_o = await fetch('https://korkort24.com/api/quiz/', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(temp)
+        });
+
+        const quiz_jsx = convertQuizToJsxFormat(quiz);
+
+        setQuizInJsxFormat(quiz_jsx);
+    }
+
+
+    async function addCategory() {
+        debugger;
+        if (category) {
+
+            quiz[category] = {};
+
+            setCategory('');
+
+            const response_o = await fetch('https://korkort24.com/api/quiz/', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(quiz)
+            });
+
+            const quiz_jsx = convertQuizToJsxFormat(quiz);
+
+            setQuizInJsxFormat(quiz_jsx);
+        }
+    }
+
     return (
         <>
             <div className='pb-5'>
@@ -306,7 +366,32 @@ export default function AdminPage(props) {
                 >
                     <Tab eventKey="questions" title="Frågor">
 
-                        <Form className='mb-3'
+                        <Form.Label htmlFor="category" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', 'color': 'white', borderRadius: '5px', 'padding': '5px' }}>Ny kategori</Form.Label>
+                        <Form.Control
+                            type="text"
+                            id="category"
+                            className='mb-3'
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
+                        />
+                        <Button
+                            size='sm'
+                            type='button'
+                            variant='primary'
+                            className='mb-3'
+                            onClick={addCategory}
+                        >Lägg till ny kategori</Button>
+
+
+                        {/* <Button
+                            size='sm'
+                            type='button'
+                            variant='primary'
+                            className='mb-3'
+                            onClick={() => console.log(quiz)}
+                        >Visa objekt</Button> */}
+
+                        {/* <Form className='mb-3'
                             onSubmit={addQuestions}
                             spellCheck={false}
                         >
@@ -328,13 +413,13 @@ export default function AdminPage(props) {
                                 Lägg till frågor
                             </Button>
 
-                        </Form>
+                        </Form> */}
 
                         <div className='quiz p-3'>{quizInJsxFormat}</div>
 
                     </Tab>
                     <Tab eventKey="info" title="Info">
-                    <Form className='mb-3'
+                        <Form className='mb-3'
                             onSubmit={addInfo}
                             spellCheck={false}
                         >
@@ -358,7 +443,7 @@ export default function AdminPage(props) {
 
                         </Form>
                     </Tab>
-                    
+
                 </Tabs>
 
 

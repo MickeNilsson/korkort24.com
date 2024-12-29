@@ -1,8 +1,10 @@
 <?php
 
-require 'headers.php';
-
 require 'error-reporting.php';
+
+require 'get-payload.php';
+
+require 'headers.php';
 
 require 'settings.php';
 

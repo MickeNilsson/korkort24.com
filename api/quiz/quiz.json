@@ -1,4 +1,12 @@
 {
+    "ykb": {
+        "Första frågan inom ykb": {
+            "Svar 1": false,
+            "Svar 2 (rätt svar)": true,
+            "Svar 3": false,
+            "id": "ef9ac3b776"
+        }
+    },
     "B-körkort": {
         "Vad är ytinlärning?": {
             "När kunskaperna sitter längre tid.": false,
@@ -28,14 +36,14 @@
             "id": "fb36312e4f"
         },
         "Vad innebär ett defensivt körsätt?": {
-            "Det handlar om  att försvara sin rätt att hålla en angiven hastighet.": false,
+            "Det handlar om att försvara sin rätt att hålla en angiven hastighet.": false,
             "Det handlar om att signalera tydligt innan man ska svänga.": false,
             "Det handlar om att köra på ett tydligt och omsorgsfullt sätt och vara medveten om de risker som finns.": true,
             "Det handlar om att ha bromsberedskap vid övergångsställen.": false,
             "id": "24abf67ca8"
         },
         "Vad betyder hastighetsanpassning?": {
-            " Du ska anpassa körningen och hastigheten  efter hur många passagerare du har.": false,
+            " Du ska anpassa körningen och hastigheten efter hur många passagerare du har.": false,
             "Du ska sträva efter att alltid hålla högsta tillåtna hastighet för att inte hindra trafiken.": false,
             "Du ska vara medveten om riskerna med att köra på halt väglag.": false,
             "Du ska anpassa hastigheten efter vad trafiksäkerheten i situationen kräver.*": true,
@@ -69,14 +77,14 @@
             "Samma regler gäller som vid möten på gator med normalbredd.": false,
             "id": "c942c91fa2"
         },
-        " Vilket av följande påståenden är falskt?": {
+        "Vilket av följande påståenden är falskt?": {
             "Högerregeln gäller inte vid infart och körning på huvudled.": false,
             "Högerregeln gäller inte i cirkulationsplats.": false,
             "Högerregeln gäller inte på livligt trafikerade större gator i stadsmiljö.": true,
             "Högerregeln gäller inte där accelerationsfält förekommer.": false,
             "id": "8916dc4371"
         },
-        "Varför  gör barns syn att de har svårare att se i trafiken?": {
+        "Varför gör barns syn att de har svårare att se i trafiken?": {
             "Barn är mer närsynta än vuxna.": false,
             "Barn är mer långsynta än vuxna.": false,
             " Barn har svårare att uppfatta konturer.": false,
@@ -181,7 +189,7 @@
             "Andra trafikanter bakom dig kan köra om dig på höger sida.": false,
             "id": "841fb4087b"
         },
-        " Ett av följande påståenden är falskt -vilket?": {
+        "Ett av följande påståenden är falskt -vilket?": {
             "När du kör ut ur en cirkulationsplats så gäller alltid högerregeln.": true,
             "När du kör ut ur en cirkulationsplats ska du använda höger blinkers för att visa din avsikt.": false,
             "När du kör ut ur en cirkulationsplats ska du ha god uppsikt bakåt, kontrollera döda vinkeln och alltid ge tecken innan körfältsbyte.": false,
@@ -209,7 +217,7 @@
             "Gående": false,
             "id": "ce98cabc0f"
         },
-        " Vad gäller när en cyklist eller mopedförare åker i körbanan på de platser där det saknas cykelbana och ska svänga vänster?": {
+        "Vad gäller när en cyklist eller mopedförare åker i körbanan på de platser där det saknas cykelbana och ska svänga vänster?": {
             "De kan välja mellan att hålla sig längs med mittlinjen i svängen eller hålla sig intill körbanans högra kant i svängen.": true,
             " De måste hålla sig längs med mittlinjen i svängen.": false,
             "De måste hålla sig intill körbanans högra kant i svängen.": false,
@@ -230,14 +238,14 @@
             "65 m.": false,
             "id": "e99cb5628d"
         },
-        "Vilket av följande påståenden är falskt?": {
+        "Vilket av följande påståenden är falskt? ": {
             "Det är förbjudet att köra om på vänster sida om framförvarande ger tecken för vänstersväng.": false,
             "Det är förbjudet att köra om före eller på en obevakad cykelöverfart på gator med ett körfält i vardera riktningen.": false,
             " Det är förbjudet att köra om andra fyrhjuliga fordon före en järnvägskorsning som saknar trafikljus av samma sort som används i vägkorsning.": false,
             "Det är förbjudet att köra om tvåhjuliga fordon före en järnvägskorsning som saknar trafikljus av samma sort som används i vägkorsning.": true,
             "id": "7fb80a2990"
         },
-        " En polisbil bakom dig med blinkande blått och rött ljus betyder att...?": {
+        "En polisbil bakom dig med blinkande blått och rött ljus betyder att...?": {
             " Polisen vill göra dig uppmärksam på att du av misstag har helljus på.": false,
             "Du ska omedelbart öka farten.": false,
             "Polisen vill passera dig för att den är på uppdrag och har bråttom att komma fram till en brottsplats.": false,
@@ -293,7 +301,7 @@
             "För att stadsbussarna ska kunna hålla sina tidtabeller och inte hindras av trafikstockningar.": true,
             "id": "2c1e345732"
         },
-        " Vad innebär reversibelt körfält?": {
+        "Vad innebär reversibelt körfält?": {
             "Körfält reserverat för taxi och utryckningsfordon.": false,
             "Körfält med plats för tre fordon i bredd.": false,
             " Vändbart körfält vars för tillfället tillåtna körriktning styrs av trafiksignaler.": true,
@@ -556,7 +564,7 @@
             "Vill bakomvarande bil köra om är jag skyldig att hålla till höger. ": true,
             "id": "cd3afc6fc0"
         },
-        ". Du tänker köra en bil som vid normal belastning ska ha ett lufttryck på 190 kPa i varje däck. Hur bör Du ändra lufttrycket vid körning med tung last baktill i bilen?": {
+        "Du tänker köra en bil som vid normal belastning ska ha ett lufttryck på 190 kPa i varje däck. Hur bör Du ändra lufttrycket vid körning med tung last baktill i bilen?": {
             "Bibehålla normalt lufttryck.  ": false,
             "Öka lufttrycket till 210 kPa både fram och bak.": false,
             "Öka lufttrycket till 210 kPa fram och 230 kPa bak.": true,
@@ -694,7 +702,7 @@
             "Du ska lämna företräde åt all korsande trafik. ": true,
             "id": "3aaa0aa481"
         },
-        " Vad är sant beträffande motorvägskörning?": {
+        "Vad är sant beträffande motorvägskörning?": {
             "Lägsta tillåtna hastighet är 40 km\/h. ": false,
             "Samma högsta tillåtna hastighet för lätt lastbil och personbil.": true,
             "Du får endast stanna vid av- och påfartssträckorna.": false,
@@ -777,7 +785,7 @@
             " Placera den skadade med huvudet högt.": false,
             "id": "f06961ba60"
         },
-        " Vad är den första åtgärd Du bör vidta om du på en parkeringsplats råkat köra på och skada en bil vars förare inte finns där?": {
+        "Vad är den första åtgärd Du bör vidta om du på en parkeringsplats råkat köra på och skada en bil vars förare inte finns där?": {
             " Att anmäla händelsen till Vägverket. ": false,
             "Att anmäla händelsen till trafikförsäkringsföreningen. ": false,
             "Att sätta en lapp under vindrutetorkaren på den skadade bilen och på den uppge ditt namn och telefonnummer samt berätta vad som hänt.": true,

@@ -4,14 +4,62 @@ import { useEffect, useReducer, useRef, useState } from 'react';
 import { Nav } from 'react-bootstrap';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Pagination from 'react-bootstrap/Pagination';
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
-export default function StudentAccountPage({student}) {
-    
+export default function StudentAccountPage({ student }) {
+
+    const [value, onChange] = useState(new Date());
+
+    const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+    const events = [
+        new Date(2024, 11, 20), // Add your event dates here
+        new Date(2024, 11, 22),
+        new Date(2024, 11, 25),
+    ];
+
+    const availableTimes = [
+        {
+            id: 1,
+            from: '10:00',
+            to: '10:30'
+        },
+        {
+            id: 2,
+            from: '12:00',
+            to: '12:30'
+        },
+        {
+            id: 3,
+            from: '14:30',
+            to: '15:30'
+        }
+    ];
+
+    const isEventDate = (date) => {
+        return events.some(
+            (eventDate) =>
+                eventDate.getFullYear() === date.getFullYear() &&
+                eventDate.getMonth() === date.getMonth() &&
+                eventDate.getDate() === date.getDate()
+        );
+    };
+
+    function handleClickDay(e) {
+        console.log(e);
+        //console.log(value);
+    }
+
     const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
     const [info, setInfo] = useState({});
@@ -63,8 +111,8 @@ export default function StudentAccountPage({student}) {
         const timerRef_s = setInterval(() => {
 
             timer_i.current--;
- 
-            const minutes_i =  parseInt(timer_i.current / 60);
+
+            const minutes_i = parseInt(timer_i.current / 60);
 
             const minutes_s = minutes_i < 10 ? '0' + minutes_i : minutes_i;
 
@@ -84,7 +132,7 @@ export default function StudentAccountPage({student}) {
         axios.get('https://korkort24.com/api/quiz/')
 
             .then(response_o => {
-            
+
                 if (response_o && response_o.data && response_o.data.data) {
 
                     const data_o = response_o.data.data;
@@ -170,18 +218,18 @@ export default function StudentAccountPage({student}) {
     }
 
     function correctTest() {
-        
+
         let score_i = 0;
 
-        for(const question_o of activeQuiz.questions) {
-    
+        for (const question_o of activeQuiz.questions) {
+
             const questionId_s = question_o.id;
 
             const chosenAnswer_s = chosenAnswers[questionId_s]
-    
+
             const correctAnswer_s = (question_o.answers.find(answer_o => answer_o.isCorrectAnswer)).answer;
 
-            if(chosenAnswer_s === correctAnswer_s) {
+            if (chosenAnswer_s === correctAnswer_s) {
 
                 paginationItems[questionId_s] = '#60bd60';
 
@@ -191,7 +239,7 @@ export default function StudentAccountPage({student}) {
 
                 paginationItems[questionId_s] = chosenAnswer_s ? 'red' : 'white';
             }
-    
+
             setPaginationItems(paginationItems);
         }
 
@@ -200,7 +248,7 @@ export default function StudentAccountPage({student}) {
         setRevealAnswer(true);
 
         clearInterval(timerRef);
-        
+
         forceUpdate();
     }
 
@@ -222,7 +270,7 @@ export default function StudentAccountPage({student}) {
 
         activeQuiz;
 
-        
+
 
         for (const quiz_o of quizzes) {
 
@@ -318,12 +366,12 @@ export default function StudentAccountPage({student}) {
             >
                 <Tab eventKey="home" title="Hem" className='text-white'>
 
-                    <div style={{borderRadius: '5px', backgroundColor: 'rgba(0, 0, 0, 0.7)'}} className='p-2 mt-3 text-white'>
+                    <div style={{ borderRadius: '5px', backgroundColor: 'rgba(0, 0, 0, 0.7)' }} className='p-2 mt-3 text-white'>
                         Hej {student.firstname}!
                         <p>Dina resultat:</p>
                         <p>B-körkortsprov: 62 av 65 rätt</p>
                     </div>
-                    
+
                 </Tab>
 
                 <Tab eventKey="questions" title="Frågor" className='p-3' style={{ backgroundColor: 'rgba(0, 0, 0, 0.7' }}>
@@ -339,18 +387,18 @@ export default function StudentAccountPage({student}) {
                     {activeQuiz && <div className='mb-3 mt-3'>
 
                         <div className='text-center'>
-                            {!quizType && 
+                            {!quizType &&
                                 <span>
                                     <Button className='me-3' size='sm' variant='primary' onClick={activateStandardQuiz}>Alla frågor</Button>
                                     <Button size='sm' variant='primary' onClick={activateTimedQuiz}>Frågor på tid</Button>
                                 </span>}
 
-                            {quizType === 'timed' && <span className='ms-3' style={{color: 'white'}}>{timer}</span>}
+                            {quizType === 'timed' && <span className='ms-3' style={{ color: 'white' }}>{timer}</span>}
 
                             {/* <i role='button' className='bi bi-x-circle text-white fs-3 float-end'></i> */}
                         </div>
 
-                        
+
 
                     </div>}
 
@@ -396,14 +444,14 @@ export default function StudentAccountPage({student}) {
                                             onChange={() => { userPickedAnswer(); handleChange(questionId_s, answer_s) }}
                                             defaultChecked={chosenAnswers[questionId_s] === answer_s}
                                             type='radio'
-                                            style={{opacity: '1.0', borderRadius: '5px', backgroundColor: (chosenAnswers[questionId_s] === answer_s && paginationItems[questionId_s]) || '' }}
+                                            style={{ opacity: '1.0', borderRadius: '5px', backgroundColor: (chosenAnswers[questionId_s] === answer_s && paginationItems[questionId_s]) || '' }}
                                             className='text-white answer'
                                             label={answer_s} />
                                     );
 
                                 })}
 
-                                {revealAnswer && <div className='text-white fs-3 mt-3'>{score} rätt{score > 1 ? 'a' : ''} svar av {quizType === 'standard' ? '187' : '65'} {quizType === 'timed' ? (score > 51 ? <span className='text-success'>Godkänt</span> : <span className='text-danger'>Underkänt</span>) : ''} <Button onClick={() => {setRevealAnswer(false);setQuizType('');setChosenAnswers([]);setPaginationItems([]);setActiveQuestionIndex(0);}} className='float-end' size='sm' variant='primary'>Stäng</Button></div>}
+                                {revealAnswer && <div className='text-white fs-3 mt-3'>{score} rätt{score > 1 ? 'a' : ''} svar av {quizType === 'standard' ? '187' : '65'} {quizType === 'timed' ? (score > 51 ? <span className='text-success'>Godkänt</span> : <span className='text-danger'>Underkänt</span>) : ''} <Button onClick={() => { setRevealAnswer(false); setQuizType(''); setChosenAnswers([]); setPaginationItems([]); setActiveQuestionIndex(0); }} className='float-end' size='sm' variant='primary'>Stäng</Button></div>}
 
                                 {!revealAnswer && <Button className='mt-3' variant='primary' onClick={correctTest}>Avsluta testet och visa resultatet</Button>}
 
@@ -423,12 +471,41 @@ export default function StudentAccountPage({student}) {
 
                     </Form.Select>
 
-                    {info.text && <div style={{borderRadius: '5px', backgroundColor: 'rgba(0, 0, 0, 0.7)'}} className='p-2 mt-3 text-white' dangerouslySetInnerHTML={{__html:info.text}}></div>}
+                    {info.text && <div style={{ borderRadius: '5px', backgroundColor: 'rgba(0, 0, 0, 0.7)' }} className='p-2 mt-3 text-white' dangerouslySetInnerHTML={{ __html: info.text }}></div>}
+
+                </Tab>
+
+                <Tab eventKey="driving" title="Coaching">
+
+                    <div style={{ borderRadius: '5px', backgroundColor: 'rgba(0, 0, 0, 0.7)', height: '1000px' }} className='p-2 mt-3 text-white'>
+                        <h2>Boka coaching</h2>
+                        <Calendar style={{float: 'left'}} onChange={onChange} onClickDay={handleClickDay} value={value} tileClassName={({ date, view }) =>
+                            view === "month" && isEventDate(date) ? "highlight" : null
+                        } />
+                        <div style={{float: 'left', width: '150px'}}>{availableTimes.map(availableTime => <span onClick={handleShow} className="available-time" key={availableTime.id}>{availableTime.from} - {availableTime.to}</span>)}</div>
+                    </div>
+                    
 
                 </Tab>
 
             </Tabs>
 
+            <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Boka coaching</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Boka coaching måndagen den 24:e november kl. 14:00 - 15:00</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Stäng
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+           Boka
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
         </>
     );
 }
+
