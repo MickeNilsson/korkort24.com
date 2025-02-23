@@ -98,32 +98,30 @@ export default function AdminPage(props) {
 
     async function deleteSection(sectionName_s) {
 
-        const updatedConvertedQuiz_a = convertedQuiz.filter(section => section.name !== sectionName_s);
+        const updatedQuiz_a = quiz.filter(section => section.name !== sectionName_s);
 
-        setConvertedQuiz(updatedConvertedQuiz_a);
+        await saveQuiz(updatedQuiz_a);
+
+        setQuiz(updatedQuiz_a);
 
         setShowDeleteSectionModal(false);
-
-        const quiz_o = convertToObject(updatedConvertedQuiz_a);
-
-        await saveQuiz(quiz_o);
-
-        setQuiz(quiz_o);
     }
 
     async function addSection() {
 
         if (!section) return;
 
-        convertedQuiz.push({ name: section });
+        const newSection_o = {
+            id: generateUUID(),
+            name: section,
+            quesions: []
+        };
 
-        setConvertedQuiz(convertedQuiz);
+        const updatedQuiz_a = [...quiz, newSection_o];
 
-        const quiz_o = convertToObject(convertedQuiz);
+        await saveQuiz(updatedQuiz_a);
 
-        await saveQuiz(quiz_o);
-
-        setQuiz(quiz_o);
+        setQuiz(updatedQuiz_a);
     }
 
     function addQuestion(section_o) {
@@ -149,10 +147,6 @@ export default function AdminPage(props) {
             image: ''
         };
 
-        /* quiz[showAddQuestionModal][question] = {
-            id: generateUUID()
-        }; */
-
         for (const [index, answer] of answers.entries()) {
 
             const answer_o = {
@@ -166,23 +160,7 @@ export default function AdminPage(props) {
 
         section_o.questions.push(newQuestion_o);
 
-/*         const quiz_o = { ...quiz };
-
-        for (const sectionName_s in quiz_o) {
-
-            delete quiz_o[sectionName_s]['name'];
-        } */
-
-            debugger;
-            
         await saveQuiz(quiz);
-
-        // for (const sectionName_s in quiz_o) {
-
-        //     quiz_o[sectionName_s]['name'] = sectionName_s;
-        // }
-
-        // setQuiz(quiz_o);
 
         setShowAddQuestionModal(false);
     }
