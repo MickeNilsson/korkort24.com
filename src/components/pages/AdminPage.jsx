@@ -251,7 +251,7 @@ export default function AdminPage(props) {
 
                     <div className='bg-body p-2'>
                         {quiz.map(section => (
-                            <div key={section.name}>
+                            <div style={{fontSize: '20px'}} key={section.name}>
                                 <span className='section-name' role='button' onClick={() => { setShowQuestionsModal(section.name) }}>{section.name}</span> <i onClick={() => { setSectionNameToDelete(section.name); setShowDeleteSectionModal(true); }} role='button' className='mx-2 bi bi-trash'></i>
                                 <i onClick={() => { setShowAddQuestionModal(section.name); setAnswers(['']); setQuestion(''); }} role='button' className='bi bi-plus-square-fill text-success'></i>
                             </div>
