@@ -114,7 +114,7 @@ export default function AdminPage(props) {
         const newSection_o = {
             id: generateUUID(),
             name: section,
-            quesions: []
+            questions: []
         };
 
         const updatedQuiz_a = [...quiz, newSection_o];
