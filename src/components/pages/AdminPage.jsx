@@ -1,319 +1,52 @@
-import Form from 'react-bootstrap/Form';
-import { Button, Modal, Tab, Tabs } from 'react-bootstrap';
+import { Button, Col, Form, InputGroup, Modal, Row, Tab, Tabs } from 'react-bootstrap';
 import { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
 
 export default function AdminPage(props) {
 
-    const [quizInJsxFormat, setQuizInJsxFormat] = useState(<h1>Loading...</h1>);
+    const [answers, setAnswers] = useState([]);
 
-    const [quiz, setQuiz] = useState({});
+    const [quiz, setQuiz] = useState([]);
 
-    const [showModal, setShowModal] = useState(false);
+    const [convertedQuiz, setConvertedQuiz] = useState([]);
 
-    const [category, setCategory] = useState('');
+    const [question, setQuestion] = useState('');
 
-    const [newInfo, setNewInfo] = useState('');
+    const [showDeleteSectionModal, setShowDeleteSectionModal] = useState(false);
 
-    const [newQuestions, setNewQuestions] = useState('');
+    const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
 
-    const [modalMessage, setModalMessage] = useState('');
+    const [showQuestionsModal, setShowQuestionsModal] = useState(false);
 
-    const [rerenderState, setRerenderState] = useState('A');
+    const [sectionNameToDelete, setSectionNameToDelete] = useState('');
 
-    const handleClose = () => setShowModal(false);
-
-    const quiz_o = useRef(null);
+    const [section, setSection] = useState('');
 
     useEffect(() => {
 
-        getQuiz();
+        init();
 
-        async function getQuiz() {
+        async function init() {
 
-            const response_o = await fetch('https://korkort24.com/api/quiz/');
-
-            if (response_o.status === 200) {
-
-                const body_o = await response_o.json();
-
-                setQuiz(body_o.data);
-
-                const quiz_jsx = convertQuizToJsxFormat(body_o.data);
-
-                setQuizInJsxFormat(quiz_jsx);
-            }
+            await loadQuiz();
         }
 
     }, []);
 
-    function updateNewQuestions(e) {
+    async function loadQuiz() {
 
-        setNewQuestions(e.target.value);
-    }
+        const response_o = await fetch('https://korkort24.com/api/quiz/');
+  
+        if (response_o.status === 200) {
 
-    function deleteQ(section_s, question_s) {
-        debugger;
-        if (question_s) {
+            const responseBody_o = await response_o.json();
 
-            delete quiz_o.current[section_s][question_s];
+            const quiz_o = responseBody_o.data;
 
-        } else {
-
-            delete quiz_o.current[section_s];
+            setQuiz(quiz_o);
         }
-
-        quiz_o.current.delete = true;
-
-        axios.post('https://korkort24.com/api/quiz/', quiz_o.current)
-
-            .then(function (postQuizResponse_o) {
-
-                if (postQuizResponse_o.status === 200) {
-
-                    axios.get('https://korkort24.com/api/quiz/')
-
-                        .then(function (getQuizResponse_o) {
-
-                            if (getQuizResponse_o.status === 200) {
-
-                                quiz_o.current = getQuizResponse_o.data
-
-                                const quiz_jsx = convertQuizToJsxFormat(quiz_o.current);
-
-                                setQuizInJsxFormat(quiz_jsx);
-                            }
-                        })
-
-                        .catch(function (error_o) {
-
-                            debugger;
-                        });
-                }
-            })
-
-            .catch(function (error_o) {
-
-                debugger;
-            });
     }
 
-    function uploadFile(questionId_s, e) {
-
-        const imageElement_o = e.target.parentElement.previousSibling;
-
-        const file_o = e.target.files[0];
-
-        const formData_o = new FormData();
-
-        formData_o.append('image', file_o);
-
-        const imageType_s = file_o.name.split('.')[1];
-
-        const fileName_s = questionId_s + '.' + imageType_s;
-
-        formData_o.append('fileName', fileName_s);
-
-        e.target.value = null;
-
-        window.questionid = questionId_s;
-
-        axios.post('https://korkort24.com/api/uploads/', formData_o)
-
-            .then(function (fileUploadResponse_o) {
-
-                setModalMessage('Bilden är sparad');
-
-                setShowModal(true);
-
-                imageElement_o.src = 'https://korkort24.com/images/' + fileName_s + '?' + new Date().getTime();
-            })
-
-            .catch(function (error) {
-
-                debugger;
-            });
-    }
-
-    function convertQuizToJsxFormat(quiz_o) {
-
-        let sections_a = [];
-
-        for (const section_s in quiz_o) {
-
-            let questions_a = [];
-
-            const section_o = quiz_o[section_s];
-
-            for (const question_s in section_o) {
-
-                let answers_a = [];
-
-                const question_o = section_o[question_s];
-
-                for (const answer_s in question_o) {
-
-                    if (answer_s !== 'id') {
-
-                        const answer_o = question_o[answer_s];
-
-                        const answer_jsx = (
-
-                            <h6>{answer_s} {answer_o === true ? <span className='correct-answer'>Rätt svar</span> : ''}</h6>
-                        );
-
-                        answers_a.push(answer_jsx);
-                    }
-                }
-
-                const question_jsx = (
-
-                    <div>
-
-                        <h4 style={{ display: 'inline-block' }}>{question_s}</h4>
-
-                        <Button className='delete-section-button'
-                            onClick={() => deleteQ(section_s, question_s)}
-                            size='sm'
-                            type='button'
-                            variant='outline-danger'>
-                            Ta bort
-                        </Button>
-
-                        {answers_a}
-
-                        <img style={{ width: '300px', display: 'block' }} src={'https://korkort24.com/images/find_image.php?name=' + question_o.id} alt='Question illustration' />
-
-                        <Form.Group className='mb-3'
-                            controlId='formFileSm'>
-
-                            {/* <Form.Label>Small file input example</Form.Label> */}
-
-                            <Form.Control
-                                onChange={(e) => { uploadFile(question_o.id, e) }}
-                                size='sm'
-                                type='file' />
-
-                        </Form.Group>
-
-                    </div>
-                );
-
-                questions_a.push(question_jsx);
-            }
-
-            const section_jsx = (
-
-                <div className='section' style={{ marginBottom: '12px' }}>
-
-                    {/* <h1 className='section-header'>{section_s}</h1> */}
-                    <details>
-                        <summary style={{marginBottom: '10px'}}>{section_s}<Button className='delete-section-button'
-                            onClick={() => deleteCategory(section_s)}
-                            size='sm'
-                            type='button'
-                            variant='outline-danger'>
-                            Ta bort
-                        </Button></summary>
-                        {questions_a}
-                    </details>
-
-                    {/* <Button className='delete-section-button'
-                        onClick={() => deleteCategory(section_s)}
-                        size='sm'
-                        type='button'
-                        variant='outline-danger'>
-                        Ta bort
-                    </Button> */}
-
-
-
-                </div>
-            );
-
-            sections_a.push(section_jsx);
-        }
-
-        const quiz_jsx = <div>{sections_a}</div>
-
-        return quiz_jsx;
-    }
-
-    function addQuestions(e) {
-
-        e.preventDefault();
-
-        e.stopPropagation();
-
-        try {
-
-            var newQuestions_o = JSON.parse(newQuestions.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"'));
-
-        } catch (e) {
-
-            alert('JSON-strukturen är felaktig.');
-
-            return;
-        }
-
-        axios.post('https://korkort24.com/api/quiz/', newQuestions_o)
-
-            .then(function (response_o) {
-
-                if (response_o.status === 200) {
-
-                    axios.get('https://korkort24.com/api/quiz/')
-
-                        .then(function (getQuizResponse_o) {
-
-                            if (getQuizResponse_o.status === 200) {
-
-                                quiz_o.current = getQuizResponse_o.data
-
-                                const quiz_jsx = convertQuizToJsxFormat(quiz_o.current);
-
-                                setQuizInJsxFormat(quiz_jsx);
-
-                                setNewQuestions('');
-
-                                setShowModal(true);
-
-                                setModalMessage('Frågorna är tillagda')
-                            }
-                        })
-
-                        .catch(function (error_o) {
-
-                            debugger;
-                        });
-                }
-            })
-            .catch(function (error_o) {
-
-                debugger;
-            });
-    }
-
-    function addInfo(e) {
-
-        e.preventDefault();
-
-        e.stopPropagation();
-
-    }
-
-    function updateNewInfo(e) {
-
-        setNewInfo(e.target.value);
-    }
-
-    async function deleteCategory(category_s) {
-
-        const temp = quiz;
-
-        delete temp[category_s];
-
-        setQuiz(temp);
+    async function saveQuiz(quiz_o) {
 
         const response_o = await fetch('https://korkort24.com/api/quiz/', {
             method: 'POST',
@@ -321,151 +54,329 @@ export default function AdminPage(props) {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(temp)
+            body: JSON.stringify(quiz_o)
         });
 
-        const quiz_jsx = convertQuizToJsxFormat(quiz);
-
-        setQuizInJsxFormat(quiz_jsx);
+        const responseBody_o = await response_o.json();
     }
 
+    function convertToArrayOfObjects(quiz_o) {
 
-    async function addCategory() {
-        debugger;
-        if (category) {
+        const arrayOfObjects = [];
 
-            quiz[category] = {};
+        for (const sectionName_s in quiz_o) {
 
-            setCategory('');
+            let section_o = quiz_o[sectionName_s];
 
-            const response_o = await fetch('https://korkort24.com/api/quiz/', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(quiz)
-            });
+            section_o.name = sectionName_s;
 
-            const quiz_jsx = convertQuizToJsxFormat(quiz);
-
-            setQuizInJsxFormat(quiz_jsx);
+            arrayOfObjects.push(section_o);
         }
+
+        return arrayOfObjects;
+    }
+
+    function convertToObject(quiz_a) {
+
+        let object_o = {};
+
+        for (const section_o of quiz_a) {
+
+            object_o[section_o.name] = section_o;
+
+        }
+
+        object_o = JSON.parse(JSON.stringify(object_o));
+
+        for (const section_s in object_o) {
+
+            delete object_o[section_s].name;
+        }
+
+        return object_o;
+    }
+
+    async function deleteSection(sectionName_s) {
+
+        const updatedConvertedQuiz_a = convertedQuiz.filter(section => section.name !== sectionName_s);
+
+        setConvertedQuiz(updatedConvertedQuiz_a);
+
+        setShowDeleteSectionModal(false);
+
+        const quiz_o = convertToObject(updatedConvertedQuiz_a);
+
+        await saveQuiz(quiz_o);
+
+        setQuiz(quiz_o);
+    }
+
+    async function addSection() {
+
+        if (!section) return;
+
+        convertedQuiz.push({ name: section });
+
+        setConvertedQuiz(convertedQuiz);
+
+        const quiz_o = convertToObject(convertedQuiz);
+
+        await saveQuiz(quiz_o);
+
+        setQuiz(quiz_o);
+    }
+
+    function addQuestion(section_o) {
+
+        console.log(section_o);
+
+        console.log('question: ' + question);
+    }
+
+    async function saveNewQuestion(e) {
+        
+        e.preventDefault();
+
+        const answerRadios = document.getElementsByName('answer');
+
+        const section_o = quiz.find(quiz_o => quiz_o.name === showAddQuestionModal);
+
+        const newQuestion_o = {
+            id: generateUUID(),
+            name: question,
+            answers: [],
+            explanation: '',
+            image: ''
+        };
+
+        /* quiz[showAddQuestionModal][question] = {
+            id: generateUUID()
+        }; */
+
+        for (const [index, answer] of answers.entries()) {
+
+            const answer_o = {
+                id: generateUUID(),
+                isCorrect: answerRadios[index].checked,
+                name: answer
+            };
+
+            newQuestion_o.answers.push(answer_o);
+        }
+
+        section_o.questions.push(newQuestion_o);
+
+/*         const quiz_o = { ...quiz };
+
+        for (const sectionName_s in quiz_o) {
+
+            delete quiz_o[sectionName_s]['name'];
+        } */
+
+            debugger;
+            
+        await saveQuiz(quiz);
+
+        // for (const sectionName_s in quiz_o) {
+
+        //     quiz_o[sectionName_s]['name'] = sectionName_s;
+        // }
+
+        // setQuiz(quiz_o);
+
+        setShowAddQuestionModal(false);
+    }
+
+    function generateUUID() { // Public Domain/MIT
+        var d = new Date().getTime();//Timestamp
+        var d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now() * 1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16;//random number between 0 and 16
+            if (d > 0) {//Use timestamp until depleted
+                r = (d + r) % 16 | 0;
+                d = Math.floor(d / 16);
+            } else {//Use microseconds since page-load if supported
+                r = (d2 + r) % 16 | 0;
+                d2 = Math.floor(d2 / 16);
+            }
+            return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+    }
+
+    function showQuestions(section_s) {
+        console.log(section_s);
     }
 
     return (
-        <>
-            <div className='pb-5'>
 
-                <h1 className='page-header'>Admin Page</h1>
+        <div className='pb-5'>
 
-                <Tabs
-                    defaultActiveKey="questions"
-                    id="admin-tabs"
-                    className="mb-3"
-                >
-                    <Tab eventKey="questions" title="Frågor">
+            <h1 className='page-header'>Admin Page</h1>
 
-                        <Form.Label htmlFor="category" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', 'color': 'white', borderRadius: '5px', 'padding': '5px' }}>Ny kategori</Form.Label>
+            <Tabs
+                defaultActiveKey="questions"
+                id="admin-tabs"
+                className="mb-3"
+            >
+
+                <Tab eventKey="questions" title="Frågor">
+
+                    {/* <Form.Group className='mb-3'>
+
                         <Form.Control
-                            type="text"
-                            id="category"
-                            className='mb-3'
-                            value={category}
-                            onChange={(e) => setCategory(e.target.value)}
-                        />
+                            className='mb-2'
+                            onChange={(e) => setSection(e.target.value)}
+                            placeholder='Ny kategori'
+                            size='sm'
+                            spellCheck='false'
+                            type='text' />
+
                         <Button
                             size='sm'
                             type='button'
                             variant='primary'
-                            className='mb-3'
-                            onClick={addCategory}
+                            className='mb-2'
+                            onClick={addSection}
                         >Lägg till ny kategori</Button>
 
+                    </Form.Group> */}
 
-                        {/* <Button
-                            size='sm'
-                            type='button'
-                            variant='primary'
-                            className='mb-3'
-                            onClick={() => console.log(quiz)}
-                        >Visa objekt</Button> */}
+                    <Row className="align-items-center">
 
-                        {/* <Form className='mb-3'
-                            onSubmit={addQuestions}
-                            spellCheck={false}
-                        >
-                            <Form.Group className='mb-3'>
+                        <Col xs="auto">
 
-                                <Form.Control className='new-questions-textarea'
-                                    as='textarea'
-                                    onChange={updateNewQuestions}
-                                    rows={20}
-                                    value={newQuestions} />
+                            <Form.Control
+                                className='mb-2'
+                                onChange={(e) => setSection(e.target.value)}
+                                placeholder='Ny kategori'
+                                size='sm'
+                                spellCheck='false'
+                                type='text' />
 
-                            </Form.Group>
+                        </Col>
+
+                        <Col xs="auto">
 
                             <Button
                                 size='sm'
-                                type='submit'
-                                variant='primary'
-                            >
-                                Lägg till frågor
-                            </Button>
-
-                        </Form> */}
-
-                        <div className='quiz p-3'>{quizInJsxFormat}</div>
-
-                    </Tab>
-                    <Tab eventKey="info" title="Info">
-                        <Form className='mb-3'
-                            onSubmit={addInfo}
-                            spellCheck={false}
-                        >
-                            <Form.Group className='mb-3'>
-
-                                <Form.Control className='new-info-textarea'
-                                    as='textarea'
-                                    onChange={updateNewInfo}
-                                    rows={20}
-                                    value={newInfo} />
-
-                            </Form.Group>
-
-                            <Button
-                                size='sm'
-                                type='submit'
-                                variant='primary'
-                            >
-                                Lägg till info
-                            </Button>
-
-                        </Form>
-                    </Tab>
-
-                </Tabs>
+                                type='button'
+                                variant='success'
+                                className='mb-2'
+                                onClick={addSection}
+                            >+</Button>
 
 
 
+                        </Col>
 
-            </div>
+                    </Row>
 
-            <Modal show={showModal} onHide={handleClose}>
-                {/* <Modal.Header closeButton>
-                    <Modal.Title>Frågorna är sparade</Modal.Title>
-                </Modal.Header> */}
-                <Modal.Body>{modalMessage}</Modal.Body>
+                    <div className='bg-body p-2'>
+                        {quiz.map(section => (
+                            <div key={section.name}>
+                                <span className='section-name' role='button' onClick={() => { setShowQuestionsModal(section.name) }}>{section.name}</span> <i onClick={() => { setSectionNameToDelete(section.name); setShowDeleteSectionModal(true); }} role='button' className='mx-2 bi bi-trash'></i>
+                                <i onClick={() => { setShowAddQuestionModal(section.name); setAnswers(['']); setQuestion(''); }} role='button' className='bi bi-plus-square-fill text-success'></i>
+                            </div>
+                        ))}
+                    </div>
+
+                </Tab>
+
+                <Tab eventKey="info" title="Info"></Tab>
+
+                <Tab eventKey="bookings" title="Bokningar"></Tab>
+
+            </Tabs>
+
+            <Modal show={showDeleteSectionModal} onHide={() => setShowDeleteSectionModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Vill du ta bort den här sektionen?</Modal.Title>
+                </Modal.Header>
+                {/* <Modal.Body>Ta bort sektionen {sectionNameToDelete}</Modal.Body> */}
                 <Modal.Footer>
                     <Button
-                        onClick={() => setShowModal(false)}
+                        onClick={() => deleteSection(sectionNameToDelete)}
                         size='sm'
                         variant='primary'
                     >
-                        OK
+                        Ta bort sektionen "{sectionNameToDelete}"
                     </Button>
                 </Modal.Footer>
             </Modal>
-        </>
+
+            <Modal show={showAddQuestionModal} onHide={() => { setShowAddQuestionModal(false); setQuestion(''); }}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Ny fråga - {showAddQuestionModal}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+
+                    <form onSubmit={saveNewQuestion}>
+
+                        <Form.Control
+                            required
+                            className='mb-2'
+                            onChange={e => setQuestion(e.target.value)}
+                            placeholder='Fråga'
+                            size='sm'
+                            spellCheck='false'
+                            type='text'
+                            value={question} />
+
+                        {answers.map((answer, i) => (
+
+                            <InputGroup key={i} className="mb-3" size='sm'>
+                                <InputGroup.Radio name='answer' required />
+                                <Form.Control
+                                    onChange={e => { answers[i] = e.target.value; setAnswers([...answers]); }}
+                                    placeholder='Svar'
+                                    required
+                                    spellCheck='false'
+                                    type='text'
+                                    value={answers[i]}
+                                />
+                                {answers.length === (i + 1) &&
+                                    <Button
+
+                                        type='button'
+                                        variant='success'
+
+                                        onClick={() => setAnswers([...answers, ''])}
+                                    >+</Button>}
+                            </InputGroup>
+
+
+                        ))}
+
+                        <Button
+                            size='sm'
+                            type='submit'
+                            variant='primary'
+                            onClick={() => console.log('lägg till ny fråga')}
+                        >Lägg till</Button>
+
+                    </form>
+
+                </Modal.Body>
+
+            </Modal>
+
+            <Modal show={showQuestionsModal} onHide={() => setShowQuestionsModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{showQuestionsModal}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {(convertedQuiz.filter(section => section.name === showQuestionsModal)).map(section_o => {
+                        return (
+                            <div>
+                                {section_o.name}
+                                {Object.entries(section_o).map(q => <p>{JSON.stringify(q)}</p>)}
+                            </div>
+                        )
+                    })}
+                </Modal.Body>
+            </Modal>
+
+        </div>
     );
+
 }

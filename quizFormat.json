@@ -1,0 +1,21 @@
+[
+    {
+        "id": "abc123",
+        "name": "B-körkortsfrågor",
+        "questions": [
+            {
+                "id": "def456",
+                "name": "En fråga",
+                "answers": [
+                    {
+                        "id": "qwe234",
+                        "name": "Ett svar",
+                        "isCorrect": true
+                    }
+                ],
+                "explanation": "En förklaring till denna fråga",
+                "image": "def456.png"
+            }
+        ]
+    }
+]

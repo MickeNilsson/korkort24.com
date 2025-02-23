@@ -15,36 +15,57 @@ import 'react-calendar/dist/Calendar.css';
 
 export default function StudentAccountPage({ student }) {
 
+    const [quiz, setQuiz] = useState([]);
+
+
+
+    const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+
     const [value, onChange] = useState(new Date());
 
     const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+    const [chosenDate, setChosenDate] = useState('');
 
-    const events = [
-        new Date(2024, 11, 20), // Add your event dates here
-        new Date(2024, 11, 22),
-        new Date(2024, 11, 25),
-    ];
+    const handleClose = () => setShow(false);
+    const handleShow = (id) => {
+        setShow(true);
+        console.log('handleShow: ' + id);
+        setChosenAvailableTime(availableTimes.find(availableTime => availableTime.id === id));
+        //setChosenAvailableTime({id: 1});
+    }
+    // const events = [
+    //     new Date(2025, 1, 20), // Add your event dates here
+    //     new Date(2025, 1, 22),
+    //     new Date(2025, 1, 25),
+    // ];
 
-    const availableTimes = [
-        {
-            id: 1,
-            from: '10:00',
-            to: '10:30'
-        },
-        {
-            id: 2,
-            from: '12:00',
-            to: '12:30'
-        },
-        {
-            id: 3,
-            from: '14:30',
-            to: '15:30'
-        }
-    ];
+    const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+
+    const [events, setEvents] = useState([]);
+
+    // const availableTimes = [
+    //     {
+    //         id: 1,
+    //         from: '2025-01-20T10:00:00',
+    //         to: '2025-01-20T10:30:00'
+    //     },
+    //     {
+    //         id: 2,
+    //         from: '2025-01-20T12:00:00',
+    //         to: '2025-01-20T12:30:00'
+    //     },
+    //     {
+    //         id: 3,
+    //         from: '2025-01-22T09:00:00',
+    //         to: '2025-01-22T10:00:00'
+    //     }
+    // ];
 
     const isEventDate = (date) => {
         return events.some(
@@ -55,8 +76,29 @@ export default function StudentAccountPage({ student }) {
         );
     };
 
-    function handleClickDay(e) {
-        console.log(e);
+    function handleClickDay(date) {
+
+        let chosenDate_o = new Date(date);
+
+        chosenDate_o.setDate(chosenDate_o.getDate() + 1);//.toISOString().substring(0, 10);
+
+        const chosenDate_s = chosenDate_o.toISOString().substring(0, 10);
+
+        setChosenDate(chosenDate_s);
+
+        console.dir(chosenDate_s);
+
+        console.log(availableTimes);
+
+
+        const timeslots = availableTimes.filter(availableTime => {
+            console.log(availableTime.from.substring(0, 10) + ' = ' + chosenDate_s);
+            return availableTime.from.substring(0, 10) === chosenDate_s;
+        });
+
+        console.log(timeslots);
+
+        setChosenAvailableTimes(timeslots);
         //console.log(value);
     }
 
@@ -92,6 +134,12 @@ export default function StudentAccountPage({ student }) {
 
     const quizState_o = useRef({});
 
+    const [availableTimes, setAvailableTimes] = useState([]);
+
+    const [chosenAvailableTimes, setChosenAvailableTimes] = useState([]);
+
+    const [chosenAvailableTime, setChosenAvailableTime] = useState();
+
     // Fetch quiz when user has logged in to student account
     useEffect(() => {
 
@@ -100,9 +148,73 @@ export default function StudentAccountPage({ student }) {
             hasFetchedQuiz.current = true;
 
             fetchQuiz();
+
+            fetchAvailableTimes();
         }
 
     }, []);
+
+    async function fetchAvailableTimes() {
+
+        // const availTimes = [
+        //     {
+        //         id: 1,
+        //         from: '2025-01-23T10:00:00',
+        //         to: '2025-01-23T10:30:00'
+        //     },
+        //     {
+        //         id: 2,
+        //         from: '2025-01-20T12:00:00',
+        //         to: '2025-01-20T12:30:00'
+        //     },
+        //     {
+        //         id: 3,
+        //         from: '2025-01-21T09:00:00',
+        //         to: '2025-01-21T10:00:00'
+        //     },
+        //     {
+        //         id: 4,
+        //         from: '2025-01-20T09:00:00',
+        //         to: '2025-01-20T10:30:00'
+        //     }
+        // ];
+
+        const response = await fetch('https://korkort24.com/api/times/');
+
+        let availTimes = await response.json();
+
+        availTimes = availTimes.filter(availTime => !availTime.studentid);
+
+        availTimes.sort((a, b) => {
+            if(a.from < b.from) return -1;
+            if(a.from > b.from) return 1;
+            return 0;
+        });
+
+        let  availDates = availTimes.map(availTime => availTime.from.substring(0, 10));
+
+        availDates = [...(new Set(availDates))];
+
+        setAvailableTimes(availTimes);
+
+        const eve = availDates.map(availDate => {
+
+            const year = +availDate.substring(0, 4);
+
+            let month = (+availDate.substring(5, 7));
+
+            month--;
+
+            const day = +availDate.substring(8, 10);
+
+            return new Date(year, month, day);
+        });
+
+
+        setEvents(eve);
+
+        return availTimes;
+    }
 
     function startTimer() {
 
@@ -127,78 +239,32 @@ export default function StudentAccountPage({ student }) {
         setTimerRef(timerRef_s);
     }
 
-    function fetchQuiz() {
+    async function fetchQuiz() {
 
-        axios.get('https://korkort24.com/api/quiz/')
+        fetch('https://korkort24.com/api/quiz/')
 
-            .then(response_o => {
+            .then(async (response_o) => {
 
-                if (response_o && response_o.data && response_o.data.data) {
+                const json_o = await response_o.json();
 
-                    const data_o = response_o.data.data;
+                setQuiz(json_o.data);
 
-                    hasFetchedQuiz.current = true;
-
-                    const quizzes_a = [];
-
-                    let quizId_i = 0;
-
-                    for (const quiz_s in data_o) {
-
-                        const quiz_o = {
-                            title: quiz_s,
-                            questions: [],
-                            id: ++quizId_i
-                        };
-
-                        for (const question_s in data_o[quiz_s]) {
-
-                            const question_o = {
-                                question: question_s,
-                                answers: []
-                            };
-
-                            for (const answer_s in data_o[quiz_s][question_s]) {
-
-                                if (answer_s !== 'id') {
-
-                                    const answer_o = {
-                                        answer: answer_s,
-                                        isCorrectAnswer: data_o[quiz_s][question_s][answer_s]
-                                    };
-
-                                    question_o.answers.push(answer_o);
-
-                                } else {
-
-                                    question_o.id = data_o[quiz_s][question_s][answer_s];
-                                }
-                            }
-
-                            quiz_o.questions.push(question_o);
-                        }
-
-                        quizzes_a.push(quiz_o);
-                    }
-
-                    setQuizzes(quizzes_a);
-                }
             });
     }
 
     function showQuiz(quizSelect_o) {
-
+        
         setQuizType('');
 
         clearInterval(timerRef);
 
         const selectedOption_o = quizSelect_o[quizSelect_o.options.selectedIndex];
 
-        const quizId_i = parseInt(selectedOption_o.dataset.quizId);
+        const quizId_s = selectedOption_o.dataset.quizId;
+        
+        switch (quizId_s) {
 
-        switch (quizId_i) {
-
-            case 0: // The user didn't chose any quiz
+            case '0': // The user didn't chose any quiz
 
                 setActiveQuiz(null);
 
@@ -206,9 +272,9 @@ export default function StudentAccountPage({ student }) {
 
             default:
 
-                const quiz_o = deepCopy(quizzes.find(quiz => quiz.id === quizId_i));
+                const chosenQuiz_o = quiz.find(quiz_o => quiz_o.id === quizId_s)
 
-                setActiveQuiz(quiz_o);
+                setActiveQuiz(chosenQuiz_o);
         }
     }
 
@@ -223,25 +289,27 @@ export default function StudentAccountPage({ student }) {
 
         for (const question_o of activeQuiz.questions) {
 
-            const questionId_s = question_o.id;
+            const anAnswerWasChosenForThisQuestion_b = chosenAnswers[question_o.id];
 
-            const chosenAnswer_s = chosenAnswers[questionId_s]
+            if(anAnswerWasChosenForThisQuestion_b) {
 
-            const correctAnswer_s = (question_o.answers.find(answer_o => answer_o.isCorrectAnswer)).answer;
+                if(chosenAnswers[question_o.id].isCorrect) {
 
-            if (chosenAnswer_s === correctAnswer_s) {
+                    paginationItems[question_o.id] = '#60bd60';
 
-                paginationItems[questionId_s] = '#60bd60';
+                    score_i++;
 
-                score_i++;
+                } else {
 
+                    paginationItems[question_o.id] = 'red';
+                }
             } else {
 
-                paginationItems[questionId_s] = chosenAnswer_s ? 'red' : 'white';
+                paginationItems[question_o.id] = 'white';
             }
-
-            setPaginationItems(paginationItems);
         }
+
+        setPaginationItems(paginationItems);
 
         setScore(score_i);
 
@@ -265,12 +333,6 @@ export default function StudentAccountPage({ student }) {
     }
 
     function updateQuiz(answer) {
-
-        activeQuestionIndex;
-
-        activeQuiz;
-
-
 
         for (const quiz_o of quizzes) {
 
@@ -308,15 +370,11 @@ export default function StudentAccountPage({ student }) {
 
         setQuizType('timed');
 
-        const quiz_o = deepCopy(quizzes.find(quiz => quiz.id === activeQuiz.id));
+        const quiz_o = deepCopy(quiz.find(quizItem_o => quizItem_o.id === activeQuiz.id));
 
-        //setActiveQuiz(quiz_o);
-
-        quiz_o.questions = getRandomElements(quiz_o.questions, 65);
+        quiz_o.questions = getRandomElements(quiz_o.questions, quiz_o.questions.length);
 
         setActiveQuiz(quiz_o);
-
-        quizzes;
 
         startTimer();
     }
@@ -325,7 +383,7 @@ export default function StudentAccountPage({ student }) {
 
         setQuizType('standard');
 
-        const quiz_o = deepCopy(quizzes.find(quiz => quiz.id === activeQuiz.id));
+        const quiz_o = deepCopy(quiz.find(quizItem_o => quizItem_o.id === activeQuiz.id));
 
         quiz_o.questions = getRandomElements(quiz_o.questions, quiz_o.questions.length);
 
@@ -355,6 +413,45 @@ export default function StudentAccountPage({ student }) {
             });
     }
 
+    async function bookAppointment() {
+        
+        console.log(chosenAvailableTime);
+
+        console.log(student);
+
+        const body_o = {
+            studentid : student.id,
+            timeid: chosenAvailableTime.id
+        };
+
+        const response_o = await fetch('https://korkort24.com/api/times/', {
+            method: 'PUT',
+            body: JSON.stringify(body_o),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const json_o = await response_o.json();
+
+        console.log(json_o);
+
+        handleClose();
+
+        const updatedAvailableTimes = await fetchAvailableTimes();
+
+        const timeslots = updatedAvailableTimes.filter(availableTime => {
+            console.log(availableTime.from.substring(0, 10) + ' = ' + chosenDate);
+            return availableTime.from.substring(0, 10) === chosenDate;
+        });
+
+        console.log(timeslots);
+
+        setChosenAvailableTimes(timeslots);
+
+        setShowConfirmationModal(true);
+    }
+
     return (
 
         <>
@@ -381,7 +478,7 @@ export default function StudentAccountPage({ student }) {
                         onChange={e => showQuiz(e.target)}
                         size='sm'>
                         <option data-quiz-id="0">Välj ett frågeformulär</option>
-                        {quizzes.map(quiz_o => <option key={quiz_o.id} data-quiz-id={quiz_o.id}>{quiz_o.title}</option>)}
+                        {quiz.map(quiz_o => <option key={quiz_o.id} data-quiz-id={quiz_o.id}>{quiz_o.name}</option>)}
                     </Form.Select>
 
                     {activeQuiz && <div className='mb-3 mt-3'>
@@ -395,10 +492,8 @@ export default function StudentAccountPage({ student }) {
 
                             {quizType === 'timed' && <span className='ms-3' style={{ color: 'white' }}>{timer}</span>}
 
-                            {/* <i role='button' className='bi bi-x-circle text-white fs-3 float-end'></i> */}
+                             {/* <i role='button' className='bi bi-x-circle text-white fs-3 float-end'></i> */}
                         </div>
-
-
 
                     </div>}
 
@@ -415,7 +510,7 @@ export default function StudentAccountPage({ student }) {
                                 <Pagination id="someid" size='sm' style={{ float: 'right', overflow: 'auto', borderRadius: '3px', width: 'calc(100% - 80px)' }}>
 
                                     {activeQuiz.questions.map((question_o, pageIndex_i) => {
-
+                                       
                                         const backgroundColor_s = paginationItems[question_o.id] || 'white';
 
                                         return <Pagination.Item linkStyle={{ color: '#0d6efd', backgroundColor: backgroundColor_s, width: '33px', paddingLeft: 0, paddingRight: 0, textAlign: 'center' }} onClick={() => setActiveQuestionIndex(pageIndex_i)} style={{ display: 'inline-block' }} key={pageIndex_i} active={pageIndex_i === activeQuestionIndex}>{pageIndex_i + 1}</Pagination.Item>;
@@ -423,15 +518,15 @@ export default function StudentAccountPage({ student }) {
 
                                 </Pagination>
 
-                                <h4 className='text-white' style={{ display: 'inline-block' }}>{activeQuiz.questions[activeQuestionIndex].question}</h4>
+                                <h4 className='text-white' style={{ display: 'inline-block' }}>{activeQuiz.questions[activeQuestionIndex].name}</h4>
 
-                                {activeQuiz.questions[activeQuestionIndex].answers.map((answer, index) => {
-
+                                {activeQuiz.questions[activeQuestionIndex].answers.map((answer_o, index) => {
+                                    
                                     const questionId_s = activeQuiz.questions[activeQuestionIndex].id;
 
-                                    const answer_s = answer.answer
+                                    //const answer_s = answer.answer
 
-                                    const isCorrectAnswer_b = answer.isCorrectAnswer;
+                                    //const isCorrect_b = answer.isCorrect;
 
                                     return (
 
@@ -441,12 +536,12 @@ export default function StudentAccountPage({ student }) {
                                             id={questionId_s + index}
                                             name='answer'
                                             onClick={() => console.log('asdf')}
-                                            onChange={() => { userPickedAnswer(); handleChange(questionId_s, answer_s) }}
-                                            defaultChecked={chosenAnswers[questionId_s] === answer_s}
+                                            onChange={() => { userPickedAnswer(); handleChange(questionId_s, answer_o) }}
+                                            defaultChecked={chosenAnswers[questionId_s] === answer_o}
                                             type='radio'
-                                            style={{ opacity: '1.0', borderRadius: '5px', backgroundColor: (chosenAnswers[questionId_s] === answer_s && paginationItems[questionId_s]) || '' }}
+                                            style={{ opacity: '1.0', borderRadius: '5px', backgroundColor: (chosenAnswers[questionId_s] === answer_o && paginationItems[questionId_s]) || '' }}
                                             className='text-white answer'
-                                            label={answer_s} />
+                                            label={answer_o.name} />
                                     );
 
                                 })}
@@ -479,31 +574,49 @@ export default function StudentAccountPage({ student }) {
 
                     <div style={{ borderRadius: '5px', backgroundColor: 'rgba(0, 0, 0, 0.7)', height: '1000px' }} className='p-2 mt-3 text-white'>
                         <h2>Boka coaching</h2>
-                        <Calendar style={{float: 'left'}} onChange={onChange} onClickDay={handleClickDay} value={value} tileClassName={({ date, view }) =>
+                        <Calendar style={{ float: 'left' }} onChange={onChange} onClickDay={handleClickDay} value={value} tileClassName={({ date, view }) =>
                             view === "month" && isEventDate(date) ? "highlight" : null
                         } />
-                        <div style={{float: 'left', width: '150px'}}>{availableTimes.map(availableTime => <span onClick={handleShow} className="available-time" key={availableTime.id}>{availableTime.from} - {availableTime.to}</span>)}</div>
+                        <div style={{ float: 'left', width: '150px' }}>{chosenAvailableTimes.map(availableTime => <span onClick={() => handleShow(availableTime.id)} className="available-time" key={availableTime.id}>{availableTime.from.substring(11, 16)} - {availableTime.to.substring(11, 16)}</span>)}</div>
                     </div>
-                    
+
 
                 </Tab>
 
             </Tabs>
 
             <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Boka coaching</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Boka coaching måndagen den 24:e november kl. 14:00 - 15:00</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Stäng
-          </Button>
-          <Button variant="primary" onClick={handleClose}>
-           Boka
-          </Button>
-        </Modal.Footer>
-      </Modal>
+                <Modal.Header closeButton>
+                    <Modal.Title>Boka coaching</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Boka coaching {
+                        chosenAvailableTime && (new Date(chosenAvailableTime.from)).toLocaleDateString('sv', options)
+                    } {' '} kl. {chosenAvailableTime && (chosenAvailableTime.from.substring(11, 16) + ' - ' + chosenAvailableTime.to.substring(11, 16))}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Stäng
+                    </Button>
+                    <Button variant="primary" onClick={bookAppointment}>
+                        Boka
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal show={showConfirmationModal} onHide={() => setShowConfirmationModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Bokningen genomförd</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Du har bokat coaching {
+                        chosenAvailableTime && (new Date(chosenAvailableTime.from)).toLocaleDateString('sv', options)
+                    } {' '} kl. {chosenAvailableTime && (chosenAvailableTime.from.substring(11, 16) + ' - ' + chosenAvailableTime.to.substring(11, 16))}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={() => setShowConfirmationModal(false)}>
+                        Ok
+                    </Button>
+                </Modal.Footer>
+            </Modal>
 
         </>
     );

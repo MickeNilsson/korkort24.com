@@ -2,8 +2,6 @@
 
 function post($pdo_o) {
 
-    require '../get-payload.php';
-
     $payload_o = getPayload();
 
     $sql_s = 'SELECT email FROM k24_member WHERE email = :email';

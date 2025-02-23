@@ -2,37 +2,39 @@
 
 function post($quiz_o, $db_o) {
 
-	if(isset($quiz_o->{'delete'})) {
+	file_put_contents('./quiz.json', json_encode($quiz_o, JSON_UNESCAPED_UNICODE));
 
-		unset($quiz_o->{'delete'});
+	// if(isset($quiz_o->{'delete'})) {
 
-		file_put_contents('./quiz.json', json_encode($quiz_o, JSON_UNESCAPED_UNICODE));
+	// 	unset($quiz_o->{'delete'});
 
-	} else {
+	// 	file_put_contents('./quiz.json', json_encode($quiz_o, JSON_UNESCAPED_UNICODE));
 
-		$savedQuiz_s = file_get_contents('./quiz.json');
+	// } else {
 
-		$savedQuiz_o = new stdClass();
+	// 	$savedQuiz_s = file_get_contents('./quiz.json');
+
+	// 	$savedQuiz_o = new stdClass();
 		
-		if($savedQuiz_s) {
+	// 	if($savedQuiz_s) {
 		
-			$savedQuiz_o = json_decode($savedQuiz_s);
-		}
+	// 		$savedQuiz_o = json_decode($savedQuiz_s);
+	// 	}
 
-		foreach($quiz_o as $sectionName_s => $section_o) {
+	// 	foreach($quiz_o as $sectionName_s => $section_o) {
 		
-			if(!isset($savedQuiz_o->{$sectionName_s})) {
-				$savedQuiz_o->{$sectionName_s} = new stdClass();
-			}
+	// 		if(!isset($savedQuiz_o->{$sectionName_s})) {
+	// 			$savedQuiz_o->{$sectionName_s} = new stdClass();
+	// 		}
 			
-			foreach($section_o as $question_s => $question_o) {
-				$question_o->{'id'} = uniqidReal();
-				$savedQuiz_o->{$sectionName_s}->{$question_s} = $question_o;
-			}
-		}
+	// 		foreach($section_o as $question_s => $question_o) {
+	// 			$question_o->{'id'} = uniqidReal();
+	// 			$savedQuiz_o->{$sectionName_s}->{$question_s} = $question_o;
+	// 		}
+	// 	}
 		
-		file_put_contents('./quiz.json', json_encode($savedQuiz_o, JSON_UNESCAPED_UNICODE));
-	}
+	// 	file_put_contents('./quiz.json', json_encode($savedQuiz_o, JSON_UNESCAPED_UNICODE));
+	// }
 	
 	$response_o = new stdClass();
 
