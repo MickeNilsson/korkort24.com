@@ -328,7 +328,7 @@ export default function AdminPage(props) {
                         <Button
                             size='sm'
                             type='submit'
-                            variant='primary'
+                            variant='success'
                             onClick={() => console.log('lägg till ny fråga')}
                         >Lägg till</Button>
 
