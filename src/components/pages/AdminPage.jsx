@@ -185,6 +185,18 @@ export default function AdminPage(props) {
         console.log(section_s);
     }
 
+    async function deleteQuestion(questionId_s) {
+
+        for(const category_o of quiz) {
+
+            category_o.questions = category_o.questions.filter(question_o => question_o.id !== questionId_s);
+        }
+     
+        setQuiz([...quiz]);
+
+        await saveQuiz(quiz);
+    }
+
     return (
 
         <div className='pb-5'>
@@ -343,14 +355,13 @@ export default function AdminPage(props) {
                     <Modal.Title>{showQuestionsModal}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {(convertedQuiz.filter(section => section.name === showQuestionsModal)).map(section_o => {
-                        return (
-                            <div>
-                                {section_o.name}
-                                {Object.entries(section_o).map(q => <p>{JSON.stringify(q)}</p>)}
+                    {
+                        (quiz.find(category_o => category_o.name === showQuestionsModal))?.questions.map(question_o => (
+                            <div key={question_o.id} className='mb-1'>
+                                <h6 className='question'>{question_o.name}<i onClick={() => deleteQuestion(question_o.id)} role='button' className='mx-2 bi bi-trash'></i></h6>
                             </div>
-                        )
-                    })}
+                        ))
+                    }
                 </Modal.Body>
             </Modal>
 

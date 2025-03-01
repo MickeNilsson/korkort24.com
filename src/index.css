@@ -65,6 +65,10 @@ body {
     height: 200px;
 }
 
+.question:hover {
+    text-decoration: underline;
+}
+
 .quiz {
     background-color: white;
 }
