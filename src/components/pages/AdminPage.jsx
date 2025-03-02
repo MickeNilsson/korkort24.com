@@ -21,6 +21,8 @@ export default function AdminPage(props) {
 
     const [section, setSection] = useState('');
 
+    const [image, setImage] = useState({});
+
     useEffect(() => {
 
         init();
@@ -132,19 +134,27 @@ export default function AdminPage(props) {
     }
 
     async function saveNewQuestion(e) {
-        
+
         e.preventDefault();
 
         const answerRadios = document.getElementsByName('answer');
 
         const section_o = quiz.find(quiz_o => quiz_o.name === showAddQuestionModal);
 
+        const questionId_s = generateUUID();
+
+        let fileName_s = '';
+
+        if(image.size) {
+            fileName_s = await uploadFile(questionId_s);
+        }
+
         const newQuestion_o = {
-            id: generateUUID(),
+            id: questionId_s,
             name: question,
             answers: [],
             explanation: '',
-            image: ''
+            image: fileName_s
         };
 
         for (const [index, answer] of answers.entries()) {
@@ -161,6 +171,8 @@ export default function AdminPage(props) {
         section_o.questions.push(newQuestion_o);
 
         await saveQuiz(quiz);
+
+        
 
         setShowAddQuestionModal(false);
     }
@@ -195,6 +207,26 @@ export default function AdminPage(props) {
         setQuiz([...quiz]);
 
         await saveQuiz(quiz);
+    }
+
+    async function uploadFile(questionId_s) {
+
+        const formData_o = new FormData();
+
+        formData_o.append('image', image);
+
+        const imageType_s = image.name.split('.')[1];
+
+        const fileName_s = questionId_s + '.' + imageType_s;
+
+        formData_o.append('fileName', fileName_s);
+
+        const response_o = await fetch('https://korkort24.com/api/uploads/', {
+            method: 'POST',
+            body: formData_o
+        });
+
+        return fileName_s;
     }
 
     return (
@@ -311,6 +343,13 @@ export default function AdminPage(props) {
                             spellCheck='false'
                             type='text'
                             value={question} />
+
+                        <Form.Control
+                            onChange={(e) => setImage(e.target.files[0])}
+                            type='file'
+                            size='sm'
+                            className='mb-2'
+                        />
 
                         {answers.map((answer, i) => (
 

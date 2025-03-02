@@ -59,7 +59,7 @@ export default function App() {
 
             <MainContent page={page} setPage={setPage} />
 
-            <Footer />
+            {/* <Footer /> */}
         </>
     );
 }

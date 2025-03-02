@@ -29,15 +29,15 @@ switch($_SERVER['REQUEST_METHOD']) {
 
     case 'POST': 
         
-      if(file_exists('../../images/' . strtok($_POST['fileName'], '.') . '.png')) {
-        unlink('../../images/' . strtok($_POST['fileName'], '.') . '.png');
+      if(file_exists('../quizimages/' . strtok($_POST['fileName'], '.') . '.png')) {
+        unlink('../quizimages/' . strtok($_POST['fileName'], '.') . '.png');
       }
 
-      if(file_exists('../../images/' . strtok($_POST['fileName'], '.') . '.jpg')) {
-        unlink('../../images/' . strtok($_POST['fileName'], '.') . '.jpg');
+      if(file_exists('../quizimages/' . strtok($_POST['fileName'], '.') . '.jpg')) {
+        unlink('../quizimages/' . strtok($_POST['fileName'], '.') . '.jpg');
       }
 
-      move_uploaded_file($_FILES['image']['tmp_name'], '../../images/' . $_POST['fileName']);
+      move_uploaded_file($_FILES['image']['tmp_name'], '../quizimages/' . $_POST['fileName']);
 
       //move_uploaded_file($_FILES['image']['tmp_name'], '../../images/' . $_FILES['image']['name']);
 

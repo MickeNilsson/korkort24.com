@@ -8,6 +8,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
+import Image from 'react-bootstrap/Image';
 import Pagination from 'react-bootstrap/Pagination';
 import Form from 'react-bootstrap/Form';
 import Calendar from 'react-calendar';
@@ -463,7 +464,7 @@ export default function StudentAccountPage({ student }) {
             >
                 <Tab eventKey="home" title="Hem" className='text-white'>
 
-                    <div style={{ borderRadius: '5px', backgroundColor: 'rgba(0, 0, 0, 0.7)' }} className='p-2 mt-3 text-white'>
+                    <div style={{ borderRadius: '5px', backgroundColor: 'rgba(0, 0, 0, 1)' }} className='p-2 mt-3 text-white'>
                         Hej {student.firstname}!
                         <p>Dina resultat:</p>
                         <p>B-körkortsprov: 62 av 65 rätt</p>
@@ -471,7 +472,7 @@ export default function StudentAccountPage({ student }) {
 
                 </Tab>
 
-                <Tab eventKey="questions" title="Frågor" className='p-3' style={{ backgroundColor: 'rgba(0, 0, 0, 0.7' }}>
+                <Tab eventKey="questions" title="Frågor" className='p-3' style={{ backgroundColor: 'rgba(0, 0, 0, 1' }}>
 
                     <Form.Select
                         className='mb-2'
@@ -518,7 +519,11 @@ export default function StudentAccountPage({ student }) {
 
                                 </Pagination>
 
+                                {activeQuiz.questions[activeQuestionIndex].image && <div style={{marginTop: '10px'}}></div>}
+                                
                                 <h4 className='text-white' style={{ display: 'inline-block' }}>{activeQuiz.questions[activeQuestionIndex].name}</h4>
+
+                                {activeQuiz.questions[activeQuestionIndex].image && <Image style={{maxWidth: '100%', marginBottom: '10px', marginTop: '10px'}} src={'https://korkort24.com/api/quizimages/' + activeQuiz.questions[activeQuestionIndex].image} rounded />}
 
                                 {activeQuiz.questions[activeQuestionIndex].answers.map((answer_o, index) => {
                                     
@@ -566,13 +571,13 @@ export default function StudentAccountPage({ student }) {
 
                     </Form.Select>
 
-                    {info.text && <div style={{ borderRadius: '5px', backgroundColor: 'rgba(0, 0, 0, 0.7)' }} className='p-2 mt-3 text-white' dangerouslySetInnerHTML={{ __html: info.text }}></div>}
+                    {info.text && <div style={{ borderRadius: '5px', backgroundColor: 'rgba(0, 0, 0, 1)' }} className='p-2 mt-3 text-white' dangerouslySetInnerHTML={{ __html: info.text }}></div>}
 
                 </Tab>
 
                 <Tab eventKey="driving" title="Coaching">
 
-                    <div style={{ borderRadius: '5px', backgroundColor: 'rgba(0, 0, 0, 0.7)', height: '1000px' }} className='p-2 mt-3 text-white'>
+                    <div style={{ borderRadius: '5px', backgroundColor: 'rgba(0, 0, 0, 1)', height: '1000px' }} className='p-2 mt-3 text-white'>
                         <h2>Boka coaching</h2>
                         <Calendar style={{ float: 'left' }} onChange={onChange} onClickDay={handleClickDay} value={value} tileClassName={({ date, view }) =>
                             view === "month" && isEventDate(date) ? "highlight" : null
