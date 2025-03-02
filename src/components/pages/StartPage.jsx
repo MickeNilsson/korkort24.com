@@ -6,6 +6,7 @@ export default function StartPage({setPage, setStudent}) {
     
     return (
         <div style={{textAlign: 'center'}}>
+            <div className='under-construction'>OBS! Denna webbplats är under konstruktion. Beräknas vara klar någon gång under 2025.</div>
             <Card style={{marginBottom: '20px', backgroundColor: 'rgba(0, 0, 0, 0.5)', color: 'white'}}>
                 <Card.Body>På den här webbplatsen får du lära dig allt om hur man hanterar en bil. Du får värdefull teori och praktik i en smart kombination som kommer att ta dig från
                 zero to hero på nolltid. En meriterad yrkesförare och utbildad trafikpedagog följer din utveckling och ger dig värdefulla råd och tips.</Card.Body>

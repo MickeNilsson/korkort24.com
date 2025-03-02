@@ -97,6 +97,14 @@ body {
     display: inline-block;
 }
 
+.under-construction {
+    background-color: yellow;
+    border-style: dashed;
+    margin-bottom: 30px;
+    padding: 10px;
+    font-weight: bold;
+}
+
 .header-box {
     position: fixed;
     padding-top: 70px;
