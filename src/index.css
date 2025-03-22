@@ -82,6 +82,10 @@ body {
     margin-right: 30px;
 }
 
+.schedule-date:hover {
+    background-color: goldenrod;
+}
+
 .section {
 
     border-bottom: 1px solid #ddd;
