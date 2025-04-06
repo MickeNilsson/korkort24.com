@@ -46,7 +46,7 @@ export default function StudentAccountPage({ student }) {
         year: "numeric",
         month: "long",
         day: "numeric",
-      };
+    };
 
     const [events, setEvents] = useState([]);
 
@@ -141,6 +141,8 @@ export default function StudentAccountPage({ student }) {
 
     const [chosenAvailableTime, setChosenAvailableTime] = useState();
 
+    const [schedule, setSchedule] = useState({});
+
     // Fetch quiz when user has logged in to student account
     useEffect(() => {
 
@@ -151,9 +153,39 @@ export default function StudentAccountPage({ student }) {
             fetchQuiz();
 
             fetchAvailableTimes();
+
+            loadSchedule();
         }
 
     }, []);
+
+    async function loadSchedule() {
+
+        const response_o = await fetch('https://korkort24.com/api/schedule/');
+
+        if (response_o.status === 200) {
+
+            const responseBody_o = await response_o.json();
+
+            const schedule_a = responseBody_o.data;
+
+            setSchedule(schedule_a);
+        }
+    }
+
+    async function saveSchedule(schedule_o) {
+
+        const response_o = await fetch('https://korkort24.com/api/schedule/', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(schedule_o)
+        });
+
+        const responseBody_o = await response_o.json();
+    }
 
     async function fetchAvailableTimes() {
 
@@ -187,12 +219,12 @@ export default function StudentAccountPage({ student }) {
         availTimes = availTimes.filter(availTime => !availTime.studentid);
 
         availTimes.sort((a, b) => {
-            if(a.from < b.from) return -1;
-            if(a.from > b.from) return 1;
+            if (a.from < b.from) return -1;
+            if (a.from > b.from) return 1;
             return 0;
         });
 
-        let  availDates = availTimes.map(availTime => availTime.from.substring(0, 10));
+        let availDates = availTimes.map(availTime => availTime.from.substring(0, 10));
 
         availDates = [...(new Set(availDates))];
 
@@ -254,7 +286,7 @@ export default function StudentAccountPage({ student }) {
     }
 
     function showQuiz(quizSelect_o) {
-        
+
         setQuizType('');
 
         clearInterval(timerRef);
@@ -262,7 +294,7 @@ export default function StudentAccountPage({ student }) {
         const selectedOption_o = quizSelect_o[quizSelect_o.options.selectedIndex];
 
         const quizId_s = selectedOption_o.dataset.quizId;
-        
+
         switch (quizId_s) {
 
             case '0': // The user didn't chose any quiz
@@ -292,9 +324,9 @@ export default function StudentAccountPage({ student }) {
 
             const anAnswerWasChosenForThisQuestion_b = chosenAnswers[question_o.id];
 
-            if(anAnswerWasChosenForThisQuestion_b) {
+            if (anAnswerWasChosenForThisQuestion_b) {
 
-                if(chosenAnswers[question_o.id].isCorrect) {
+                if (chosenAnswers[question_o.id].isCorrect) {
 
                     paginationItems[question_o.id] = '#60bd60';
 
@@ -415,13 +447,13 @@ export default function StudentAccountPage({ student }) {
     }
 
     async function bookAppointment() {
-        
+
         console.log(chosenAvailableTime);
 
         console.log(student);
 
         const body_o = {
-            studentid : student.id,
+            studentid: student.id,
             timeid: chosenAvailableTime.id
         };
 
@@ -451,6 +483,33 @@ export default function StudentAccountPage({ student }) {
         setChosenAvailableTimes(timeslots);
 
         setShowConfirmationModal(true);
+    }
+
+    function addMinutes(date, minutes) {
+        date.setMinutes(date.getMinutes() + minutes);
+        return date;
+    }
+
+    function subtractMinutes(date, minutes) {
+        date.setMinutes(date.getMinutes() - minutes);
+        return date;
+    }
+
+    async function addBookedTime(params) {
+
+        for(const date_o of schedule[params.date]) {
+
+            if(params.time >= date_o.start && params.time < date_o.end) {
+                date_o.bookings = date_o.bookings || [];
+                date_o.bookings.push({studentId: student.id, time: params.time});
+            }
+        }
+        debugger;
+        const schedule_o = JSON.parse(JSON.stringify(schedule));
+
+        setSchedule(schedule_o);
+
+        await saveSchedule(schedule_o);
     }
 
     return (
@@ -493,7 +552,7 @@ export default function StudentAccountPage({ student }) {
 
                             {quizType === 'timed' && <span className='ms-3' style={{ color: 'white' }}>{timer}</span>}
 
-                             {/* <i role='button' className='bi bi-x-circle text-white fs-3 float-end'></i> */}
+                            {/* <i role='button' className='bi bi-x-circle text-white fs-3 float-end'></i> */}
                         </div>
 
                     </div>}
@@ -511,7 +570,7 @@ export default function StudentAccountPage({ student }) {
                                 <Pagination id="someid" size='sm' style={{ float: 'right', overflow: 'auto', borderRadius: '3px', width: 'calc(100% - 80px)' }}>
 
                                     {activeQuiz.questions.map((question_o, pageIndex_i) => {
-                                       
+
                                         const backgroundColor_s = paginationItems[question_o.id] || 'white';
 
                                         return <Pagination.Item linkStyle={{ color: '#0d6efd', backgroundColor: backgroundColor_s, width: '33px', paddingLeft: 0, paddingRight: 0, textAlign: 'center' }} onClick={() => setActiveQuestionIndex(pageIndex_i)} style={{ display: 'inline-block' }} key={pageIndex_i} active={pageIndex_i === activeQuestionIndex}>{pageIndex_i + 1}</Pagination.Item>;
@@ -519,14 +578,14 @@ export default function StudentAccountPage({ student }) {
 
                                 </Pagination>
 
-                                {activeQuiz.questions[activeQuestionIndex].image && <div style={{marginTop: '10px'}}></div>}
-                                
+                                {activeQuiz.questions[activeQuestionIndex].image && <div style={{ marginTop: '10px' }}></div>}
+
                                 <h4 className='text-white' style={{ display: 'inline-block' }}>{activeQuiz.questions[activeQuestionIndex].name}</h4>
 
-                                {activeQuiz.questions[activeQuestionIndex].image && <Image style={{maxWidth: '100%', marginBottom: '10px', marginTop: '10px'}} src={'https://korkort24.com/api/quizimages/' + activeQuiz.questions[activeQuestionIndex].image} rounded />}
+                                {activeQuiz.questions[activeQuestionIndex].image && <Image style={{ maxWidth: '100%', marginBottom: '10px', marginTop: '10px' }} src={'https://korkort24.com/api/quizimages/' + activeQuiz.questions[activeQuestionIndex].image} rounded />}
 
                                 {activeQuiz.questions[activeQuestionIndex].answers.map((answer_o, index) => {
-                                    
+
                                     const questionId_s = activeQuiz.questions[activeQuestionIndex].id;
 
                                     //const answer_s = answer.answer
@@ -579,10 +638,77 @@ export default function StudentAccountPage({ student }) {
 
                     <div style={{ borderRadius: '5px', backgroundColor: 'rgba(0, 0, 0, 1)', height: '1000px' }} className='p-2 mt-3 text-white'>
                         <h2>Boka coaching</h2>
+                        {/*                         <Calendar style={{ float: 'left' }} onChange={onChange} onClickDay={handleClickDay} value={value} tileClassName={({ date, view }) =>
+                            view === "month" && isEventDate(date) ? "highlight" : null
+                        } />
+                        <div style={{ float: 'left', width: '150px' }}>{chosenAvailableTimes.map(availableTime => <span onClick={() => handleShow(availableTime.id)} className="available-time" key={availableTime.id}>{availableTime.from.substring(11, 16)} - {availableTime.to.substring(11, 16)}</span>)}</div> */}
+
+                        <div style={{ float: 'right' }}>
+                            {schedule[chosenDate] && schedule[chosenDate].map(chosenDate_o => {
+
+                                const startDateTime_s = chosenDate + 'T' + chosenDate_o.start + ':00';
+
+                                const endDateTime_s = chosenDate + 'T' + chosenDate_o.end + ':00';
+
+                                let d = new Date(startDateTime_s);
+
+                                let lastTime_s = new Date()
+
+                                let timeSlots_a = [];
+
+
+                                for (let i = 0; i < 10; ++i) {
+
+                                    let hours_s = d.getHours() < 10 ? '0' + d.getHours() : d.getHours();
+
+                                    let minutes_s = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes();
+
+                                    
+                                    const scheduledStart_s = hours_s + ':' + minutes_s;
+
+                        
+
+                                    let timeIsBooked = false;
+                          
+                                    if(chosenDate_o.bookings) {
+                                        for(const booking_o of chosenDate_o.bookings) {
+                               
+                                            if(booking_o.time === scheduledStart_s) {
+                                                timeIsBooked = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    
+
+                                    if(timeIsBooked) {
+
+                                        d = addMinutes(d, chosenDate_o.length);
+
+                                        continue;
+                                    }
+
+                                    hours_s = d.getHours() < 10 ? '0' + d.getHours() : d.getHours();
+
+                                    minutes_s = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes();
+                        
+                                    timeSlots_a.push(<div className='available-time' onClick={() => addBookedTime({date: chosenDate, time: scheduledStart_s, length: chosenDate_o.length})}>{scheduledStart_s}</div>);
+
+                                    d = addMinutes(d, chosenDate_o.length);
+                                }
+
+                                //return <div className='schedule-date' style={{cursor: 'pointer', marginBottom: '5px', backgroundColor: 'white', padding: '3px', border: '2px solid black', borderRadius: '5px'}}>{chosenDate_o.start} - {chosenDate_o.end} {chosenDate_o.length + ' min'}</div>;
+                                return <div>{timeSlots_a}</div>;
+                            })}
+                        </div>
+
+
                         <Calendar style={{ float: 'left' }} onChange={onChange} onClickDay={handleClickDay} value={value} tileClassName={({ date, view }) =>
                             view === "month" && isEventDate(date) ? "highlight" : null
                         } />
-                        <div style={{ float: 'left', width: '150px' }}>{chosenAvailableTimes.map(availableTime => <span onClick={() => handleShow(availableTime.id)} className="available-time" key={availableTime.id}>{availableTime.from.substring(11, 16)} - {availableTime.to.substring(11, 16)}</span>)}</div>
+
+
+
                     </div>
 
 
@@ -595,8 +721,8 @@ export default function StudentAccountPage({ student }) {
                     <Modal.Title>Boka coaching</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>Boka coaching {
-                        chosenAvailableTime && (new Date(chosenAvailableTime.from)).toLocaleDateString('sv', options)
-                    } {' '} kl. {chosenAvailableTime && (chosenAvailableTime.from.substring(11, 16) + ' - ' + chosenAvailableTime.to.substring(11, 16))}
+                    chosenAvailableTime && (new Date(chosenAvailableTime.from)).toLocaleDateString('sv', options)
+                } {' '} kl. {chosenAvailableTime && (chosenAvailableTime.from.substring(11, 16) + ' - ' + chosenAvailableTime.to.substring(11, 16))}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
@@ -613,8 +739,8 @@ export default function StudentAccountPage({ student }) {
                     <Modal.Title>Bokningen genomförd</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>Du har bokat coaching {
-                        chosenAvailableTime && (new Date(chosenAvailableTime.from)).toLocaleDateString('sv', options)
-                    } {' '} kl. {chosenAvailableTime && (chosenAvailableTime.from.substring(11, 16) + ' - ' + chosenAvailableTime.to.substring(11, 16))}
+                    chosenAvailableTime && (new Date(chosenAvailableTime.from)).toLocaleDateString('sv', options)
+                } {' '} kl. {chosenAvailableTime && (chosenAvailableTime.from.substring(11, 16) + ' - ' + chosenAvailableTime.to.substring(11, 16))}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="primary" onClick={() => setShowConfirmationModal(false)}>

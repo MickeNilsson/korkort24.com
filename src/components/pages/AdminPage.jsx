@@ -305,8 +305,6 @@ export default function AdminPage(props) {
 
         await saveQuiz(quiz);
 
-
-
         setShowAddQuestionModal(false);
     }
 
