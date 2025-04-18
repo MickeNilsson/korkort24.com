@@ -43,6 +43,8 @@ export default function AdminPage(props) {
 
     const [schedule, setSchedule] = useState({});
 
+    const [quizString, setQuizString] = useState('');
+
     useEffect(() => {
 
         init();
@@ -54,9 +56,43 @@ export default function AdminPage(props) {
             await fetchAvailableTimes();
 
             await loadSchedule();
+
+            await loadJsonQuiz();
         }
 
     }, []);
+
+    async function saveQuizString() {
+
+        const quizStringElement = document.getElementById('quiz-string');
+
+        debugger;
+
+        const quizStringObject= JSON.parse(quizStringElement.value);
+
+        const response_o = await fetch('https://korkort24.com/api/quiz/', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(quizStringObject)
+        });
+        
+    }
+
+    async function loadJsonQuiz() {
+
+        const response = await fetch('https:///korkort24.com/api/quiz/downloadquiz.php');
+
+        const quiz_o =  await response.json();
+
+        const quiz_s = JSON.stringify(quiz_o, null, 2)
+
+        setQuizString(quiz_s);
+
+        debugger;
+    }
 
     async function fetchAvailableTimes() {
 
@@ -428,16 +464,16 @@ export default function AdminPage(props) {
 
         schedule[chosenDate] = schedule[chosenDate] || [];
 
-        for(const chosenDateTimeSlot_o of schedule[chosenDate]) {
-            if(chosenDateTimeSlot_o.start === timeSlot_o.start) {
+        for (const chosenDateTimeSlot_o of schedule[chosenDate]) {
+            if (chosenDateTimeSlot_o.start === timeSlot_o.start) {
                 return;
             }
         }
         schedule[chosenDate].push(timeSlot_o);
 
         schedule[chosenDate].sort((a, b) => {
-            if(a.start < b.start) return -1;
-            if(a.start > b.start) return 1;
+            if (a.start < b.start) return -1;
+            if (a.start > b.start) return 1;
             return 0
         });
 
@@ -449,7 +485,7 @@ export default function AdminPage(props) {
     function deleteScheduleDate(chosenTimeSlot_o, date_s) {
 
         const date_a = schedule[date_s].filter(timeSlot_o => JSON.stringify(chosenTimeSlot_o) !== JSON.stringify(timeSlot_o));
-        
+
         schedule[date_s] = date_a;
 
         setSchedule({ ...schedule });
@@ -523,8 +559,6 @@ export default function AdminPage(props) {
                                 onClick={addSection}
                             >+</Button>
 
-
-
                         </Col>
 
                     </Row>
@@ -537,6 +571,18 @@ export default function AdminPage(props) {
                             </div>
                         ))}
                     </div>
+
+                    <Form.Group className="mb-3 mt-3" controlId="exampleForm.ControlTextarea1">
+                        <Form.Control onChange={(e) => setQuizString(e.target.value)} id="quiz-string" as="textarea" rows={10} value={quizString} style={{'font-family': 'monospace', 'white-space': 'pre'}} />
+                    </Form.Group>
+
+                    <Button
+                        size='sm'
+                        type='button'
+                        variant='success'
+                        className='mb-2'
+                        onClick={saveQuizString}
+                    >Spara</Button>
 
                 </Tab>
 
@@ -586,31 +632,32 @@ export default function AdminPage(props) {
 
                     <div className='my-2'>
 
-                    {timeSlots.map(timeSlot_o => (
-                        <Button
-                            className='me-2'
-                            onClick={() => addTimeSlotToDay({ start: timeSlot_o.start, end: timeSlot_o.end, length: timeSlot_o.length })}
-                            size='sm'
-                            variant='primary'
-                        >
-                            {timeSlot_o.start + ' - ' + timeSlot_o.end + ' ' + timeSlot_o.length + ' min'}
-                        </Button>
-                    ))
-                    }
+                        {timeSlots.map(timeSlot_o => (
+                            <Button
+                                className='me-2'
+                                onClick={() => addTimeSlotToDay({ start: timeSlot_o.start, end: timeSlot_o.end, length: timeSlot_o.length })}
+                                size='sm'
+                                variant='primary'
+                            >
+                                {timeSlot_o.start + ' - ' + timeSlot_o.end + ' ' + timeSlot_o.length + ' min'}
+                            </Button>
+                        ))
+                        }
                     </div>
-                    
 
 
-                    <div style={{float: 'right'}}>
-                    {schedule[chosenDate] && schedule[chosenDate].map(chosenDate_o => (
-                            <div onClick={() => deleteScheduleDate(chosenDate_o, chosenDate)} className='schedule-date' style={{cursor: 'pointer', marginBottom: '5px', backgroundColor: 'white', padding: '3px', border: '2px solid black', borderRadius: '5px'}}>{chosenDate_o.start} - {chosenDate_o.end} {chosenDate_o.length + ' min'}</div>
+
+                    <div style={{ float: 'right' }}>
+                        {schedule[chosenDate] && schedule[chosenDate].map(chosenDate_o => (
+                            <div onClick={() => deleteScheduleDate(chosenDate_o, chosenDate)} className='schedule-date' style={{ cursor: 'pointer', marginBottom: '5px', backgroundColor: 'white', padding: '3px', border: '2px solid black', borderRadius: '5px' }}>{chosenDate_o.start} - {chosenDate_o.end} {chosenDate_o.length + ' min'}</div>
                         ))}
                     </div>
-                    
+
 
                     <Calendar style={{ float: 'left' }} onChange={onChange} onClickDay={handleClickDay} value={value} tileClassName={({ date, view }) =>
                         view === "month" && isEventDate(date) ? "highlight" : null
                     } />
+
                 </Tab>
 
             </Tabs>

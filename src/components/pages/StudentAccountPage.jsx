@@ -527,6 +527,8 @@ export default function StudentAccountPage({ student }) {
                         Hej {student.firstname}!
                         <p>Dina resultat:</p>
                         <p>B-körkortsprov: 62 av 65 rätt</p>
+
+                        
                     </div>
 
                 </Tab>
