@@ -3,8 +3,8 @@
 function post($payload_o, $db_o) {
 
     $params_a = [
-        'from' => $payload_o->{'from'},
-        'to' => $payload_o->{'to'}
+        'date' => $payload_o->{'date'},
+        'timespan' => $payload_o->{'timespan'}
     ];
 
     $result_o = $db_o->insertInto('k24_schedule', $params_a);
