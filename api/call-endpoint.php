@@ -14,8 +14,16 @@ function callEndpoint($endpoint_s) {
 
     $db_o = new DB($settings_a);
     //$db_o = initPdo($settings_a);
-
+    
     switch($_SERVER['REQUEST_METHOD']) {
+
+        case 'DELETE':
+
+            require __DIR__ . '/' . $endpoint_s . '/delete.php';
+
+            $result_o = delete($_GET, $db_o);
+
+            break;
 
         case 'GET':
     

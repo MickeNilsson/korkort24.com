@@ -19,6 +19,38 @@ class DB {
         }
     }
 
+    public function delete($table_s, $params_a) {
+
+        $result_o = new stdClass();
+
+        $whereClause_a = [];
+
+        foreach($params_a as $columnName_s => $value_s) {
+
+            array_push($whereClause_a, $table_s . '.' . $columnName_s . ' = ' . ':' .  $columnName_s);
+        }
+
+        $whereClause_s = implode(' AND ', $whereClause_a);
+
+        $sql_s = "DELETE FROM " . $table_s . " WHERE " . $whereClause_s;
+
+        try {
+            $stmt_o = $this->pdo_o->prepare($sql_s);
+
+            $stmt_o->execute($params_a);
+
+            $result_o->{'result'} = 'ok';
+
+        } catch(Exception $e) {
+
+            $result_o->{'result'} = 'error';
+            
+            $result_o->{'message'} = $e->getMessage();
+        }
+
+        return $result_o;
+    }
+
     public function select($table_s, $params_a) {
 
         $result_o = new stdClass();
