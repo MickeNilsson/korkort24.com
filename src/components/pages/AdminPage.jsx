@@ -41,7 +41,7 @@ export default function AdminPage(props) {
 
     const [events, setEvents] = useState([]);
 
-    const [schedule, setSchedule] = useState({});
+    const [schedule, setSchedule] = useState([]);
 
     const [quizString, setQuizString] = useState('');
 
@@ -51,11 +51,15 @@ export default function AdminPage(props) {
 
         async function init() {
 
+            const today_o = new Date();
+
+            const currentDate_s = today_o.toISOString().split('T')[0];
+
             await loadQuiz();
 
             await fetchAvailableTimes();
 
-            await loadSchedule();
+            await loadSchedule(currentDate_s);
 
             await loadJsonQuiz();
         }
@@ -66,7 +70,7 @@ export default function AdminPage(props) {
 
         const quizStringElement = document.getElementById('quiz-string');
 
-        debugger;
+        
 
         const quizStringObject= JSON.parse(quizStringElement.value);
 
@@ -91,7 +95,7 @@ export default function AdminPage(props) {
 
         setQuizString(quiz_s);
 
-        debugger;
+        
     }
 
     async function fetchAvailableTimes() {
@@ -173,34 +177,13 @@ export default function AdminPage(props) {
         );
     };
 
-    function handleClickDay(date) {
+    async function handleClickDay(date_o) {
 
-        let chosenDate_o = new Date(date);
+        const date_s = date_o.toLocaleString().substring(0, 10);
 
-        chosenDate_o.setDate(chosenDate_o.getDate() + 1);//.toISOString().substring(0, 10);
+        setChosenDate(date_s);
 
-        const chosenDate_s = chosenDate_o.toISOString().substring(0, 10);
-
-        console.log(chosenDate_s);
-
-        setChosenDate(chosenDate_s);
-
-        console.log(schedule[chosenDate_s])
-
-        // console.dir(chosenDate_s);
-
-        // console.log(availableTimes);
-
-
-        // const timeslots = availableTimes.filter(availableTime => {
-        //     console.log(availableTime.from.substring(0, 10) + ' = ' + chosenDate_s);
-        //     return availableTime.from.substring(0, 10) === chosenDate_s;
-        // });
-
-        // console.log(timeslots);
-
-        // setChosenAvailableTimes(timeslots);
-        //console.log(value);
+        await loadSchedule(date_s);
     }
 
     async function loadQuiz() {
@@ -441,23 +424,51 @@ export default function AdminPage(props) {
         setEndTime(endTime_s);
     }
 
+    async function addSchedule() {
+
+        debugger;
+
+        const body_o = {
+            date: chosenDate,
+            timespan: startTime + '-' + endTime
+        };
+
+        const response_o = await fetch('https://korkort24.com/api/schedules/', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body_o)
+        });
+
+        const responseBody_o = await response_o.json();
+
+        await loadSchedule(chosenDate);
+        
+    }
+
     function createTimeSlot() {
 
-        if (+timeSlotLength && startTime.length === 5 && endTime.length === 5 && startTime < endTime && startTime > '00:00' && endTime < '23:59') {
-            const newTimeSlot_o = {
-                length: +timeSlotLength,
-                start: startTime,
-                end: endTime
-            };
-
-            setTimeSlots([...timeSlots, newTimeSlot_o]);
-
-            setTimeSlotLength('');
-
-            setStartTime('');
-
-            setEndTime('');
+        if (startTime.length === 5 && endTime.length === 5 && startTime < endTime && startTime > '00:00' && endTime < '23:59') {
+            
         }
+
+        // if (+timeSlotLength && startTime.length === 5 && endTime.length === 5 && startTime < endTime && startTime > '00:00' && endTime < '23:59') {
+        //     const newTimeSlot_o = {
+        //         length: +timeSlotLength,
+        //         start: startTime,
+        //         end: endTime
+        //     };
+
+        //     setTimeSlots([...timeSlots, newTimeSlot_o]);
+
+        //     setTimeSlotLength('');
+
+        //     setStartTime('');
+
+        //     setEndTime('');
+        // }
     }
 
     async function addTimeSlotToDay(timeSlot_o) {
@@ -482,27 +493,28 @@ export default function AdminPage(props) {
         await saveSchedule({ ...schedule });
     }
 
-    function deleteScheduleDate(chosenTimeSlot_o, date_s) {
+    async function deleteSchedule(id) {
+        
+        debugger;
+        const response_o = await fetch('https://korkort24.com/api/schedules/' + id, {
+            method: 'DELETE'
+        });
 
-        const date_a = schedule[date_s].filter(timeSlot_o => JSON.stringify(chosenTimeSlot_o) !== JSON.stringify(timeSlot_o));
+        const responseBody_o = await response_o.json();
 
-        schedule[date_s] = date_a;
-
-        setSchedule({ ...schedule });
-
-        saveSchedule({ ...schedule });
+        await loadSchedule(chosenDate);
     }
 
-    async function loadSchedule() {
+    async function loadSchedule(date_s) {
 
-        const response_o = await fetch('https://korkort24.com/api/schedule/');
-
+        const response_o = await fetch('https://korkort24.com/api/schedules/?date=' + date_s);
+        
         if (response_o.status === 200) {
 
             const responseBody_o = await response_o.json();
 
             const schedule_a = responseBody_o.data;
-
+            debugger;
             setSchedule(schedule_a);
         }
     }
@@ -591,7 +603,7 @@ export default function AdminPage(props) {
                 <Tab eventKey="bookings" title="Bokningar">
 
                     <Row>
-                        <Col>
+                        {/* <Col>
                             <Form.Control
                                 onChange={(e) => validateTimeSlot(e.target.value)}
                                 placeholder='Längd (min)'
@@ -599,7 +611,7 @@ export default function AdminPage(props) {
                                 spellCheck='false'
                                 type='text'
                                 value={timeSlotLength} />
-                        </Col>
+                        </Col> */}
                         <Col>
                             <Form.Control
                                 onChange={(e) => validateStartTime(e.target.value)}
@@ -620,7 +632,7 @@ export default function AdminPage(props) {
                         </Col>
                         <Col>
                             <Button
-                                onClick={() => createTimeSlot()}
+                                onClick={addSchedule}
                                 size='sm'
                                 variant='primary'
                             >
@@ -648,13 +660,13 @@ export default function AdminPage(props) {
 
 
                     <div style={{ float: 'right' }}>
-                        {schedule[chosenDate] && schedule[chosenDate].map(chosenDate_o => (
-                            <div onClick={() => deleteScheduleDate(chosenDate_o, chosenDate)} className='schedule-date' style={{ cursor: 'pointer', marginBottom: '5px', backgroundColor: 'white', padding: '3px', border: '2px solid black', borderRadius: '5px' }}>{chosenDate_o.start} - {chosenDate_o.end} {chosenDate_o.length + ' min'}</div>
+                        {schedule && schedule.map(chosenDate_o => (
+                            <div onClick={() => deleteSchedule(chosenDate_o.id)} className='schedule-date' style={{ cursor: 'pointer', marginBottom: '5px', backgroundColor: 'white', padding: '3px', border: '2px solid black', borderRadius: '5px' }}>{chosenDate_o.timespan}</div>
                         ))}
                     </div>
 
 
-                    <Calendar style={{ float: 'left' }} onChange={onChange} onClickDay={handleClickDay} value={value} tileClassName={({ date, view }) =>
+                    <Calendar style={{ float: 'left' }} onClickDay={handleClickDay} tileClassName={({ date, view }) =>
                         view === "month" && isEventDate(date) ? "highlight" : null
                     } />
 
