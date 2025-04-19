@@ -8,9 +8,12 @@ function callEndpoint($endpoint_s) {
 
     require 'settings.php';
 
-    require 'init-pdo.php';
+    //require 'init-pdo.php';
 
-    $db_o = initPdo($settings_a);
+    require 'db.php';
+
+    $db_o = new DB($settings_a);
+    //$db_o = initPdo($settings_a);
 
     switch($_SERVER['REQUEST_METHOD']) {
 

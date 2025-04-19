@@ -168,7 +168,7 @@ export default function StudentAccountPage({ student }) {
             const responseBody_o = await response_o.json();
 
             const schedule_a = responseBody_o.data;
-
+            debugger;
             setSchedule(schedule_a);
         }
     }
@@ -528,7 +528,7 @@ export default function StudentAccountPage({ student }) {
                         <p>Dina resultat:</p>
                         <p>B-körkortsprov: 62 av 65 rätt</p>
 
-                        
+                        {Object.entries(schedule).map(([key, value]) => <div>{key}</div>)}
                     </div>
 
                 </Tab>

@@ -1,13 +1,13 @@
 <?php
 
-function post($payload_a, $db_o) {
+function post($payload_o, $db_o) {
 
     $params_a = [
-        'from_datetime' => date('Y-m-d H:i:s', strtotime($payload_a['from_datetime'])),
-        'to_datetime' => date('Y-m-d H:i:s', strtotime($payload_a['to_datetime']))
+        'from' => $payload_o->{'from'},
+        'to' => $payload_o->{'to'}
     ];
 
-    $result_o = $db_o->insertInto('schedule', $params_a);
+    $result_o = $db_o->insertInto('k24_schedule', $params_a);
 
     return $result_o;
 }

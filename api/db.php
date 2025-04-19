@@ -68,10 +68,16 @@ class DB {
         try {
 
             $columnNames_a = array_keys($params_a);
-            
-            $sql_s = "INSERT INTO " . $table_s . "(" . implode(', ', $columnNames_a) . ") "
-                   . "VALUES (:" . implode(', :', $columnNames_a) . ")";
 
+            // Wrap each element in single quotes
+            $quoted_a = array_map(fn($item) => "`$item`", $columnNames_a);
+
+            // Join with commas
+            $columns_s = implode(', ', $quoted_a);
+            
+            $sql_s = "INSERT INTO " . $table_s . "(" . $columns_s . ") "
+                   . "VALUES (:" . implode(', :', $columnNames_a) . ")";
+           
             $stmt_o = $this->pdo_o->prepare($sql_s);
 
             $stmt_o->execute($params_a);
