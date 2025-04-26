@@ -55,6 +55,8 @@ export default function AdminPage(props) {
 
             const currentDate_s = today_o.toISOString().split('T')[0];
 
+            setChosenDate(currentDate_s);
+
             await loadQuiz();
 
             await fetchAvailableTimes();
