@@ -425,13 +425,23 @@ export default function AdminPage(props) {
     }
 
     async function addSchedule() {
-
-        debugger;
-
+        console.log(schedule);
+        
+        
         const body_o = {
             date: chosenDate,
             timespan: startTime + '-' + endTime
         };
+
+        if(!isValidTimeInterval(body_o.timespan)) {
+            alert('Starttiden måste komma före sluttiden så det lades inte till');
+            return;
+        }
+        
+        if(isOverlap(schedule, body_o.timespan)) {
+            alert('Tidsintervallet överlappar med schemat så det lades inte till');
+            return;
+        }
 
         const response_o = await fetch('https://korkort24.com/api/schedules/', {
             method: 'POST',
@@ -447,6 +457,18 @@ export default function AdminPage(props) {
         await loadSchedule(chosenDate);
         
     }
+
+    function isValidTimeInterval(interval) {
+        const [start, end] = interval.split('-');
+        const [startHours, startMinutes] = start.split(':').map(Number);
+        const [endHours, endMinutes] = end.split(':').map(Number);
+      
+        // Convert times to minutes since midnight
+        const startTotalMinutes = startHours * 60 + startMinutes;
+        const endTotalMinutes = endHours * 60 + endMinutes;
+      
+        return startTotalMinutes < endTotalMinutes;
+      }
 
     function createTimeSlot() {
 
@@ -493,9 +515,39 @@ export default function AdminPage(props) {
         await saveSchedule({ ...schedule });
     }
 
+    function isOverlap(currentIntervals, newInterval) {
+
+        let existingIntervals = currentIntervals.map(interval => interval.timespan);
+        
+        // Helper function to convert "hh:mm" to minutes since midnight
+        const toMinutes = (time) => {
+          const [hours, minutes] = time.split(':').map(Number);
+          return hours * 60 + minutes;
+        };
+      
+        // Parse new interval
+        const [newStartStr, newEndStr] = newInterval.split('-');
+        const newStart = toMinutes(newStartStr);
+        const newEnd = toMinutes(newEndStr);
+      
+        // Check for overlap with existing intervals
+        for (const interval of existingIntervals) {
+          const [startStr, endStr] = interval.split('-');
+          const start = toMinutes(startStr);
+          const end = toMinutes(endStr);
+      
+          // Overlap if newStart < end and newEnd > start
+          if (newStart < end && newEnd > start) {
+            return true; // Overlapping
+          }
+        }
+      
+        return false; // No overlap
+      }
+
     async function deleteSchedule(id) {
         
-        debugger;
+        
         const response_o = await fetch('https://korkort24.com/api/schedules/' + id, {
             method: 'DELETE'
         });
@@ -514,7 +566,7 @@ export default function AdminPage(props) {
             const responseBody_o = await response_o.json();
 
             const schedule_a = responseBody_o.data;
-            debugger;
+            
             setSchedule(schedule_a);
         }
     }
@@ -659,7 +711,7 @@ export default function AdminPage(props) {
 
 
 
-                    <div style={{ float: 'right' }}>
+                    <div style={{ display: 'inline-block' }}>
                         {schedule && schedule.map(chosenDate_o => (
                             <div onClick={() => deleteSchedule(chosenDate_o.id)} className='schedule-date' style={{ cursor: 'pointer', marginBottom: '5px', backgroundColor: 'white', padding: '3px', border: '2px solid black', borderRadius: '5px' }}>{chosenDate_o.timespan}</div>
                         ))}

@@ -83,7 +83,7 @@ body {
 }
 
 .schedule-date:hover {
-    background-color: goldenrod;
+    background-color: goldenrod !important;
 }
 
 .section {
