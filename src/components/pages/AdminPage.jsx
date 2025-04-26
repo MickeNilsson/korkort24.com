@@ -72,9 +72,9 @@ export default function AdminPage(props) {
 
         const quizStringElement = document.getElementById('quiz-string');
 
-        
 
-        const quizStringObject= JSON.parse(quizStringElement.value);
+
+        const quizStringObject = JSON.parse(quizStringElement.value);
 
         const response_o = await fetch('https://korkort24.com/api/quiz/', {
             method: 'POST',
@@ -84,20 +84,20 @@ export default function AdminPage(props) {
             },
             body: JSON.stringify(quizStringObject)
         });
-        
+
     }
 
     async function loadJsonQuiz() {
 
         const response = await fetch('https:///korkort24.com/api/quiz/downloadquiz.php');
 
-        const quiz_o =  await response.json();
+        const quiz_o = await response.json();
 
         const quiz_s = JSON.stringify(quiz_o, null, 2)
 
         setQuizString(quiz_s);
 
-        
+
     }
 
     async function fetchAvailableTimes() {
@@ -428,19 +428,18 @@ export default function AdminPage(props) {
 
     async function addSchedule() {
         console.log(schedule);
-        
-        
+
         const body_o = {
             date: chosenDate,
             timespan: startTime + '-' + endTime
         };
 
-        if(!isValidTimeInterval(body_o.timespan)) {
+        if (!isValidTimeInterval(body_o.timespan)) {
             alert('Starttiden måste komma före sluttiden så det lades inte till');
             return;
         }
-        
-        if(isOverlap(schedule, body_o.timespan)) {
+
+        if (isOverlap(schedule, body_o.timespan)) {
             alert('Tidsintervallet överlappar med schemat så det lades inte till');
             return;
         }
@@ -457,25 +456,38 @@ export default function AdminPage(props) {
         const responseBody_o = await response_o.json();
 
         await loadSchedule(chosenDate);
-        
+
     }
+
+    function sortByTimespan(a, b) {
+        const [startA] = a.timespan.split('-');
+        const [startB] = b.timespan.split('-');
+
+        const [hoursA, minutesA] = startA.split(':').map(Number);
+        const [hoursB, minutesB] = startB.split(':').map(Number);
+
+        const totalMinutesA = hoursA * 60 + minutesA;
+        const totalMinutesB = hoursB * 60 + minutesB;
+
+        return totalMinutesA - totalMinutesB;
+    };
 
     function isValidTimeInterval(interval) {
         const [start, end] = interval.split('-');
         const [startHours, startMinutes] = start.split(':').map(Number);
         const [endHours, endMinutes] = end.split(':').map(Number);
-      
+
         // Convert times to minutes since midnight
         const startTotalMinutes = startHours * 60 + startMinutes;
         const endTotalMinutes = endHours * 60 + endMinutes;
-      
+
         return startTotalMinutes < endTotalMinutes;
-      }
+    }
 
     function createTimeSlot() {
 
         if (startTime.length === 5 && endTime.length === 5 && startTime < endTime && startTime > '00:00' && endTime < '23:59') {
-            
+
         }
 
         // if (+timeSlotLength && startTime.length === 5 && endTime.length === 5 && startTime < endTime && startTime > '00:00' && endTime < '23:59') {
@@ -520,36 +532,36 @@ export default function AdminPage(props) {
     function isOverlap(currentIntervals, newInterval) {
 
         let existingIntervals = currentIntervals.map(interval => interval.timespan);
-        
+
         // Helper function to convert "hh:mm" to minutes since midnight
         const toMinutes = (time) => {
-          const [hours, minutes] = time.split(':').map(Number);
-          return hours * 60 + minutes;
+            const [hours, minutes] = time.split(':').map(Number);
+            return hours * 60 + minutes;
         };
-      
+
         // Parse new interval
         const [newStartStr, newEndStr] = newInterval.split('-');
         const newStart = toMinutes(newStartStr);
         const newEnd = toMinutes(newEndStr);
-      
+
         // Check for overlap with existing intervals
         for (const interval of existingIntervals) {
-          const [startStr, endStr] = interval.split('-');
-          const start = toMinutes(startStr);
-          const end = toMinutes(endStr);
-      
-          // Overlap if newStart < end and newEnd > start
-          if (newStart < end && newEnd > start) {
-            return true; // Overlapping
-          }
+            const [startStr, endStr] = interval.split('-');
+            const start = toMinutes(startStr);
+            const end = toMinutes(endStr);
+
+            // Overlap if newStart < end and newEnd > start
+            if (newStart < end && newEnd > start) {
+                return true; // Overlapping
+            }
         }
-      
+
         return false; // No overlap
-      }
+    }
 
     async function deleteSchedule(id) {
-        
-        
+
+
         const response_o = await fetch('https://korkort24.com/api/schedules/' + id, {
             method: 'DELETE'
         });
@@ -562,13 +574,13 @@ export default function AdminPage(props) {
     async function loadSchedule(date_s) {
 
         const response_o = await fetch('https://korkort24.com/api/schedules/?date=' + date_s);
-        
+
         if (response_o.status === 200) {
 
             const responseBody_o = await response_o.json();
 
             const schedule_a = responseBody_o.data;
-            
+
             setSchedule(schedule_a);
         }
     }
@@ -639,7 +651,7 @@ export default function AdminPage(props) {
                     </div>
 
                     <Form.Group className="mb-3 mt-3" controlId="exampleForm.ControlTextarea1">
-                        <Form.Control onChange={(e) => setQuizString(e.target.value)} id="quiz-string" as="textarea" rows={10} value={quizString} style={{'font-family': 'monospace', 'white-space': 'pre'}} />
+                        <Form.Control onChange={(e) => setQuizString(e.target.value)} id="quiz-string" as="textarea" rows={10} value={quizString} style={{ 'font-family': 'monospace', 'white-space': 'pre' }} />
                     </Form.Group>
 
                     <Button
@@ -714,7 +726,7 @@ export default function AdminPage(props) {
 
 
                     <div style={{ display: 'inline-block' }}>
-                        {schedule && schedule.map(chosenDate_o => (
+                        {schedule && schedule.sort(sortByTimespan).map(chosenDate_o => (
                             <div onClick={() => deleteSchedule(chosenDate_o.id)} className='schedule-date' style={{ cursor: 'pointer', marginBottom: '5px', backgroundColor: 'white', padding: '3px', border: '2px solid black', borderRadius: '5px' }}>{chosenDate_o.timespan}</div>
                         ))}
                     </div>
