@@ -82,6 +82,10 @@ body {
     margin-right: 30px;
 }
 
+[role="tab"][aria-selected="false"] {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
 .schedule-date:hover {
     background-color: goldenrod !important;
 }
