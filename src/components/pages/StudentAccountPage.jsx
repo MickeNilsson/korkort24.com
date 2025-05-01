@@ -154,24 +154,46 @@ export default function StudentAccountPage({ student }) {
 
             fetchAvailableTimes();
 
-            loadSchedule();
+            const today_o = new Date();
+
+            const currentDate_s = today_o.toISOString().split('T')[0];
+
+            setChosenDate(currentDate_s);
+
+            loadSchedule(currentDate_s);
         }
 
     }, []);
 
-    async function loadSchedule() {
+    async function loadSchedule(date_s) {
 
-        const response_o = await fetch('https://korkort24.com/api/schedule/');
+        const response_o = await fetch('https://korkort24.com/api/schedules/?date=' + date_s);
 
         if (response_o.status === 200) {
 
             const responseBody_o = await response_o.json();
 
             const schedule_a = responseBody_o.data;
-            debugger;
+
             setSchedule(schedule_a);
+
+            console.log(schedule_a);
         }
     }
+
+    // async function loadSchedule() {
+
+    //     const response_o = await fetch('https://korkort24.com/api/schedule/');
+
+    //     if (response_o.status === 200) {
+
+    //         const responseBody_o = await response_o.json();
+
+    //         const schedule_a = responseBody_o.data;
+    //         debugger;
+    //         setSchedule(schedule_a);
+    //     }
+    // }
 
     async function saveSchedule(schedule_o) {
 
@@ -486,8 +508,9 @@ export default function StudentAccountPage({ student }) {
     }
 
     function addMinutes(date, minutes) {
-        date.setMinutes(date.getMinutes() + minutes);
-        return date;
+        const copy_o = new Date(date);
+        copy_o.setMinutes(copy_o.getMinutes() + minutes);
+        return copy_o;
     }
 
     function subtractMinutes(date, minutes) {
@@ -646,61 +669,95 @@ export default function StudentAccountPage({ student }) {
                         <div style={{ float: 'left', width: '150px' }}>{chosenAvailableTimes.map(availableTime => <span onClick={() => handleShow(availableTime.id)} className="available-time" key={availableTime.id}>{availableTime.from.substring(11, 16)} - {availableTime.to.substring(11, 16)}</span>)}</div> */}
 
                         <div style={{ float: 'right' }}>
-                            {schedule[chosenDate] && schedule[chosenDate].map(chosenDate_o => {
+                            {schedule && schedule.length && schedule.map(chosenDate_o => {
+                                console.log(chosenDate_o);
+                                chosenDate_o.timespan
+                                debugger;
+                                const timespan_a = chosenDate_o.timespan.split("-");
 
-                                const startDateTime_s = chosenDate + 'T' + chosenDate_o.start + ':00';
+                                const startDateTime_s = chosenDate + 'T' + timespan_a[0] + ':00';
 
-                                const endDateTime_s = chosenDate + 'T' + chosenDate_o.end + ':00';
+                                const endDateTime_s = chosenDate + 'T' + timespan_a[1] + ':00';
 
-                                let d = new Date(startDateTime_s);
+                                let currentDateTimeSlot_o = new Date(startDateTime_s);
 
-                                let lastTime_s = new Date()
+                                let endDateTime_o = new Date(endDateTime_s);
 
                                 let timeSlots_a = [];
 
+                                const timeSlotLength_n = 30;
 
-                                for (let i = 0; i < 10; ++i) {
+                                let nextDateTime_o = addMinutes(currentDateTimeSlot_o, timeSlotLength_n);
 
-                                    let hours_s = d.getHours() < 10 ? '0' + d.getHours() : d.getHours();
+                                while(nextDateTime_o <= endDateTime_o) {
 
-                                    let minutes_s = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes();
+                                    let hours_s = currentDateTimeSlot_o.getHours() < 10 ? '0' + currentDateTimeSlot_o.getHours() : currentDateTimeSlot_o.getHours();
 
-                                    
-                                    const scheduledStart_s = hours_s + ':' + minutes_s;
+                                    let minutes_s = currentDateTimeSlot_o.getMinutes() < 10 ? '0' + currentDateTimeSlot_o.getMinutes() : currentDateTimeSlot_o.getMinutes();
 
-                        
+                                    timeSlots_a.push(hours_s + ':' + minutes_s);
 
-                                    let timeIsBooked = false;
-                          
-                                    if(chosenDate_o.bookings) {
-                                        for(const booking_o of chosenDate_o.bookings) {
-                               
-                                            if(booking_o.time === scheduledStart_s) {
-                                                timeIsBooked = true;
-                                                break;
-                                            }
-                                        }
-                                    }
-                                    
+                                    currentDateTimeSlot_o = nextDateTime_o;
 
-                                    if(timeIsBooked) {
-
-                                        d = addMinutes(d, chosenDate_o.length);
-
-                                        continue;
-                                    }
-
-                                    hours_s = d.getHours() < 10 ? '0' + d.getHours() : d.getHours();
-
-                                    minutes_s = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes();
-                        
-                                    timeSlots_a.push(<div className='available-time' onClick={() => addBookedTime({date: chosenDate, time: scheduledStart_s, length: chosenDate_o.length})}>{scheduledStart_s}</div>);
-
-                                    d = addMinutes(d, chosenDate_o.length);
+                                    nextDateTime_o = addMinutes(currentDateTimeSlot_o, timeSlotLength_n);
                                 }
 
-                                //return <div className='schedule-date' style={{cursor: 'pointer', marginBottom: '5px', backgroundColor: 'white', padding: '3px', border: '2px solid black', borderRadius: '5px'}}>{chosenDate_o.start} - {chosenDate_o.end} {chosenDate_o.length + ' min'}</div>;
-                                return <div>{timeSlots_a}</div>;
+
+                                console.log(timeSlots_a);
+                                return timeSlots_a.map(timeSlot_s => <div className='schedule-date' style={{cursor: 'pointer', marginBottom: '5px', color: 'black', backgroundColor: 'white', padding: '3px', border: '2px solid black', borderRadius: '5px'}}>{timeSlot_s}</div>);
+                                // const startDateTime_s = chosenDate + 'T' + chosenDate_o.start + ':00';
+
+                                // const endDateTime_s = chosenDate + 'T' + chosenDate_o.end + ':00';
+
+                                // let d = new Date(startDateTime_s);
+
+                                // let lastTime_s = new Date()
+
+                                // let timeSlots_a = [];
+
+
+                                // for (let i = 0; i < 10; ++i) {
+
+                                //     let hours_s = d.getHours() < 10 ? '0' + d.getHours() : d.getHours();
+
+                                //     let minutes_s = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes();
+
+                                    
+                                //     const scheduledStart_s = hours_s + ':' + minutes_s;
+
+                        
+
+                                //     let timeIsBooked = false;
+                          
+                                //     if(chosenDate_o.bookings) {
+                                //         for(const booking_o of chosenDate_o.bookings) {
+                               
+                                //             if(booking_o.time === scheduledStart_s) {
+                                //                 timeIsBooked = true;
+                                //                 break;
+                                //             }
+                                //         }
+                                //     }
+                                    
+
+                                //     if(timeIsBooked) {
+
+                                //         d = addMinutes(d, chosenDate_o.length);
+
+                                //         continue;
+                                //     }
+
+                                //     hours_s = d.getHours() < 10 ? '0' + d.getHours() : d.getHours();
+
+                                //     minutes_s = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes();
+                        
+                                //     timeSlots_a.push(<div className='available-time' onClick={() => addBookedTime({date: chosenDate, time: scheduledStart_s, length: chosenDate_o.length})}>{scheduledStart_s}</div>);
+
+                                //     d = addMinutes(d, chosenDate_o.length);
+                                // }
+
+                                // //return <div className='schedule-date' style={{cursor: 'pointer', marginBottom: '5px', backgroundColor: 'white', padding: '3px', border: '2px solid black', borderRadius: '5px'}}>{chosenDate_o.start} - {chosenDate_o.end} {chosenDate_o.length + ' min'}</div>;
+                                // return <div>{timeSlots_a}</div>;
                             })}
                         </div>
 
