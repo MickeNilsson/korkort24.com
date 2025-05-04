@@ -77,8 +77,8 @@ export default function StudentAccountPage({ student }) {
         );
     };
 
-    function handleClickDay(date) {
-
+    async function handleClickDay(date) {
+       
         let chosenDate_o = new Date(date);
 
         chosenDate_o.setDate(chosenDate_o.getDate() + 1);//.toISOString().substring(0, 10);
@@ -87,19 +87,21 @@ export default function StudentAccountPage({ student }) {
 
         setChosenDate(chosenDate_s);
 
-        console.dir(chosenDate_s);
+        await loadSchedule(chosenDate_s);
 
-        console.log(availableTimes);
+        // console.dir(chosenDate_s);
+
+        // console.log(availableTimes);
 
 
-        const timeslots = availableTimes.filter(availableTime => {
-            console.log(availableTime.from.substring(0, 10) + ' = ' + chosenDate_s);
-            return availableTime.from.substring(0, 10) === chosenDate_s;
-        });
+        // const timeslots = availableTimes.filter(availableTime => {
+        //     console.log(availableTime.from.substring(0, 10) + ' = ' + chosenDate_s);
+        //     return availableTime.from.substring(0, 10) === chosenDate_s;
+        // });
 
-        console.log(timeslots);
+        // console.log(timeslots);
 
-        setChosenAvailableTimes(timeslots);
+        // setChosenAvailableTimes(timeslots);
         //console.log(value);
     }
 
@@ -157,7 +159,7 @@ export default function StudentAccountPage({ student }) {
             const today_o = new Date();
 
             const currentDate_s = today_o.toISOString().split('T')[0];
-
+            
             setChosenDate(currentDate_s);
 
             loadSchedule(currentDate_s);
