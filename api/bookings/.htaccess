@@ -1,0 +1,4 @@
+RewriteEngine On
+
+# Rewrite URLs like /bookings/123 to /bookings/index.php?id=123
+RewriteRule ^([0-9]+)$ index.php?id=$1 [L,QSA]
