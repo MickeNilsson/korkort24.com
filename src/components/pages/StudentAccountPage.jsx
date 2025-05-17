@@ -587,8 +587,6 @@ export default function StudentAccountPage({ student }) {
                         Hej {student.firstname}!
                         <h3>Dina bokningar</h3>
                         {appointments.map((appointment) => <p>{appointment.start.substring(0, 10)} {appointment.start.substring(11, 16)}</p>)}
-
-                        {Object.entries(schedule).map(([key, value]) => <div>{key}</div>)}
                     </div>
 
                 </Tab>
