@@ -78,7 +78,7 @@ export default function StudentAccountPage({ student }) {
     };
 
     async function handleClickDay(date) {
-       
+
         let chosenDate_o = new Date(date);
 
         chosenDate_o.setDate(chosenDate_o.getDate() + 1);//.toISOString().substring(0, 10);
@@ -159,7 +159,7 @@ export default function StudentAccountPage({ student }) {
             const today_o = new Date();
 
             const currentDate_s = today_o.toISOString().split('T')[0];
-            
+
             setChosenDate(currentDate_s);
 
             loadSchedule(currentDate_s);
@@ -470,19 +470,21 @@ export default function StudentAccountPage({ student }) {
             });
     }
 
-    async function bookAppointment() {
+    async function bookAppointment(timeSlot, scheduleId) {
 
-        console.log(chosenAvailableTime);
+        const startDateTime_s = chosenDate + 'T' + timeSlot + ':00';
 
-        console.log(student);
+        const endDateTime_s = addMinutesToLocalTime(startDateTime_s, 60);
 
         const body_o = {
-            studentid: student.id,
-            timeid: chosenAvailableTime.id
+            schedule_id: scheduleId,
+            member_id: student.id,
+            start: startDateTime_s,
+            end: endDateTime_s
         };
 
-        const response_o = await fetch('https://korkort24.com/api/times/', {
-            method: 'PUT',
+        const response_o = await fetch('https://korkort24.com/api/bookings/', {
+            method: 'POST',
             body: JSON.stringify(body_o),
             headers: {
                 'Content-Type': 'application/json'
@@ -493,20 +495,20 @@ export default function StudentAccountPage({ student }) {
 
         console.log(json_o);
 
-        handleClose();
+        // handleClose();
 
-        const updatedAvailableTimes = await fetchAvailableTimes();
+        // const updatedAvailableTimes = await fetchAvailableTimes();
 
-        const timeslots = updatedAvailableTimes.filter(availableTime => {
-            console.log(availableTime.from.substring(0, 10) + ' = ' + chosenDate);
-            return availableTime.from.substring(0, 10) === chosenDate;
-        });
+        // const timeslots = updatedAvailableTimes.filter(availableTime => {
+        //     console.log(availableTime.from.substring(0, 10) + ' = ' + chosenDate);
+        //     return availableTime.from.substring(0, 10) === chosenDate;
+        // });
 
-        console.log(timeslots);
+        // console.log(timeslots);
 
-        setChosenAvailableTimes(timeslots);
+        // setChosenAvailableTimes(timeslots);
 
-        setShowConfirmationModal(true);
+        // setShowConfirmationModal(true);
     }
 
     function addMinutes(date, minutes) {
@@ -522,19 +524,36 @@ export default function StudentAccountPage({ student }) {
 
     async function addBookedTime(params) {
 
-        for(const date_o of schedule[params.date]) {
+        for (const date_o of schedule[params.date]) {
 
-            if(params.time >= date_o.start && params.time < date_o.end) {
+            if (params.time >= date_o.start && params.time < date_o.end) {
                 date_o.bookings = date_o.bookings || [];
-                date_o.bookings.push({studentId: student.id, time: params.time});
+                date_o.bookings.push({ studentId: student.id, time: params.time });
             }
         }
-        debugger;
+
         const schedule_o = JSON.parse(JSON.stringify(schedule));
 
         setSchedule(schedule_o);
 
         await saveSchedule(schedule_o);
+    }
+
+    function addMinutesToLocalTime(timestamp, minutesToAdd) {
+        const date = new Date(timestamp);
+        date.setMinutes(date.getMinutes() + minutesToAdd);
+
+        // Hjälpfunktion för att lägga till nolla framför ental (t.ex. 7 → 07)
+        const pad = (num) => String(num).padStart(2, '0');
+
+        const year = date.getFullYear();
+        const month = pad(date.getMonth() + 1); // Månader är 0-indexerade
+        const day = pad(date.getDate());
+        const hours = pad(date.getHours());
+        const minutes = pad(date.getMinutes());
+        const seconds = pad(date.getSeconds());
+
+        return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
     }
 
     return (
@@ -672,9 +691,7 @@ export default function StudentAccountPage({ student }) {
 
                         <div style={{ float: 'right' }}>
                             {schedule && schedule.length && schedule.map(chosenDate_o => {
-                                console.log(chosenDate_o);
-                                chosenDate_o.timespan
-                                debugger;
+                          
                                 const timespan_a = chosenDate_o.timespan.split("-");
 
                                 const startDateTime_s = chosenDate + 'T' + timespan_a[0] + ':00';
@@ -687,11 +704,11 @@ export default function StudentAccountPage({ student }) {
 
                                 let timeSlots_a = [];
 
-                                const timeSlotLength_n = 30;
+                                const timeSlotLength_n = 60;
 
                                 let nextDateTime_o = addMinutes(currentDateTimeSlot_o, timeSlotLength_n);
 
-                                while(nextDateTime_o <= endDateTime_o) {
+                                while (nextDateTime_o <= endDateTime_o) {
 
                                     let hours_s = currentDateTimeSlot_o.getHours() < 10 ? '0' + currentDateTimeSlot_o.getHours() : currentDateTimeSlot_o.getHours();
 
@@ -704,9 +721,7 @@ export default function StudentAccountPage({ student }) {
                                     nextDateTime_o = addMinutes(currentDateTimeSlot_o, timeSlotLength_n);
                                 }
 
-
-                                console.log(timeSlots_a);
-                                return timeSlots_a.map(timeSlot_s => <div className='schedule-date' style={{cursor: 'pointer', marginBottom: '5px', color: 'black', backgroundColor: 'white', padding: '3px', border: '2px solid black', borderRadius: '5px'}}>{timeSlot_s}</div>);
+                                return timeSlots_a.map(timeSlot_s => <div onClick={() => bookAppointment(timeSlot_s, chosenDate_o.id)} className='schedule-date' style={{ cursor: 'pointer', marginBottom: '5px', color: 'black', backgroundColor: 'white', padding: '3px', border: '2px solid black', borderRadius: '5px' }}>{timeSlot_s}</div>);
                                 // const startDateTime_s = chosenDate + 'T' + chosenDate_o.start + ':00';
 
                                 // const endDateTime_s = chosenDate + 'T' + chosenDate_o.end + ':00';
@@ -724,23 +739,23 @@ export default function StudentAccountPage({ student }) {
 
                                 //     let minutes_s = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes();
 
-                                    
+
                                 //     const scheduledStart_s = hours_s + ':' + minutes_s;
 
-                        
+
 
                                 //     let timeIsBooked = false;
-                          
+
                                 //     if(chosenDate_o.bookings) {
                                 //         for(const booking_o of chosenDate_o.bookings) {
-                               
+
                                 //             if(booking_o.time === scheduledStart_s) {
                                 //                 timeIsBooked = true;
                                 //                 break;
                                 //             }
                                 //         }
                                 //     }
-                                    
+
 
                                 //     if(timeIsBooked) {
 
@@ -752,7 +767,7 @@ export default function StudentAccountPage({ student }) {
                                 //     hours_s = d.getHours() < 10 ? '0' + d.getHours() : d.getHours();
 
                                 //     minutes_s = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes();
-                        
+
                                 //     timeSlots_a.push(<div className='available-time' onClick={() => addBookedTime({date: chosenDate, time: scheduledStart_s, length: chosenDate_o.length})}>{scheduledStart_s}</div>);
 
                                 //     d = addMinutes(d, chosenDate_o.length);
