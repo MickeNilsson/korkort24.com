@@ -145,6 +145,8 @@ export default function StudentAccountPage({ student }) {
 
     const [schedule, setSchedule] = useState({});
 
+    const [appointments, setAppointments] = useState([]);
+
     // Fetch quiz when user has logged in to student account
     useEffect(() => {
 
@@ -163,9 +165,25 @@ export default function StudentAccountPage({ student }) {
             setChosenDate(currentDate_s);
 
             loadSchedule(currentDate_s);
+
+            loadAppointments();
         }
 
     }, []);
+
+    async function loadAppointments() {
+
+        const response_o = await fetch('https://korkort24.com/api/bookings/?member_id=' + student.id);
+
+        if (response_o.status === 200) {
+
+            const responseBody_o = await response_o.json();
+
+            const appointments_a = responseBody_o.data;
+            debugger;
+            setAppointments(appointments_a);
+        }
+    }
 
     async function loadSchedule(date_s) {
 
@@ -178,8 +196,6 @@ export default function StudentAccountPage({ student }) {
             const schedule_a = responseBody_o.data;
 
             setSchedule(schedule_a);
-
-            console.log(schedule_a);
         }
     }
 
