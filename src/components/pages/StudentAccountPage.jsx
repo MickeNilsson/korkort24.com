@@ -585,8 +585,8 @@ export default function StudentAccountPage({ student }) {
 
                     <div style={{ borderRadius: '5px', backgroundColor: 'rgba(0, 0, 0, 1)' }} className='p-2 mt-3 text-white'>
                         Hej {student.firstname}!
-                        <p>Dina resultat:</p>
-                        <p>B-körkortsprov: 62 av 65 rätt</p>
+                        <h3>Dina bokningar</h3>
+                        {appointments.map((appointment) => <p>{appointment.start.substring(0, 10)} {appointment.start.substring(11, 16)}</p>)}
 
                         {Object.entries(schedule).map(([key, value]) => <div>{key}</div>)}
                     </div>
