@@ -2,6 +2,7 @@ import { Button, Col, Form, InputGroup, Modal, Row, Tab, Tabs } from 'react-boot
 import { useState, useEffect, useRef } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import FileUploader from '../inputfields/FileUploader';
 
 export default function AdminPage(props) {
 
@@ -661,6 +662,9 @@ export default function AdminPage(props) {
                         className='mb-2'
                         onClick={saveQuizString}
                     >Spara</Button>
+
+                    <h1 class="text-white">Ladda upp bild</h1>
+                    <FileUploader />
 
                 </Tab>
 
