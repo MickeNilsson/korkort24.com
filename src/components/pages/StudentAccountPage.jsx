@@ -642,7 +642,7 @@ export default function StudentAccountPage({ student }) {
 
                                 <h4 className='text-white' style={{ display: 'inline-block' }}>{activeQuiz.questions[activeQuestionIndex].name}</h4>
 
-                                {activeQuiz.questions[activeQuestionIndex].image && <Image style={{ maxWidth: '100%', marginBottom: '10px', marginTop: '10px' }} src={'https://korkort24.com/api/quizimages/' + activeQuiz.questions[activeQuestionIndex].image} rounded />}
+                                {activeQuiz.questions[activeQuestionIndex].image && <Image style={{ maxWidth: '100%', marginBottom: '10px', marginTop: '10px', display: 'block' }} src={'https://korkort24.com/api/quizimages/' + activeQuiz.questions[activeQuestionIndex].image} rounded />}
 
                                 {activeQuiz.questions[activeQuestionIndex].answers.map((answer_o, index) => {
 
