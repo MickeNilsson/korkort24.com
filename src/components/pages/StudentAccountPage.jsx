@@ -18,6 +18,7 @@ export default function StudentAccountPage({ student }) {
 
     const [quiz, setQuiz] = useState([]);
 
+    const [timeSlots, setTimeSlots] = useState([]);
 
 
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -79,15 +80,28 @@ export default function StudentAccountPage({ student }) {
 
     async function handleClickDay(date) {
 
-        let chosenDate_o = new Date(date);
+        let chosenDate_s = date;
 
-        chosenDate_o.setDate(chosenDate_o.getDate() + 1);//.toISOString().substring(0, 10);
+        if (typeof date === 'object') {
 
-        const chosenDate_s = chosenDate_o.toISOString().substring(0, 10);
+            let chosenDate_o = new Date(date);
+
+            chosenDate_o.setDate(chosenDate_o.getDate() + 1);//.toISOString().substring(0, 10);
+
+            chosenDate_s = chosenDate_o.toISOString().substring(0, 10);
+        }
 
         setChosenDate(chosenDate_s);
 
-        await loadSchedule(chosenDate_s);
+        const schedule_a = await loadSchedule(chosenDate_s);
+
+        const appointments_a = await loadAppointments({ schedule_id: schedule_a[0].id });
+
+        const availableTimeSlots_a = getAvailableSlots(schedule_a[0], appointments_a, 60);
+
+        setTimeSlots(availableTimeSlots_a);
+
+
 
         // console.dir(chosenDate_s);
 
@@ -104,6 +118,39 @@ export default function StudentAccountPage({ student }) {
         // setChosenAvailableTimes(timeslots);
         //console.log(value);
     }
+
+    function getAvailableSlots(schedule, bookings, length) {
+        const [startStr, endStr] = schedule.timespan.split('-');
+        const date = schedule.date;
+
+        const startTime = new Date(`${date}T${startStr}`);
+        const endTime = new Date(`${date}T${endStr}`);
+
+        const slotDurationMs = length * 60 * 1000;
+
+        const availableSlots = [];
+
+        for (
+            let slotStart = new Date(startTime);
+            slotStart.getTime() + slotDurationMs <= endTime.getTime();
+            slotStart = new Date(slotStart.getTime() + slotDurationMs)
+        ) {
+            const slotEnd = new Date(slotStart.getTime() + slotDurationMs);
+
+            const hasOverlap = bookings.some(booking => {
+                const bookingStart = new Date(booking.start);
+                const bookingEnd = new Date(booking.end);
+                return slotStart < bookingEnd && slotEnd > bookingStart;
+            });
+
+            if (!hasOverlap) {
+                availableSlots.push(slotStart.toTimeString().slice(0, 5)); // Format "HH:MM"
+            }
+        }
+
+        return availableSlots;
+    }
+
 
     const [ignored, forceUpdate] = useReducer(x => x + 1, 0);
 
@@ -166,23 +213,29 @@ export default function StudentAccountPage({ student }) {
 
             loadSchedule(currentDate_s);
 
-            loadAppointments();
+            loadAppointments({ member_id: student.id });
         }
 
     }, []);
 
-    async function loadAppointments() {
+    async function loadAppointments(params_o) {
 
-        const response_o = await fetch('https://korkort24.com/api/bookings/?member_id=' + student.id);
+        const queryParams_s = new URLSearchParams(params_o).toString();
+
+        const response_o = await fetch('https://korkort24.com/api/bookings/?' + queryParams_s);
 
         if (response_o.status === 200) {
 
             const responseBody_o = await response_o.json();
 
             const appointments_a = responseBody_o.data;
-            debugger;
+
             setAppointments(appointments_a);
+
+            return appointments_a;
         }
+
+        return [];
     }
 
     async function loadSchedule(date_s) {
@@ -196,7 +249,11 @@ export default function StudentAccountPage({ student }) {
             const schedule_a = responseBody_o.data;
 
             setSchedule(schedule_a);
+
+            return schedule_a;
         }
+
+        return [];
     }
 
     // async function loadSchedule() {
@@ -488,6 +545,8 @@ export default function StudentAccountPage({ student }) {
 
     async function bookAppointment(timeSlot, scheduleId) {
 
+        handleClickDay(chosenDate);
+
         const startDateTime_s = chosenDate + 'T' + timeSlot + ':00';
 
         const endDateTime_s = addMinutesToLocalTime(startDateTime_s, 60);
@@ -510,6 +569,8 @@ export default function StudentAccountPage({ student }) {
         const json_o = await response_o.json();
 
         console.log(json_o);
+
+
 
         // handleClose();
 
@@ -572,6 +633,45 @@ export default function StudentAccountPage({ student }) {
         return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
     }
 
+    function setKey(key) {
+
+        switch (key) {
+            case 'home': loadAppointments({ member_id: student.id }); break;
+        }
+    }
+
+    function formatDateToSwedish(dateString) {
+        const date = new Date(dateString);
+
+        const weekdays = [
+            "Söndagen", "Måndagen", "Tisdagen", "Onsdagen",
+            "Torsdagen", "Fredagen", "Lördagen"
+        ];
+        const months = [
+            "januari", "februari", "mars", "april", "maj", "juni",
+            "juli", "augusti", "september", "oktober", "november", "december"
+        ];
+
+        const weekday = weekdays[date.getDay()];
+        const day = date.getDate();
+        const month = months[date.getMonth()];
+
+        // Funktion för korrekt svensk ändelse
+        function getSwedishDateSuffix(day) {
+            if ([1, 2, 21, 22, 31].includes(day)) {
+                return `${day}:a`;
+            } else if (day === 3 || day === 23) {
+                return `${day}:e`;
+            } else {
+                return `${day}:e`;
+            }
+        }
+
+        const formattedDay = getSwedishDateSuffix(day);
+
+        return `${weekday} den ${formattedDay} ${month}`;
+    }
+
     return (
 
         <>
@@ -580,6 +680,7 @@ export default function StudentAccountPage({ student }) {
             <Tabs
                 defaultActiveKey='home'
                 className="mb-3"
+                onSelect={(k) => setKey(k)}
             >
                 <Tab eventKey="home" title="Hem" className='text-white'>
 
@@ -695,115 +796,21 @@ export default function StudentAccountPage({ student }) {
                 </Tab>
 
                 <Tab eventKey="driving" title="Coaching">
-
                     <div style={{ borderRadius: '5px', backgroundColor: 'rgba(0, 0, 0, 1)', height: '1000px' }} className='p-2 mt-3 text-white'>
                         <h2>Boka coaching</h2>
-                        {/*                         <Calendar style={{ float: 'left' }} onChange={onChange} onClickDay={handleClickDay} value={value} tileClassName={({ date, view }) =>
+                        
+                        <Calendar onChange={onChange} onClickDay={handleClickDay} value={value} tileClassName={({ date, view }) =>
                             view === "month" && isEventDate(date) ? "highlight" : null
                         } />
-                        <div style={{ float: 'left', width: '150px' }}>{chosenAvailableTimes.map(availableTime => <span onClick={() => handleShow(availableTime.id)} className="available-time" key={availableTime.id}>{availableTime.from.substring(11, 16)} - {availableTime.to.substring(11, 16)}</span>)}</div> */}
-
-                        <div style={{ float: 'right' }}>
-                            {schedule && schedule.length && schedule.map(chosenDate_o => {
-                          
-                                const timespan_a = chosenDate_o.timespan.split("-");
-
-                                const startDateTime_s = chosenDate + 'T' + timespan_a[0] + ':00';
-
-                                const endDateTime_s = chosenDate + 'T' + timespan_a[1] + ':00';
-
-                                let currentDateTimeSlot_o = new Date(startDateTime_s);
-
-                                let endDateTime_o = new Date(endDateTime_s);
-
-                                let timeSlots_a = [];
-
-                                const timeSlotLength_n = 60;
-
-                                let nextDateTime_o = addMinutes(currentDateTimeSlot_o, timeSlotLength_n);
-
-                                while (nextDateTime_o <= endDateTime_o) {
-
-                                    let hours_s = currentDateTimeSlot_o.getHours() < 10 ? '0' + currentDateTimeSlot_o.getHours() : currentDateTimeSlot_o.getHours();
-
-                                    let minutes_s = currentDateTimeSlot_o.getMinutes() < 10 ? '0' + currentDateTimeSlot_o.getMinutes() : currentDateTimeSlot_o.getMinutes();
-
-                                    timeSlots_a.push(hours_s + ':' + minutes_s);
-
-                                    currentDateTimeSlot_o = nextDateTime_o;
-
-                                    nextDateTime_o = addMinutes(currentDateTimeSlot_o, timeSlotLength_n);
-                                }
-
-                                return timeSlots_a.map(timeSlot_s => <div onClick={() => bookAppointment(timeSlot_s, chosenDate_o.id)} className='schedule-date' style={{ cursor: 'pointer', marginBottom: '5px', color: 'black', backgroundColor: 'white', padding: '3px', border: '2px solid black', borderRadius: '5px' }}>{timeSlot_s}</div>);
-                                // const startDateTime_s = chosenDate + 'T' + chosenDate_o.start + ':00';
-
-                                // const endDateTime_s = chosenDate + 'T' + chosenDate_o.end + ':00';
-
-                                // let d = new Date(startDateTime_s);
-
-                                // let lastTime_s = new Date()
-
-                                // let timeSlots_a = [];
-
-
-                                // for (let i = 0; i < 10; ++i) {
-
-                                //     let hours_s = d.getHours() < 10 ? '0' + d.getHours() : d.getHours();
-
-                                //     let minutes_s = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes();
-
-
-                                //     const scheduledStart_s = hours_s + ':' + minutes_s;
-
-
-
-                                //     let timeIsBooked = false;
-
-                                //     if(chosenDate_o.bookings) {
-                                //         for(const booking_o of chosenDate_o.bookings) {
-
-                                //             if(booking_o.time === scheduledStart_s) {
-                                //                 timeIsBooked = true;
-                                //                 break;
-                                //             }
-                                //         }
-                                //     }
-
-
-                                //     if(timeIsBooked) {
-
-                                //         d = addMinutes(d, chosenDate_o.length);
-
-                                //         continue;
-                                //     }
-
-                                //     hours_s = d.getHours() < 10 ? '0' + d.getHours() : d.getHours();
-
-                                //     minutes_s = d.getMinutes() < 10 ? '0' + d.getMinutes() : d.getMinutes();
-
-                                //     timeSlots_a.push(<div className='available-time' onClick={() => addBookedTime({date: chosenDate, time: scheduledStart_s, length: chosenDate_o.length})}>{scheduledStart_s}</div>);
-
-                                //     d = addMinutes(d, chosenDate_o.length);
-                                // }
-
-                                // //return <div className='schedule-date' style={{cursor: 'pointer', marginBottom: '5px', backgroundColor: 'white', padding: '3px', border: '2px solid black', borderRadius: '5px'}}>{chosenDate_o.start} - {chosenDate_o.end} {chosenDate_o.length + ' min'}</div>;
-                                // return <div>{timeSlots_a}</div>;
-                            })}
+                       
+                        <div style={{float: 'left'}}>
+                            <h5>{formatDateToSwedish(chosenDate)}</h5>
+                            {(schedule && schedule.length && schedule.map(chosenDate_o => {
+                                return timeSlots.map(timeSlot_s => <span onClick={() => bookAppointment(timeSlot_s, chosenDate_o.id)} className='schedule-date' style={{float: 'left', cursor: 'pointer', marginBottom: '5px', color: 'black', backgroundColor: 'white', padding: '3px', border: '2px solid black', borderRadius: '5px' }}>{timeSlot_s}</span>);
+                            })) || 'Inga lediga tider den här dagen, vänligen välj en annan dag.'}
                         </div>
-
-
-                        <Calendar style={{ float: 'left' }} onChange={onChange} onClickDay={handleClickDay} value={value} tileClassName={({ date, view }) =>
-                            view === "month" && isEventDate(date) ? "highlight" : null
-                        } />
-
-
-
                     </div>
-
-
                 </Tab>
-
             </Tabs>
 
             <Modal show={show} onHide={handleClose}>
