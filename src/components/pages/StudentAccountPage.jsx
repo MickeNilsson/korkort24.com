@@ -679,12 +679,12 @@ export default function StudentAccountPage({ student }) {
 
             <Tabs
                 defaultActiveKey='home'
-                className="mb-3"
+                className="mb-3 clearfix"
                 onSelect={(k) => setKey(k)}
             >
                 <Tab eventKey="home" title="Hem" className='text-white'>
 
-                    <div style={{ borderRadius: '5px', backgroundColor: 'rgba(0, 0, 0, 1)' }} className='p-2 mt-3 text-white'>
+                    <div className='p-2 mt-3 text-white'>
                         Hej {student.firstname}!
                         <h3>Dina bokningar</h3>
                         {appointments.map((appointment) => <p>{appointment.start.substring(0, 10)} {appointment.start.substring(11, 16)}</p>)}
@@ -692,7 +692,7 @@ export default function StudentAccountPage({ student }) {
 
                 </Tab>
 
-                <Tab eventKey="questions" title="Frågor" className='p-3' style={{ backgroundColor: 'rgba(0, 0, 0, 1' }}>
+                <Tab eventKey="questions" title="Frågor" className='p-3'>
 
                     <Form.Select
                         className='mb-2'
@@ -791,19 +791,19 @@ export default function StudentAccountPage({ student }) {
 
                     </Form.Select>
 
-                    {info.text && <div style={{ borderRadius: '5px', backgroundColor: 'rgba(0, 0, 0, 1)' }} className='p-2 mt-3 text-white' dangerouslySetInnerHTML={{ __html: info.text }}></div>}
+                    {info.text && <div className='p-2 mt-3 text-white' dangerouslySetInnerHTML={{ __html: info.text }}></div>}
 
                 </Tab>
 
                 <Tab eventKey="driving" title="Coaching">
-                    <div style={{ borderRadius: '5px', backgroundColor: 'rgba(0, 0, 0, 1)', height: '1000px' }} className='p-2 mt-3 text-white'>
+                    <div className='p-2 mt-3 text-white'>
                         <h2>Boka coaching</h2>
                         
                         <Calendar onChange={onChange} onClickDay={handleClickDay} value={value} tileClassName={({ date, view }) =>
                             view === "month" && isEventDate(date) ? "highlight" : null
                         } />
                        
-                        <div style={{float: 'left'}}>
+                        <div style={{float: 'left', paddingBottom: '10px'}}>
                             <h5>{formatDateToSwedish(chosenDate)}</h5>
                             {(schedule && schedule.length && schedule.map(chosenDate_o => {
                                 return timeSlots.map(timeSlot_s => <span onClick={() => bookAppointment(timeSlot_s, chosenDate_o.id)} className='schedule-date' style={{float: 'left', cursor: 'pointer', marginBottom: '5px', color: 'black', backgroundColor: 'white', padding: '3px', border: '2px solid black', borderRadius: '5px' }}>{timeSlot_s}</span>);

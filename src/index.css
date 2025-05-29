@@ -18,6 +18,23 @@ body {
     color: black;
 }
 
+.clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.tab-content {
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    border-radius: 5px;
+}
+
+.tab-content::after {
+    content: "" !important;
+    display: table !important;
+    clear: both !important;
+}
+
 .correct-answer {
 
     color: green;
@@ -58,7 +75,7 @@ body {
 }
 
 .page-link {
-    background-color: rgba(0,0,0,0);
+    background-color: rgba(0, 0, 0, 0);
 }
 
 .question-image {
@@ -84,7 +101,7 @@ body {
 }
 
 [role="tab"][aria-selected="false"] {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.8);
 }
 
 .schedule-date:hover {
@@ -98,7 +115,7 @@ body {
 }
 
 .section-name:hover {
-    color:dodgerblue;
+    color: dodgerblue;
 }
 
 .section-header {
@@ -148,7 +165,8 @@ body {
     transform: translateY(-50%);
 }
 
-.form-check-input[disabled] ~ .form-check-label, .form-check-input:disabled ~ .form-check-label {
+.form-check-input[disabled]~.form-check-label,
+.form-check-input:disabled~.form-check-label {
     opacity: 1 !important;
 }
 
@@ -160,6 +178,7 @@ body {
     color: rgb(25, 135, 84);
     cursor: pointer;
 }
+
 .forgot-pw:hover {
     text-decoration: underline;
 }
