@@ -805,7 +805,7 @@ export default function StudentAccountPage({ student }) {
                        
                         <div style={{float: 'left', paddingBottom: '10px'}}>
                             <h5>{formatDateToSwedish(chosenDate)}</h5>
-                            {(schedule && schedule.length && schedule.map(chosenDate_o => {
+                            {(schedule && schedule.length && timeSlots && timeSlots.length > 0 && schedule.map(chosenDate_o => {
                                 return timeSlots.map(timeSlot_s => <span onClick={() => bookAppointment(timeSlot_s, chosenDate_o.id)} className='schedule-date' style={{float: 'left', cursor: 'pointer', marginBottom: '5px', color: 'black', backgroundColor: 'white', padding: '3px', border: '2px solid black', borderRadius: '5px' }}>{timeSlot_s}</span>);
                             })) || 'Inga lediga tider den här dagen, vänligen välj en annan dag.'}
                         </div>
