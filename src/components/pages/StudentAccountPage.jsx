@@ -811,6 +811,14 @@ export default function StudentAccountPage({ student }) {
                         </div>
                     </div>
                 </Tab>
+
+                <Tab eventKey="downloads" title="Nedladdningar">
+                    <div className='p-2 mt-3 text-white'>
+                        <h2>Nedladdningar</h2>
+                        
+                        <a href="https://korkort24.com/docs/test.pdf" download>test.pdf</a>
+                    </div>
+                </Tab>
             </Tabs>
 
             <Modal show={show} onHide={handleClose}>
