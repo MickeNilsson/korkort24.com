@@ -79,7 +79,7 @@ export default function StudentAccountPage({ student }) {
     };
 
     async function handleClickDay(date) {
-
+        
         let chosenDate_s = date;
 
         if (typeof date === 'object') {
@@ -194,26 +194,35 @@ export default function StudentAccountPage({ student }) {
 
     const [appointments, setAppointments] = useState([]);
 
+    const [bookedAppointments, setBookedAppointments] = useState([]);
+
     // Fetch quiz when user has logged in to student account
     useEffect(() => {
 
         if (!hasFetchedQuiz.current) {
 
-            hasFetchedQuiz.current = true;
+            init();
 
-            fetchQuiz();
+            async function init() {
 
-            fetchAvailableTimes();
+                hasFetchedQuiz.current = true;
 
-            const today_o = new Date();
+                await fetchQuiz();
 
-            const currentDate_s = today_o.toISOString().split('T')[0];
+                await fetchAvailableTimes();
 
-            setChosenDate(currentDate_s);
+                const today_o = new Date();
 
-            loadSchedule(currentDate_s);
+                const currentDate_s = today_o.toISOString().split('T')[0];
 
-            loadAppointments({ member_id: student.id });
+                setChosenDate(currentDate_s);
+
+                await loadSchedule(currentDate_s);
+
+                setBookedAppointments(await loadAppointments({ member_id: student.id }));
+      
+                await handleClickDay(currentDate_s);
+            }
         }
 
     }, []);
@@ -687,7 +696,7 @@ export default function StudentAccountPage({ student }) {
                     <div className='p-2 mt-3 text-white'>
                         Hej {student.firstname}!
                         <h3>Dina bokningar</h3>
-                        {appointments.map((appointment) => <p>{appointment.start.substring(0, 10)} {appointment.start.substring(11, 16)}</p>)}
+                        {bookedAppointments.map((appointment) => <p>{appointment.start.substring(0, 10)} {appointment.start.substring(11, 16)}</p>)}
                     </div>
 
                 </Tab>
