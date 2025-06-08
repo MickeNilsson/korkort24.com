@@ -681,6 +681,24 @@ export default function StudentAccountPage({ student }) {
         return `${weekday} den ${formattedDay} ${month}`;
     }
 
+    function cancelAppointment(appointmentId) {
+
+        console.log('Canceling appointment with ID:', appointmentId);
+        return;
+        fetch('https://korkort24.com/api/bookings/' + appointmentId, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                if (response.status === 200) {
+                    setBookedAppointments(bookedAppointments.filter(appointment => appointment.id !== appointmentId));
+                } else {
+                    console.error('Failed to cancel appointment');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+
     return (
 
         <>
@@ -691,12 +709,16 @@ export default function StudentAccountPage({ student }) {
                 className="mb-3 clearfix"
                 onSelect={(k) => setKey(k)}
             >
-                <Tab eventKey="home" title="Hem" className='text-white'>
+                <Tab eventKey="home" title="Hem" className='text-white p-3'>
 
-                    <div className='p-2 mt-3 text-white'>
+                    <div className='mt-3'>
                         Hej {student.firstname}!
                         <h3>Dina bokningar</h3>
-                        {bookedAppointments.map((appointment) => <p>{appointment.start.substring(0, 10)} {appointment.start.substring(11, 16)}</p>)}
+                        {bookedAppointments.map((appointment) => <div className='mt-3 d-flex align-items-center'><span className='me-3' style={{backgroundColor: 'white', color: 'black', borderRadius: '3px', padding: '3px'}}>{appointment.start.substring(0, 10)} {appointment.start.substring(11, 16)}</span><Button 
+                                    onClick={() => cancelAppointment(appointment.id)}
+                                    size='sm'
+                                    style={{paddingTop: '3px', paddingBottom: '3px'}}
+                                    variant='danger'>Avboka</Button></div>)}
                     </div>
 
                 </Tab>
