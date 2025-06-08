@@ -20,6 +20,9 @@ export default function StudentAccountPage({ student }) {
 
     const [timeSlots, setTimeSlots] = useState([]);
 
+    const [showCancelModal, setShowCancelModal] = useState(false);
+
+    const [cancelAppointmentId, setCancelAppointmentId] = useState(null);
 
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
@@ -681,17 +684,19 @@ export default function StudentAccountPage({ student }) {
         return `${weekday} den ${formattedDay} ${month}`;
     }
 
-    function cancelAppointment(appointmentId) {
+    function cancelAppointment() {
 
-        fetch('https://korkort24.com/api/bookings/' + appointmentId, {
+        fetch('https://korkort24.com/api/bookings/' + cancelAppointmentId, {
             method: 'DELETE'
         })
             .then(response => {
                 if (response.status === 200) {
-                    setBookedAppointments(bookedAppointments.filter(appointment => appointment.id !== appointmentId));
+                    setBookedAppointments(bookedAppointments.filter(appointment => appointment.id !== cancelAppointmentId));
                 } else {
                     console.error('Failed to cancel appointment');
                 }
+                setShowCancelModal(false);
+                setCancelAppointmentId(null);
             })
             .catch(error => console.error('Error:', error));
     }
@@ -713,7 +718,7 @@ export default function StudentAccountPage({ student }) {
                         Hej {student.firstname}!
                         <h3>Dina bokningar</h3>
                         {bookedAppointments.map((appointment) => <div className='mt-3 d-flex align-items-center'><span className='me-3' style={{backgroundColor: 'white', color: 'black', borderRadius: '3px', padding: '3px'}}>{appointment.start.substring(0, 10)} {appointment.start.substring(11, 16)}</span><Button 
-                                    onClick={() => cancelAppointment(appointment.id)}
+                                    onClick={() => {setCancelAppointmentId(appointment.id); setShowCancelModal(true)}}
                                     size='sm'
                                     style={{paddingTop: '3px', paddingBottom: '3px'}}
                                     variant='danger'>Avboka</Button></div>)}
@@ -879,6 +884,20 @@ export default function StudentAccountPage({ student }) {
                 <Modal.Footer>
                     <Button variant="primary" onClick={() => setShowConfirmationModal(false)}>
                         Ok
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal show={showCancelModal} onHide={() => setShowCancelModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Avboka din bokning</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Vill du verkligen avboka din bokning?</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowCancelModal(false)}>
+                        Avbryt</Button>
+                    <Button variant="danger" onClick={() => cancelAppointment()}>
+                        Avboka
                     </Button>
                 </Modal.Footer>
             </Modal>
