@@ -683,8 +683,6 @@ export default function StudentAccountPage({ student }) {
 
     function cancelAppointment(appointmentId) {
 
-        console.log('Canceling appointment with ID:', appointmentId);
-        return;
         fetch('https://korkort24.com/api/bookings/' + appointmentId, {
             method: 'DELETE'
         })
