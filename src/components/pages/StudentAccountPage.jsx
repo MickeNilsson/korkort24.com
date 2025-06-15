@@ -396,6 +396,11 @@ export default function StudentAccountPage({ student }) {
 
     function showQuiz(quizSelect_o) {
 
+        setRevealAnswer(false);
+        setActiveQuestionIndex(0);
+        setPaginationItems({});
+        setChosenAnswers({});
+
         setQuizType('');
 
         clearInterval(timerRef);
