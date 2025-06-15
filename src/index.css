@@ -51,12 +51,18 @@ body {
     background-color: rgb(100, 237, 162);
 }
 
+.nav {
+    border: none;
+}
+
 .nav-link {
     color: white;
+    border-color: #696969 !important;
 }
 
 .nav-link:hover {
     color: white;
+    border-color: white !important;
 }
 
 .new-questions-textarea {
