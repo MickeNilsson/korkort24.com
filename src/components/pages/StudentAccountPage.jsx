@@ -726,7 +726,7 @@ export default function StudentAccountPage({ student }) {
                                     size='sm'
                                     style={{paddingTop: '3px', paddingBottom: '3px'}}
                                     variant='danger'>Avboka</Button></div>)}
-                        {bookedAppointments.length === 0 && <div className='mt-3'>Du har inga bokningar.</div>}
+                        {bookedAppointments.length === 0 && <div>Du har inga bokningar.</div>}
                     </div>
 
                 </Tab>
