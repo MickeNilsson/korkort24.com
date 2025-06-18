@@ -717,10 +717,9 @@ export default function StudentAccountPage({ student }) {
                 className="mb-3 clearfix"
                 onSelect={(k) => setKey(k)}
             >
-                <Tab eventKey="home" title="Hem" className='text-white p-3'>
-
-                    <div className='mt-3'>
-                        Hej {student.firstname}!
+                <Tab eventKey="home" title="Hem">
+                    <div className='p-2 mt-3 text-white'>
+                        <h2>Hej {student.firstname}!</h2>
                         <h3>Dina bokningar</h3>
                         {bookedAppointments.map((appointment) => <div className='mt-3 d-flex align-items-center'><span className='me-3' style={{backgroundColor: 'white', color: 'black', borderRadius: '3px', padding: '3px'}}>{appointment.start.substring(0, 10)} {appointment.start.substring(11, 16)}</span><Button 
                                     onClick={() => {setCancelAppointmentId(appointment.id); setShowCancelModal(true)}}
