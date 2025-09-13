@@ -67,7 +67,12 @@ class DB {
             $whereClause_s = implode(' AND ', $whereClause_a);
             
             $sql_s = "SELECT * FROM " . $table_s . " WHERE " . $whereClause_s;
-           
+            
+            if(empty($params_a)) {
+
+                $sql_s = "SELECT * FROM " . $table_s;
+            }
+
             $stmt_o = $this->pdo_o->prepare($sql_s);
 
             $stmt_o->execute($params_a);
