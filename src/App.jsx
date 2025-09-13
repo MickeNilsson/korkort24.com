@@ -55,6 +55,7 @@ export default function App() {
     return (
 
         <>
+        <div className="fixed-bg"></div>
             <TopMenu student={student} setStudent={setStudent} page={page} setPage={setPage} />
 
             <MainContent page={page} setPage={setPage} />
