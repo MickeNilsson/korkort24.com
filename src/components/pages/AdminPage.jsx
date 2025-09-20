@@ -787,6 +787,7 @@ export default function AdminPage(props) {
             {schedule &&
               schedule.sort(sortByTimespan).map((chosenDate_o) => (
                 <div
+                  key={chosenDate_o.id}
                   onClick={() => deleteSchedule(chosenDate_o.id)}
                   className="schedule-date"
                   style={{
@@ -816,12 +817,29 @@ export default function AdminPage(props) {
           {educationcards.map((card_o) => (
             <div key={card_o.id} className="mb-3 p-2 bg-body">
               <h5>Medlem: {card_o.member_id}</h5>
-                {card_o.educationcard.map((entry_o) => (
-                    <div key={entry_o.id}>
-                    <div>{entry_o.moment}</div>
-                    <div>{entry_o.state}</div>
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map(
+                (moment) => {
+                  const entry_o = card_o.educationcard.find(
+                    (e) => e.moment === moment
+                  );
+                  return (
+                    <div key={moment}>
+                      <span
+                        className="d-inline-flex align-items-center justify-content-center 
+             rounded-circle bg-primary text-white me-2"
+                        style={{ width: "40px", height: "40px" }}
+                      >
+                        {moment}
+                      </span>
+                      {["D", "I", "S", "G"].map((state) => {
+                        const isFilled = entry_o?.state?.includes(state); // ✅ check if letter exists
+                        return <span key={state} className={`me-1 d-inline-flex align-items-center justify-content-center rounded 
+                     ${isFilled ? "bg-primary text-white" : ""}`} style={{ width: "40px", height: "40px", fontSize: "1.25rem", border: "1px solid black", cursor: "pointer" }}>{state}</span>;
+                      })}
                     </div>
-                ))}
+                  );
+                }
+              )}
             </div>
           ))}
         </Tab>
