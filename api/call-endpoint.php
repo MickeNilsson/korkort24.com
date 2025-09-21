@@ -49,13 +49,13 @@ function callEndpoint($endpoint_s) {
 
             require 'get-payload.php';
 
-            require './' . $endpoint_s . '/put.php';
+            require __DIR__ . '/' . $endpoint_s . '/put.php';
 
             $payload_o = getPayload();
 
-            $result_o = post($payload_o, $db_o);
+            $id_s = $_GET['id'];
 
-            $response_s = post();
+            $result_o = put($payload_o, $db_o, $id_s);
             
             break;
     }

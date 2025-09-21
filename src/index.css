@@ -205,3 +205,15 @@ body {
   background-position: center;
   z-index: 9999;                 /* Keeps it on top of everything */
 }
+
+.moment-styles {
+    width: 40px;
+    height: 40px;
+    fontSize: 1.25rem;
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+.moment-styles:hover {
+    background-color: lightgrey;
+}

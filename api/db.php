@@ -19,6 +19,46 @@ class DB {
         }
     }
 
+    public function update($table_s, $params_a, $id_i) {
+
+        $result_o = new stdClass();
+
+        try {
+            // Build the SET clause: col1 = :col1, col2 = :col2 ...
+            $setClause_a = [];
+            foreach ($params_a as $columnName_s => $value_s) {
+                $setClause_a[] = $table_s . '.' . $columnName_s . ' = :' . $columnName_s;
+            }
+
+            $setClause_s = implode(', ', $setClause_a);
+
+            // Build the SQL query
+            $sql_s = "UPDATE " . $table_s . " SET " . $setClause_s . " WHERE " . $table_s . ".id = :id";
+
+            $stmt_o = $this->pdo_o->prepare($sql_s);
+
+            // Bind the parameters
+            foreach ($params_a as $columnName_s => $value_s) {
+                $stmt_o->bindValue(':' . $columnName_s, $value_s);
+            }
+            $stmt_o->bindValue(':id', $id_i, PDO::PARAM_INT);
+
+            // Execute
+            $success_b = $stmt_o->execute();
+
+            $result_o->success = $success_b;
+            $result_o->rowCount = $stmt_o->rowCount();
+            $result_o->sql = $sql_s;
+
+        } catch (PDOException $e) {
+            $result_o->success = false;
+            $result_o->error = $e->getMessage();
+        }
+
+        return $result_o;
+    }
+
+
     public function delete($table_s, $params_a) {
 
         $result_o = new stdClass();
