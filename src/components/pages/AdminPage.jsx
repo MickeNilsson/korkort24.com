@@ -629,7 +629,7 @@ export default function AdminPage(props) {
 
     async function changeState(entry_o, memberId, momentId, state, obj) {
         
-
+        debugger;
         if (entry_o) {
             const member = educationcards.find(
                 (educationcard) => educationcard.member_id == memberId
@@ -643,6 +643,12 @@ export default function AdminPage(props) {
                 moment_o.state = moment_o.state.replace(state, "");
             } else {
                 moment_o.state = moment_o.state + state;
+                if(state === '👍') {
+                    moment_o.state = moment_o.state.replace('👎', '');
+                }
+                if(state === '👎') {
+                    moment_o.state = moment_o.state.replace('👍', '');
+                }
             }
             setEducationcards([...educationcards]);
 
@@ -896,7 +902,7 @@ export default function AdminPage(props) {
                                             >
                                                 {moment}
                                             </span>
-                                            {["D", "I", "S", "G"].map((state) => {
+                                            {["D", "I", "S", "G","👍","👎"].map((state) => {
                                                 const isFilled = entry_o?.state?.includes(state); // ✅ check if letter exists
                                                 return (
                                                     <span
