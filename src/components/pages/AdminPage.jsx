@@ -628,52 +628,68 @@ export default function AdminPage(props) {
     }
 
     async function changeState(entry_o, memberId, momentId, state, obj) {
-        console.log(
-            'id: ' + entry_o.id + " memberId: " + memberId + ", state: " + state + ", momentId: " + momentId
-        );
-        console.log(obj.target.className);
-        console.log('entry_o: ' + JSON.stringify(entry_o));
-        console.log(educationcards);
-        const member = educationcards.find(
-            (educationcard) => educationcard.member_id == memberId
-        );
-        console.log(member);
+        
 
-        const moment_o = member.educationcard.find((moment) => {
-            console.log("moment");
-            console.log(moment);
-            return moment.moment === momentId;
-        });
-        console.log(moment_o);
+        if (entry_o) {
+            const member = educationcards.find(
+                (educationcard) => educationcard.member_id == memberId
+            );
 
-       if (obj.target.className.includes("bg-primary")) {
-            console.log("not selected");
-            moment_o.state = moment_o.state.replace(state, '');
+            const moment_o = member.educationcard.find((moment) => {
+                return moment.moment === momentId;
+            });
+
+            if (obj.target.className.includes("bg-primary")) {
+                moment_o.state = moment_o.state.replace(state, "");
+            } else {
+                moment_o.state = moment_o.state + state;
+            }
+            setEducationcards([...educationcards]);
+
+            const educationcard_o = {
+                id: entry_o.id,
+                member_id: memberId,
+                moment: momentId,
+                state: entry_o.state,
+            };
+
+            const response_o = await fetch(
+                "https://korkort24.com/api/educationcards/" + entry_o.id,
+                {
+                    method: "PUT",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({state: entry_o.state}),
+                }
+            );
         } else {
-            console.log("selected");
-            moment_o.state = moment_o.state + state;
+            
+            const response_o = await fetch(
+                "https://korkort24.com/api/educationcards/",
+                {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({member_id: memberId, moment: momentId,  state: state}),
+                }
+            );
+
+            const responseBody_o = await response_o.json();
+
+            const memberCard_o = educationcards.find(card => card.member_id === memberId);
+
+            memberCard_o.educationcard.push({
+                id: parseInt(responseBody_o.data.id),
+                moment: momentId,
+                state: state
+            });
+
+            setEducationcards([...educationcards]);
         }
-        setEducationcards([...educationcards]);
-
-
-        const educationcard_o = {
-            id: entry_o.id,
-            member_id: memberId,
-            moment: momentId,
-            state: entry_o.state
-        };
-
-        const response_o = await fetch("https://korkort24.com/api/educationcards/" + entry_o.id, {
-            method: "PUT",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({state: entry_o.state}),
-        });
-
-        console.log('educationcard_o');
-        console.log(response_o);
     }
 
     return (
@@ -888,7 +904,13 @@ export default function AdminPage(props) {
                                                         className={`moment-styles me-1 d-inline-flex align-items-center justify-content-center rounded 
                      ${isFilled ? "bg-primary text-white" : ""}`}
                                                         onClick={(e) =>
-                                                            changeState(entry_o , card_o.member_id, moment, state, e)
+                                                            changeState(
+                                                                entry_o,
+                                                                card_o.member_id,
+                                                                moment,
+                                                                state,
+                                                                e
+                                                            )
                                                         }
                                                     >
                                                         {state}

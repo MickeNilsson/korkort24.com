@@ -209,7 +209,7 @@ body {
 .moment-styles {
     width: 40px;
     height: 40px;
-    fontSize: 1.25rem;
+    font-size: 1.25rem;
     border: 1px solid black;
     cursor: pointer;
 }
