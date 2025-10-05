@@ -14,7 +14,35 @@ import Form from 'react-bootstrap/Form';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 
+import PropTypes from 'prop-types';
+
 export default function StudentAccountPage({ student }) {
+
+    async function init() {
+        hasFetchedQuiz.current = true;
+        await fetchQuiz();
+        await fetchAvailableTimes();
+        const today_o = new Date();
+        const currentDate_s = today_o.toISOString().split('T')[0];
+        setChosenDate(currentDate_s);
+        await loadSchedule(currentDate_s);
+        setBookedAppointments(await loadAppointments({ member_id: student.id }));
+        await handleClickDay(currentDate_s);
+        await loadEducationCard();
+    }
+
+    async function loadEducationCard() {
+
+        const response_o = await fetch("https://korkort24.com/api/educationcards/?member_id=" + student.id);
+
+        const responseBody_o = await response_o.json();
+
+        const educationCard_a = responseBody_o.data;
+
+        educationCard_a.sort((a, b) => a.moment - b.moment);
+
+        setEducationcard(educationCard_a);
+    }
 
     const [quiz, setQuiz] = useState([]);
 
@@ -31,6 +59,8 @@ export default function StudentAccountPage({ student }) {
     const [show, setShow] = useState(false);
 
     const [chosenDate, setChosenDate] = useState('');
+
+    const [educationcard, setEducationcard] = useState([]);
 
     const handleClose = () => setShow(false);
     const handleShow = (id) => {
@@ -82,7 +112,7 @@ export default function StudentAccountPage({ student }) {
     };
 
     async function handleClickDay(date) {
-        
+
         let chosenDate_s = date;
 
         if (typeof date === 'object') {
@@ -205,27 +235,6 @@ export default function StudentAccountPage({ student }) {
         if (!hasFetchedQuiz.current) {
 
             init();
-
-            async function init() {
-
-                hasFetchedQuiz.current = true;
-
-                await fetchQuiz();
-
-                await fetchAvailableTimes();
-
-                const today_o = new Date();
-
-                const currentDate_s = today_o.toISOString().split('T')[0];
-
-                setChosenDate(currentDate_s);
-
-                await loadSchedule(currentDate_s);
-
-                setBookedAppointments(await loadAppointments({ member_id: student.id }));
-      
-                await handleClickDay(currentDate_s);
-            }
         }
 
     }, []);
@@ -721,11 +730,11 @@ export default function StudentAccountPage({ student }) {
                     <div className='p-2 mt-3 text-white'>
                         <h2>Hej {student.firstname}!</h2>
                         <h3>Dina bokningar</h3>
-                        {bookedAppointments.map((appointment) => <div className='mt-3 d-flex align-items-center'><span className='me-3' style={{backgroundColor: 'white', color: 'black', borderRadius: '3px', padding: '3px'}}>{appointment.start.substring(0, 10)} {appointment.start.substring(11, 16)}</span><Button 
-                                    onClick={() => {setCancelAppointmentId(appointment.id); setShowCancelModal(true)}}
-                                    size='sm'
-                                    style={{paddingTop: '3px', paddingBottom: '3px'}}
-                                    variant='danger'>Avboka</Button></div>)}
+                        {bookedAppointments.map((appointment) => <div className='mt-3 d-flex align-items-center'><span className='me-3' style={{ backgroundColor: 'white', color: 'black', borderRadius: '3px', padding: '3px' }}>{appointment.start.substring(0, 10)} {appointment.start.substring(11, 16)}</span><Button
+                            onClick={() => { setCancelAppointmentId(appointment.id); setShowCancelModal(true) }}
+                            size='sm'
+                            style={{ paddingTop: '3px', paddingBottom: '3px' }}
+                            variant='danger'>Avboka</Button></div>)}
                         {bookedAppointments.length === 0 && <div>Du har inga bokningar.</div>}
                     </div>
 
@@ -837,15 +846,15 @@ export default function StudentAccountPage({ student }) {
                 <Tab eventKey="driving" title="Coaching">
                     <div className='p-2 mt-3 text-white'>
                         <h2>Boka coaching</h2>
-                        
+
                         <Calendar onChange={onChange} onClickDay={handleClickDay} value={value} tileClassName={({ date, view }) =>
                             view === "month" && isEventDate(date) ? "highlight" : null
                         } />
-                       
-                        <div style={{float: 'left', paddingBottom: '10px'}}>
+
+                        <div style={{ float: 'left', paddingBottom: '10px' }}>
                             <h5>{formatDateToSwedish(chosenDate)}</h5>
                             {(schedule && schedule.length && timeSlots && timeSlots.length > 0 && schedule.map(chosenDate_o => {
-                                return timeSlots.map(timeSlot_s => <span onClick={() => bookAppointment(timeSlot_s, chosenDate_o.id)} className='schedule-date' style={{float: 'left', cursor: 'pointer', marginBottom: '5px', color: 'black', backgroundColor: 'white', padding: '3px', border: '2px solid black', borderRadius: '5px' }}>{timeSlot_s}</span>);
+                                return timeSlots.map(timeSlot_s => <span onClick={() => bookAppointment(timeSlot_s, chosenDate_o.id)} className='schedule-date' style={{ float: 'left', cursor: 'pointer', marginBottom: '5px', color: 'black', backgroundColor: 'white', padding: '3px', border: '2px solid black', borderRadius: '5px' }}>{timeSlot_s}</span>);
                             })) || 'Inga lediga tider den här dagen, vänligen välj en annan dag.'}
                         </div>
                     </div>
@@ -854,10 +863,63 @@ export default function StudentAccountPage({ student }) {
                 <Tab eventKey="downloads" title="Nedladdningar">
                     <div className='p-2 mt-3 text-white'>
                         <h2>Nedladdningar</h2>
-                        
+
                         <a href="https://korkort24.com/docs/test.pdf" download>test.pdf</a>
                     </div>
                 </Tab>
+
+                <Tab eventKey="educationcard" title="Utbildningskort">
+                    <div className='p-2 mt-3 text-white'>
+                        <h2>Utbildningskort</h2>
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map(
+                            (moment) => {
+                                const entry_o = educationcard.find(
+                                    (e) => e.moment === moment
+                                );
+                                return (
+                                    <div key={moment}>
+                                        <span
+                                            className="d-inline-flex align-items-center justify-content-center 
+             rounded-circle bg-primary text-white me-2"
+                                            style={{ width: "40px", height: "40px" }}
+                                        >
+                                            {moment}
+                                        </span>
+                                        {["D", "I", "S", "G", "👍", "👎"].map((state) => {
+                                            const isFilled = entry_o?.state?.includes(state); // ✅ check if letter exists
+                                            if (state === "👍" || state === "👎") {
+                                                if (!isFilled) {
+                                                    return;
+                                                }
+                                                if (isFilled) {
+                                                    if (state === "👍") {
+                                                        state = "✅";
+                                                    }
+                                                    if (state === "👎") {
+                                                        state = "❌";
+                                                    }
+                                                }
+                                            }
+
+                                            return (
+                                                <span
+                                                    key={state}
+                                                    className={`moment-styles me-1 d-inline-flex align-items-center justify-content-center rounded 
+                     ${isFilled ? "bg-primary text-white" : ""}`}
+
+                                                >
+                                                    {state}
+                                                </span>
+                                            );
+                                        })}
+                                    </div>
+                                );
+                            }
+                        )}
+
+                    </div>
+                </Tab>
+
             </Tabs>
 
             <Modal show={show} onHide={handleClose}>
