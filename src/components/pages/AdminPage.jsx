@@ -1,4 +1,5 @@
 import {
+    Accordion,
     Button,
     Col,
     Form,
@@ -56,6 +57,8 @@ export default function AdminPage(props) {
 
     const [educationcards, setEducationcards] = useState([]);
 
+    const [members, setMembers] = useState([]);
+
     useEffect(() => {
         init();
 
@@ -75,15 +78,28 @@ export default function AdminPage(props) {
             await loadJsonQuiz();
 
             await loadEducationCards();
+
+            await loadMembers();
         }
     }, []);
 
-    async function loadEducationCards() {
-        const response_o = await fetch("https://korkort24.com/api/educationcards/");
+    async function loadMembers() {
+        const response_o = await fetch(
+            "https://korkort24.com/api/members/?fields=firstname,lastname"
+        );
+
         const responseBody_o = await response_o.json();
 
-        console.log("=== education cards ===");
+        console.log('members');
         console.log(responseBody_o);
+
+        setMembers(responseBody_o.data);
+    }
+
+    async function loadEducationCards() {
+        const response_o = await fetch("https://korkort24.com/api/educationcards/");
+
+        const responseBody_o = await response_o.json();
 
         const result = Object.values(
             responseBody_o.data.reduce((acc, { id, member_id, moment, state }) => {
@@ -628,7 +644,6 @@ export default function AdminPage(props) {
     }
 
     async function changeState(entry_o, memberId, momentId, state, obj) {
-        
         debugger;
         if (entry_o) {
             const member = educationcards.find(
@@ -643,11 +658,11 @@ export default function AdminPage(props) {
                 moment_o.state = moment_o.state.replace(state, "");
             } else {
                 moment_o.state = moment_o.state + state;
-                if(state === '👍') {
-                    moment_o.state = moment_o.state.replace('👎', '');
+                if (state === "👍") {
+                    moment_o.state = moment_o.state.replace("👎", "");
                 }
-                if(state === '👎') {
-                    moment_o.state = moment_o.state.replace('👍', '');
+                if (state === "👎") {
+                    moment_o.state = moment_o.state.replace("👍", "");
                 }
             }
             setEducationcards([...educationcards]);
@@ -667,11 +682,10 @@ export default function AdminPage(props) {
                         Accept: "application/json",
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({state: entry_o.state}),
+                    body: JSON.stringify({ state: entry_o.state }),
                 }
             );
         } else {
-            
             const response_o = await fetch(
                 "https://korkort24.com/api/educationcards/",
                 {
@@ -680,18 +694,32 @@ export default function AdminPage(props) {
                         Accept: "application/json",
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({member_id: memberId, moment: momentId,  state: state}),
+                    body: JSON.stringify({
+                        member_id: memberId,
+                        moment: momentId,
+                        state: state,
+                    }),
                 }
             );
 
             const responseBody_o = await response_o.json();
 
-            const memberCard_o = educationcards.find(card => card.member_id === memberId);
+            let memberCard_o = educationcards.find(
+                (card) => card.member_id === memberId
+            );
+
+            if (!memberCard_o) {
+                memberCard_o = {
+                    member_id: memberId,
+                    educationcard: []
+                };
+                educationcards.push(memberCard_o);
+            }
 
             memberCard_o.educationcard.push({
                 id: parseInt(responseBody_o.data.id),
                 moment: momentId,
-                state: state
+                state: state,
             });
 
             setEducationcards([...educationcards]);
@@ -885,7 +913,79 @@ export default function AdminPage(props) {
                 </Tab>
 
                 <Tab eventKey="education-cards" title="Utbildningskort">
-                    {educationcards.map((card_o) => (
+
+                    <Accordion defaultActiveKey="0">
+                        {members.map(member_o => {
+                            let card_o = educationcards.find(card_o => card_o.member_id === member_o.id);
+                            console.log(card_o);
+                            card_o = card_o ? card_o : { educationcard: [], member_id: member_o.id }
+                            return (
+                                <Accordion.Item key={member_o.id} eventKey={member_o.id}>
+                                    <Accordion.Header>Medlem: {member_o.id} {member_o.firstname} {member_o.lastname}</Accordion.Header>
+                                    <Accordion.Body>
+                                        <div key={member_o.id} className="mb-3 p-2 bg-body">
+                                            <h5>Medlem: {member_o.id} {member_o.firstname} {member_o.lastname}</h5>
+                                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map(
+                                                (moment) => {
+                                                    const entry_o = card_o.educationcard.find(
+                                                        (e) => e.moment === moment
+                                                    );
+                                                    return (
+                                                        <div key={moment}>
+                                                            <span
+                                                                className="d-inline-flex align-items-center justify-content-center 
+             rounded-circle bg-primary text-white me-2"
+                                                                style={{ width: "40px", height: "40px" }}
+                                                            >
+                                                                {moment}
+                                                            </span>
+                                                            {["D", "I", "S", "G", "👍", "👎"].map((state) => {
+                                                                const isFilled = entry_o?.state?.includes(state); // ✅ check if letter exists
+                                                                return (
+                                                                    <span
+                                                                        key={state}
+                                                                        className={`moment-styles me-1 d-inline-flex align-items-center justify-content-center rounded 
+                     ${isFilled ? "bg-primary text-white" : ""}`}
+                                                                        onClick={(e) =>
+                                                                            changeState(
+                                                                                entry_o,
+                                                                                card_o.member_id,
+                                                                                moment,
+                                                                                state,
+                                                                                e
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        {state}
+                                                                    </span>
+                                                                );
+                                                            })}
+                                                        </div>
+                                                    );
+                                                }
+                                            )}
+                                        </div>
+
+
+
+
+
+
+                                    </Accordion.Body>
+
+
+
+                                </Accordion.Item>
+
+
+                            );
+                        })}
+                    </Accordion>
+
+
+
+
+                    {/* {educationcards.map((card_o) => (
                         <div key={card_o.id} className="mb-3 p-2 bg-body">
                             <h5>Medlem: {card_o.member_id}</h5>
                             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map(
@@ -902,8 +1002,8 @@ export default function AdminPage(props) {
                                             >
                                                 {moment}
                                             </span>
-                                            {["D", "I", "S", "G","👍","👎"].map((state) => {
-                                                const isFilled = entry_o?.state?.includes(state); // ✅ check if letter exists
+                                            {["D", "I", "S", "G", "👍", "👎"].map((state) => {
+                                                const isFilled = entry_o?.state?.includes(state);
                                                 return (
                                                     <span
                                                         key={state}
@@ -928,7 +1028,7 @@ export default function AdminPage(props) {
                                 }
                             )}
                         </div>
-                    ))}
+                    ))} */}
                 </Tab>
             </Tabs>
 
