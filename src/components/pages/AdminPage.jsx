@@ -96,17 +96,28 @@ export default function AdminPage(props) {
         setMembers(responseBody_o.data);
     }
 
+    let setTimeoutId_l;
+
+    function updateComment(comment_o) {
+        
+        clearTimeout(setTimeoutId_l);
+        setTimeoutId_l = setTimeout(() => {
+            changeState(comment_o.entry, comment_o.memberId, comment_o.momentId, null, null, comment_o.comment);
+        }, 2000);
+        
+    }
+
     async function loadEducationCards() {
         const response_o = await fetch("https://korkort24.com/api/educationcards/");
 
         const responseBody_o = await response_o.json();
 
         const result = Object.values(
-            responseBody_o.data.reduce((acc, { id, member_id, moment, state }) => {
+            responseBody_o.data.reduce((acc, { id, member_id, moment, state, comment }) => {
                 if (!acc[member_id]) {
                     acc[member_id] = { member_id, educationcard: [] };
                 }
-                acc[member_id].educationcard.push({ id, moment, state });
+                acc[member_id].educationcard.push({ id, moment, state, comment });
                 return acc;
             }, {})
         ).map((group) => {
@@ -643,8 +654,8 @@ export default function AdminPage(props) {
         const responseBody_o = await response_o.json();
     }
 
-    async function changeState(entry_o, memberId, momentId, state, obj) {
-        debugger;
+    async function changeState(entry_o, memberId, momentId, state, obj, comment) {
+        
         if (entry_o) {
             const member = educationcards.find(
                 (educationcard) => educationcard.member_id == memberId
@@ -654,10 +665,10 @@ export default function AdminPage(props) {
                 return moment.moment === momentId;
             });
 
-            if (obj.target.className.includes("bg-primary")) {
+            if (obj && obj.target.className.includes("bg-primary")) {
                 moment_o.state = moment_o.state.replace(state, "");
             } else {
-                moment_o.state = moment_o.state + state;
+                moment_o.state = moment_o.state + (state || '');
                 if (state === "👍") {
                     moment_o.state = moment_o.state.replace("👎", "");
                 }
@@ -665,6 +676,11 @@ export default function AdminPage(props) {
                     moment_o.state = moment_o.state.replace("👍", "");
                 }
             }
+
+            if(comment) {
+                moment_o.comment = comment;
+            }
+
             setEducationcards([...educationcards]);
 
             const educationcard_o = {
@@ -682,7 +698,7 @@ export default function AdminPage(props) {
                         Accept: "application/json",
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ state: entry_o.state }),
+                    body: JSON.stringify({ state: entry_o.state, comment: entry_o.comment }),
                 }
             );
         } else {
@@ -697,7 +713,8 @@ export default function AdminPage(props) {
                     body: JSON.stringify({
                         member_id: memberId,
                         moment: momentId,
-                        state: state,
+                        state: state || '',
+                        comment: comment || ''
                     }),
                 }
             );
@@ -960,6 +977,7 @@ export default function AdminPage(props) {
                                                                     </span>
                                                                 );
                                                             })}
+                                                            <textarea onKeyUp={(e) => updateComment({comment: e.target.value, entry: entry_o, momentId: moment, memberId: member_o.id})} style={{marginTop: '5px', marginBottom: '15px', borderRadius: '5px', display: 'block', width: '100%'}}>{entry_o?.comment || ''}</textarea>
                                                         </div>
                                                     );
                                                 }
