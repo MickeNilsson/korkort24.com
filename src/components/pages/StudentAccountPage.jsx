@@ -877,7 +877,7 @@ export default function StudentAccountPage({ student }) {
                                     (e) => e.moment === moment
                                 );
                                 return (
-                                    <div key={moment}>
+                                    <div style={{marginBottom: '10px'}} key={moment}>
                                         <span
                                             className="d-inline-flex align-items-center justify-content-center 
              rounded-circle bg-primary text-white me-2"
@@ -912,6 +912,7 @@ export default function StudentAccountPage({ student }) {
                                                 </span>
                                             );
                                         })}
+                                        {entry_o && <div>{entry_o.comment}</div>}
                                     </div>
                                 );
                             }
