@@ -977,7 +977,7 @@ export default function AdminPage(props) {
                                                                     </span>
                                                                 );
                                                             })}
-                                                            <textarea onKeyUp={(e) => updateComment({comment: e.target.value, entry: entry_o, momentId: moment, memberId: member_o.id})} style={{marginTop: '5px', marginBottom: '15px', borderRadius: '5px', display: 'block', width: '100%'}}>{entry_o?.comment || ''}</textarea>
+                                                            <textarea placeholder="Kommentar" onKeyUp={(e) => updateComment({comment: e.target.value, entry: entry_o, momentId: moment, memberId: member_o.id})} style={{marginTop: '5px', marginBottom: '15px', borderRadius: '5px', display: 'block', width: '100%'}}>{entry_o?.comment || ''}</textarea>
                                                         </div>
                                                     );
                                                 }
