@@ -8,309 +8,126 @@ import {
     Row,
     Tab,
     Tabs,
-} from "react-bootstrap";
-import { useState, useEffect, useRef } from "react";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
-import FileUploader from "../inputfields/FileUploader";
+} from 'react-bootstrap';
+import {useEffect, useRef, useState} from 'react';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+import FileUploader from '../inputfields/FileUploader';
 
-export default function AdminPage(props) {
-    const [chosenDate, setChosenDate] = useState("");
-
-    const [value, onChange] = useState(new Date());
+export default function AdminPage() {
 
     const [answers, setAnswers] = useState([]);
-
-    const [availableTimes, setAvailableTimes] = useState([]);
-
-    const [quiz, setQuiz] = useState([]);
-
-    const [convertedQuiz, setConvertedQuiz] = useState([]);
-
-    const [question, setQuestion] = useState("");
-
-    const [showDeleteSectionModal, setShowDeleteSectionModal] = useState(false);
-
-    const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
-
-    const [showQuestionsModal, setShowQuestionsModal] = useState(false);
-
-    const [sectionNameToDelete, setSectionNameToDelete] = useState("");
-
-    const [section, setSection] = useState("");
-
+    const [chosenDate, setChosenDate] = useState('');
+    const [educationcards, setEducationcards] = useState([]);
+    const [endTime, setEndTime] = useState('');
+    const [events, setEvents] = useState([]);
     const [image, setImage] = useState({});
+    const [members, setMembers] = useState([]);
+    const [momentHeaders, setMomentHeaders] = useState([
+        '',
+        'Körställning',
+        'Inledande manövrering',
+        'Växling',
+        'Lutning',
+        'Manövrering',
+        'Funktion och kontroll',
+        'Samordning och bromsning',
+        'Mindre samhälle',
+        'Mindre landsväg',
+        'Stad',
+        'Landsväg',
+        'Högfartsväg',
+        'Mörker',
+        'Halt väglag',
+        'Utbildningskontroll'
+    ]);
 
-    const [timeSlotLength, setTimeSlotLength] = useState("");
-
+    const [moments, setMoments] = useState([
+        [],
+        ['a) Stol och bälte', 'b) Reglage och insiment'],
+        ['a) Start och stannande', 'b) Krypkörning och styrning'],
+        ['a) Uppväxlning', 'b) Nedväxling'],
+        ['a) Motlut', 'b) Medlut'],
+        ['a) Backning', 'b) Vändning', 'c) Parkering'],
+        ['a) Bilen', 'b) Last och passagerare', 'c) Släp', 'd) Säkerhetskontroll'],
+        ['a) Avsökning och riskbedömning', 'b) Samordning och motorik', 'c) Acceleration', 'd) Hård bromsning'],
+        ['a) Avsökning och riskbedömning', 'b) Hastighetsanpassning', 'c) Placering', 'd) Väjningsregler'],
+        ['a) Avsökning och riskbedömning', 'b) Hastighetsanpassning', 'c) Placering', 'd) Väjningsregler', 'e) Järnvägskorsning'],
+        ['a) Avsökning och riskbedömning', 'b) Hastighetsanpassning', 'c) Placering', 'd) Väjningsregler', 'e) Trafiksignal', 'f) Enkelriktad trafik', 'g) Cirkulationsplats', 'h) Vändning och parkering'],
+        ['a) Avsökning och riskbedömning', 'b) Hastighetsanpassning', 'c) Placering', 'd) Påfart och avfart', 'e) Omkörning', 'f) Vändning och parkering'],
+        ['a) Avsökning och riskbedömning', 'b) Hastighetsanpassning', 'c) Motorväg', 'd) Motortrafikled', 'd) Mitträckeväg(2-1)'],
+        ['a) Avsökning och riskbedömning', 'b) Hastighetsanpassning', 'c) Mörkerdemonstration', 'd) Möte', 'e) Omkörning', 'f) Parkering', 'g) Nedsatt sikt'],
+        ['a) Olika typer av halka', 'b) Utrustning och halksystem'],
+        ['a) Tillämpad stadskörning', 'b) Tillämpad landsvägskörning', 'c) Utbildningskontroll']
+    ]);
+    
+    const [question, setQuestion] = useState('');
+    const [quiz, setQuiz] = useState([]);
+    const [quizString, setQuizString] = useState('');
+    const [section, setSection] = useState('');
+    const [schedule, setSchedule] = useState([]);
+    const [sectionNameToDelete, setSectionNameToDelete] = useState('');
+    const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
+    const [showDeleteSectionModal, setShowDeleteSectionModal] = useState(false);
+    const [showQuestionsModal, setShowQuestionsModal] = useState(false);
+    const [startTime, setStartTime] = useState('');
     const [timeSlots, setTimeSlots] = useState([]);
 
-    const [startTime, setStartTime] = useState("");
-
-    const [endTime, setEndTime] = useState("");
-
-    const [events, setEvents] = useState([]);
-
-    const [schedule, setSchedule] = useState([]);
-
-    const [quizString, setQuizString] = useState("");
-
-    const [educationcards, setEducationcards] = useState([]);
-
-    const [members, setMembers] = useState([]);
+    const timeoutRef = useRef(null);
 
     useEffect(() => {
-        init();
 
-        async function init() {
+        (async () => {
+
+            console.log('%cInit Admin page', 'color: blue;font-weight: bold;');
             const today_o = new Date();
-
-            const currentDate_s = today_o.toISOString().split("T")[0];
-
+            const currentDate_s = today_o.toISOString().split('T')[0];
             setChosenDate(currentDate_s);
 
+            await loadAvailableTimes();
+            await loadEducationCards();
+            await loadJsonQuiz();
+            await loadMembers();
             await loadQuiz();
-
-            await fetchAvailableTimes();
-
             await loadSchedule(currentDate_s);
 
-            await loadJsonQuiz();
+        })();
 
-            await loadEducationCards();
-
-            await loadMembers();
-        }
     }, []);
 
-    async function loadMembers() {
-        const response_o = await fetch(
-            "https://korkort24.com/api/members/?fields=firstname,lastname"
-        );
+    async function addSchedule() {
 
-        const responseBody_o = await response_o.json();
+        const body_o = {
+            date: chosenDate,
+            timespan: startTime + '-' + endTime,
+        };
 
-        console.log('members');
-        console.log(responseBody_o);
+        if (!isValidTimeInterval(body_o.timespan)) {
+            alert('Starttiden måste komma före sluttiden så det lades inte till');
+            return;
+        }
 
-        setMembers(responseBody_o.data);
-    }
+        if (isOverlap(schedule, body_o.timespan)) {
+            alert('Tidsintervallet överlappar med schemat så det lades inte till');
+            return;
+        }
 
-    let setTimeoutId_l;
-
-    function updateComment(comment_o) {
-        
-        clearTimeout(setTimeoutId_l);
-        setTimeoutId_l = setTimeout(() => {
-            changeState(comment_o.entry, comment_o.memberId, comment_o.momentId, null, null, comment_o.comment);
-        }, 2000);
-        
-    }
-
-    async function loadEducationCards() {
-        const response_o = await fetch("https://korkort24.com/api/educationcards/");
-
-        const responseBody_o = await response_o.json();
-
-        const result = Object.values(
-            responseBody_o.data.reduce((acc, { id, member_id, moment, state, comment }) => {
-                if (!acc[member_id]) {
-                    acc[member_id] = { member_id, educationcard: [] };
-                }
-                acc[member_id].educationcard.push({ id, moment, state, comment });
-                return acc;
-            }, {})
-        ).map((group) => {
-            group.educationcard.sort((a, b) => a.moment - b.moment);
-            return group;
-        });
-
-        console.log(result);
-
-        setEducationcards(result);
-    }
-
-    async function saveQuizString() {
-        const quizStringElement = document.getElementById("quiz-string");
-
-        const quizStringObject = JSON.parse(quizStringElement.value);
-
-        const response_o = await fetch("https://korkort24.com/api/quiz/", {
-            method: "POST",
+        const response_o = await fetch('https://korkort24.com/api/schedules/', {
+            method: 'POST',
             headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify(quizStringObject),
-        });
-    }
-
-    async function loadJsonQuiz() {
-        const response = await fetch(
-            "https:///korkort24.com/api/quiz/downloadquiz.php"
-        );
-
-        const quiz_o = await response.json();
-
-        const quiz_s = JSON.stringify(quiz_o, null, 2);
-
-        setQuizString(quiz_s);
-    }
-
-    async function fetchAvailableTimes() {
-        // const availTimes = [
-        //     {
-        //         id: 1,
-        //         from: '2025-01-23T10:00:00',
-        //         to: '2025-01-23T10:30:00'
-        //     },
-        //     {
-        //         id: 2,
-        //         from: '2025-01-20T12:00:00',
-        //         to: '2025-01-20T12:30:00'
-        //     },
-        //     {
-        //         id: 3,
-        //         from: '2025-01-21T09:00:00',
-        //         to: '2025-01-21T10:00:00'
-        //     },
-        //     {
-        //         id: 4,
-        //         from: '2025-01-20T09:00:00',
-        //         to: '2025-01-20T10:30:00'
-        //     }
-        // ];
-
-        const response = await fetch("https://korkort24.com/api/times/");
-
-        let availTimes = await response.json();
-
-        //availTimes = availTimes.filter(availTime => !availTime.studentid);
-
-        availTimes.sort((a, b) => {
-            if (a.from < b.from) return -1;
-            if (a.from > b.from) return 1;
-            return 0;
+            body: JSON.stringify(body_o),
         });
 
-        let availDates = availTimes.map((availTime) =>
-            availTime.from.substring(0, 10)
-        );
+        await response_o.json();
 
-        availDates = [...new Set(availDates)];
-
-        console.log("=== availTimes ===");
-        console.log(availTimes);
-
-        console.log("=== availDates ===");
-        console.log(availDates);
-
-        setAvailableTimes(availTimes);
-
-        const eve = availDates.map((availDate) => {
-            const year = +availDate.substring(0, 4);
-
-            let month = +availDate.substring(5, 7);
-
-            month--;
-
-            const day = +availDate.substring(8, 10);
-
-            return new Date(year, month, day);
-        });
-
-        console.log("=== eve ===");
-        console.log(eve);
-        //setEvents(eve);
-
-        return availTimes;
-    }
-
-    const isEventDate = (date) => {
-        return events.some(
-            (eventDate) =>
-                eventDate.getFullYear() === date.getFullYear() &&
-                eventDate.getMonth() === date.getMonth() &&
-                eventDate.getDate() === date.getDate()
-        );
-    };
-
-    async function handleClickDay(date_o) {
-        const date_s = date_o.toLocaleString().substring(0, 10);
-
-        setChosenDate(date_s);
-
-        await loadSchedule(date_s);
-    }
-
-    async function loadQuiz() {
-        const response_o = await fetch("https://korkort24.com/api/quiz/");
-
-        if (response_o.status === 200) {
-            const responseBody_o = await response_o.json();
-
-            const quiz_o = responseBody_o.data;
-
-            setQuiz(quiz_o);
-        }
-    }
-
-    async function saveQuiz(quiz_o) {
-        const response_o = await fetch("https://korkort24.com/api/quiz/", {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(quiz_o),
-        });
-
-        const responseBody_o = await response_o.json();
-    }
-
-    function convertToArrayOfObjects(quiz_o) {
-        const arrayOfObjects = [];
-
-        for (const sectionName_s in quiz_o) {
-            let section_o = quiz_o[sectionName_s];
-
-            section_o.name = sectionName_s;
-
-            arrayOfObjects.push(section_o);
-        }
-
-        return arrayOfObjects;
-    }
-
-    function convertToObject(quiz_a) {
-        let object_o = {};
-
-        for (const section_o of quiz_a) {
-            object_o[section_o.name] = section_o;
-        }
-
-        object_o = JSON.parse(JSON.stringify(object_o));
-
-        for (const section_s in object_o) {
-            delete object_o[section_s].name;
-        }
-
-        return object_o;
-    }
-
-    async function deleteSection(sectionName_s) {
-        const updatedQuiz_a = quiz.filter(
-            (section) => section.name !== sectionName_s
-        );
-
-        await saveQuiz(updatedQuiz_a);
-
-        setQuiz(updatedQuiz_a);
-
-        setShowDeleteSectionModal(false);
+        await loadSchedule(chosenDate);
     }
 
     async function addSection() {
+
         if (!section) return;
 
         const newSection_o = {
@@ -326,24 +143,169 @@ export default function AdminPage(props) {
         setQuiz(updatedQuiz_a);
     }
 
-    function addQuestion(section_o) {
-        console.log(section_o);
+    async function deleteQuestion(questionId_s) {
 
-        console.log("question: " + question);
+        for (const category_o of quiz) {
+
+            category_o.questions = category_o.questions.filter((question_o) => question_o.id !== questionId_s);
+        }
+
+        setQuiz([...quiz]);
+
+        await saveQuiz(quiz);
+    }
+
+    async function deleteSection(sectionName_s) {
+
+        const updatedQuiz_a = quiz.filter(
+            (section) => section.name !== sectionName_s
+        );
+
+        await saveQuiz(updatedQuiz_a);
+
+        setQuiz(updatedQuiz_a);
+
+        setShowDeleteSectionModal(false);
+    }
+
+    function generateUUID() {
+        // Public Domain/MIT
+        var d = new Date().getTime(); //Timestamp
+        var d2 =
+            (typeof performance !== 'undefined' &&
+                performance.now &&
+                performance.now() * 1000) ||
+            0; //Time in microseconds since page-load or 0 if unsupported
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+            /[xy]/g,
+            function (c) {
+                var r = Math.random() * 16; //random number between 0 and 16
+                if (d > 0) {
+                    //Use timestamp until depleted
+                    r = (d + r) % 16 | 0;
+                    d = Math.floor(d / 16);
+                } else {
+                    //Use microseconds since page-load if supported
+                    r = (d2 + r) % 16 | 0;
+                    d2 = Math.floor(d2 / 16);
+                }
+                return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+            }
+        );
+    }
+
+    async function handleClickDay(date_o) {
+
+        const date_s = date_o.toLocaleString().substring(0, 10);
+
+        setChosenDate(date_s);
+
+        await loadSchedule(date_s);
+    }
+
+    function isEventDate(date) {
+
+        return events.some(
+            (eventDate) =>
+                eventDate.getFullYear() === date.getFullYear() &&
+                eventDate.getMonth() === date.getMonth() &&
+                eventDate.getDate() === date.getDate()
+        );
+    }
+
+    async function loadAvailableTimes() {
+
+        const response_o = await fetch('https://korkort24.com/api/times/');
+
+        let availTimes = await response_o.json();
+
+        availTimes.sort((a, b) => {
+            if (a.from < b.from) return -1;
+            if (a.from > b.from) return 1;
+            return 0;
+        });
+
+        // let availDates = availTimes.map((availTime) =>
+        //     availTime.from.substring(0, 10)
+        // );
+
+        // availDates = [...new Set(availDates)];
+
+        // availDates.map((availDate) => {
+            
+        //     const year = +availDate.substring(0, 4);
+
+        //     let month = +availDate.substring(5, 7);
+
+        //     month--;
+
+        //     const day = +availDate.substring(8, 10);
+
+        //     return new Date(year, month, day);
+        // });
+
+        return availTimes;
+    }
+
+    async function loadEducationCards() {
+        
+        const response_o = await fetch('https://korkort24.com/api/educationcards/');
+        const responseBody_o = await response_o.json();
+
+        const result = Object.values(
+            responseBody_o.data.reduce((acc, { id, member_id, moment, state, comment }) => {
+                if (!acc[member_id]) {
+                    acc[member_id] = { member_id, educationcard: [] };
+                }
+                acc[member_id].educationcard.push({ id, moment, state, comment });
+                return acc;
+            }, {})
+        ).map((group) => {
+            group.educationcard.sort((a, b) => a.moment - b.moment);
+            return group;
+        });
+
+        setEducationcards(result);
+    }
+
+    async function loadMembers() {
+
+        const response_o = await fetch('https://korkort24.com/api/members/?fields=firstname,lastname');
+        const responseBody_o = await response_o.json();
+        setMembers(responseBody_o.data);
+    }
+
+    async function loadJsonQuiz() {
+
+        const response_o = await fetch('https:///korkort24.com/api/quiz/downloadquiz.php');
+        const quiz_o = await response_o.json();
+        const quiz_s = JSON.stringify(quiz_o, null, 2);
+        setQuizString(quiz_s);
+    }
+
+    async function loadQuiz() {
+
+        const response_o = await fetch('https://korkort24.com/api/quiz/');
+
+        if (response_o.status === 200) {
+
+            const responseBody_o = await response_o.json();
+            const quiz_o = responseBody_o.data;
+            setQuiz(quiz_o);
+        }
     }
 
     async function saveNewQuestion(e) {
+
         e.preventDefault();
 
-        const answerRadios = document.getElementsByName("answer");
+        const answerRadios = document.getElementsByName('answer');
 
-        const section_o = quiz.find(
-            (quiz_o) => quiz_o.name === showAddQuestionModal
-        );
+        const section_o = quiz.find((quiz_o) => quiz_o.name === showAddQuestionModal);
 
         const questionId_s = generateUUID();
 
-        let fileName_s = "";
+        let fileName_s = '';
 
         if (image.size) {
             fileName_s = await uploadFile(questionId_s);
@@ -353,7 +315,7 @@ export default function AdminPage(props) {
             id: questionId_s,
             name: question,
             answers: [],
-            explanation: "",
+            explanation: '',
             image: fileName_s,
         };
 
@@ -374,91 +336,65 @@ export default function AdminPage(props) {
         setShowAddQuestionModal(false);
     }
 
-    function generateUUID() {
-        // Public Domain/MIT
-        var d = new Date().getTime(); //Timestamp
-        var d2 =
-            (typeof performance !== "undefined" &&
-                performance.now &&
-                performance.now() * 1000) ||
-            0; //Time in microseconds since page-load or 0 if unsupported
-        return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
-            /[xy]/g,
-            function (c) {
-                var r = Math.random() * 16; //random number between 0 and 16
-                if (d > 0) {
-                    //Use timestamp until depleted
-                    r = (d + r) % 16 | 0;
-                    d = Math.floor(d / 16);
-                } else {
-                    //Use microseconds since page-load if supported
-                    r = (d2 + r) % 16 | 0;
-                    d2 = Math.floor(d2 / 16);
-                }
-                return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
-            }
-        );
+    async function saveQuiz(quiz_o) {
+
+        await fetch('https://korkort24.com/api/quiz/', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(quiz_o),
+        });
     }
 
-    function showQuestions(section_s) {
-        console.log(section_s);
+    async function saveQuizString() {
+
+        const quizStringElement = document.getElementById('quiz-string');
+        const quizStringObject = JSON.parse(quizStringElement.value);
+
+        await fetch('https://korkort24.com/api/quiz/', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(quizStringObject),
+        });
     }
 
-    async function deleteQuestion(questionId_s) {
-        for (const category_o of quiz) {
-            category_o.questions = category_o.questions.filter(
-                (question_o) => question_o.id !== questionId_s
-            );
+    function updateComment(comment_o) {
+
+        if(timeoutRef.current) {
+
+            clearTimeout(timeoutRef.current);
         }
 
-        setQuiz([...quiz]);
+        timeoutRef.current = setTimeout(() => {
 
-        await saveQuiz(quiz);
+            changeState(comment_o.entry, comment_o.memberId, comment_o.momentId, null, null, comment_o.comment);
+
+        }, 2000);
     }
 
     async function uploadFile(questionId_s) {
+
         const formData_o = new FormData();
 
-        formData_o.append("image", image);
+        formData_o.append('image', image);
+        
+        const imageType_s = image.name.split('.')[1];
 
-        const imageType_s = image.name.split(".")[1];
+        const fileName_s = questionId_s + '.' + imageType_s;
 
-        const fileName_s = questionId_s + "." + imageType_s;
+        formData_o.append('fileName', fileName_s);
 
-        formData_o.append("fileName", fileName_s);
-
-        const response_o = await fetch("https://korkort24.com/api/uploads/", {
-            method: "POST",
+        await fetch('https://korkort24.com/api/uploads/', {
+            method: 'POST',
             body: formData_o,
         });
 
         return fileName_s;
-    }
-
-    /**
-     * Validates and saves the current time slot. Only numbers are allowed.
-     *
-     * @param {string} timeSlot_s
-     */
-    function validateTimeSlot(timeSlot_s) {
-        timeSlot_s = timeSlot_s.replace(/[^0-9]/g, "");
-
-        setTimeSlotLength(timeSlot_s);
-    }
-
-    /**
-     * Validates and saves the current start time. Only numbers are allowed. A colon is added automatically.
-     * @param {string} startTime_s
-     */
-    function validateStartTime(startTime_s) {
-        startTime_s = startTime_s.replace(/[^0-9]/g, "");
-
-        if (startTime_s.length > 2) {
-            startTime_s =
-                startTime_s.substring(0, 2) + ":" + startTime_s.substring(2, 4);
-        }
-
-        setStartTime(startTime_s);
     }
 
     /**
@@ -467,55 +403,42 @@ export default function AdminPage(props) {
      * @param {*} endTime_s
      */
     function validateEndTime(inputField_o) {
+
         let endTime_s = inputField_o.value;
 
-        endTime_s = endTime_s.replace(/[^0-9]/g, "");
+        endTime_s = endTime_s.replace(/[^0-9]/g, '');
 
         if (endTime_s.length > 2) {
-            endTime_s = endTime_s.substring(0, 2) + ":" + endTime_s.substring(2, 4);
+            
+            endTime_s = endTime_s.substring(0, 2) + ':' + endTime_s.substring(2, 4);
         }
 
         setEndTime(endTime_s);
     }
 
-    async function addSchedule() {
-        console.log(schedule);
+    /**
+     * Validates and saves the current start time. Only numbers are allowed. A colon is added automatically.
+     * @param {string} startTime_s
+     */
+    function validateStartTime(startTime_s) {
 
-        const body_o = {
-            date: chosenDate,
-            timespan: startTime + "-" + endTime,
-        };
+        startTime_s = startTime_s.replace(/[^0-9]/g, '');
 
-        if (!isValidTimeInterval(body_o.timespan)) {
-            alert("Starttiden måste komma före sluttiden så det lades inte till");
-            return;
+        if(startTime_s.length > 2) {
+
+            startTime_s = startTime_s.substring(0, 2) + ':' + startTime_s.substring(2, 4);
         }
 
-        if (isOverlap(schedule, body_o.timespan)) {
-            alert("Tidsintervallet överlappar med schemat så det lades inte till");
-            return;
-        }
-
-        const response_o = await fetch("https://korkort24.com/api/schedules/", {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body_o),
-        });
-
-        const responseBody_o = await response_o.json();
-
-        await loadSchedule(chosenDate);
+        setStartTime(startTime_s);
     }
 
     function sortByTimespan(a, b) {
-        const [startA] = a.timespan.split("-");
-        const [startB] = b.timespan.split("-");
+        
+        const [startA] = a.timespan.split('-');
+        const [startB] = b.timespan.split('-');
 
-        const [hoursA, minutesA] = startA.split(":").map(Number);
-        const [hoursB, minutesB] = startB.split(":").map(Number);
+        const [hoursA, minutesA] = startA.split(':').map(Number);
+        const [hoursB, minutesB] = startB.split(':').map(Number);
 
         const totalMinutesA = hoursA * 60 + minutesA;
         const totalMinutesB = hoursB * 60 + minutesB;
@@ -524,42 +447,15 @@ export default function AdminPage(props) {
     }
 
     function isValidTimeInterval(interval) {
-        const [start, end] = interval.split("-");
-        const [startHours, startMinutes] = start.split(":").map(Number);
-        const [endHours, endMinutes] = end.split(":").map(Number);
+        const [start, end] = interval.split('-');
+        const [startHours, startMinutes] = start.split(':').map(Number);
+        const [endHours, endMinutes] = end.split(':').map(Number);
 
         // Convert times to minutes since midnight
         const startTotalMinutes = startHours * 60 + startMinutes;
         const endTotalMinutes = endHours * 60 + endMinutes;
 
         return startTotalMinutes < endTotalMinutes;
-    }
-
-    function createTimeSlot() {
-        if (
-            startTime.length === 5 &&
-            endTime.length === 5 &&
-            startTime < endTime &&
-            startTime > "00:00" &&
-            endTime < "23:59"
-        ) {
-        }
-
-        // if (+timeSlotLength && startTime.length === 5 && endTime.length === 5 && startTime < endTime && startTime > '00:00' && endTime < '23:59') {
-        //     const newTimeSlot_o = {
-        //         length: +timeSlotLength,
-        //         start: startTime,
-        //         end: endTime
-        //     };
-
-        //     setTimeSlots([...timeSlots, newTimeSlot_o]);
-
-        //     setTimeSlotLength('');
-
-        //     setStartTime('');
-
-        //     setEndTime('');
-        // }
     }
 
     async function addTimeSlotToDay(timeSlot_o) {
@@ -588,20 +484,20 @@ export default function AdminPage(props) {
             (interval) => interval.timespan
         );
 
-        // Helper function to convert "hh:mm" to minutes since midnight
+        // Helper function to convert 'hh:mm' to minutes since midnight
         const toMinutes = (time) => {
-            const [hours, minutes] = time.split(":").map(Number);
+            const [hours, minutes] = time.split(':').map(Number);
             return hours * 60 + minutes;
         };
 
         // Parse new interval
-        const [newStartStr, newEndStr] = newInterval.split("-");
+        const [newStartStr, newEndStr] = newInterval.split('-');
         const newStart = toMinutes(newStartStr);
         const newEnd = toMinutes(newEndStr);
 
         // Check for overlap with existing intervals
         for (const interval of existingIntervals) {
-            const [startStr, endStr] = interval.split("-");
+            const [startStr, endStr] = interval.split('-');
             const start = toMinutes(startStr);
             const end = toMinutes(endStr);
 
@@ -616,9 +512,9 @@ export default function AdminPage(props) {
 
     async function deleteSchedule(id) {
         const response_o = await fetch(
-            "https://korkort24.com/api/schedules/" + id,
+            'https://korkort24.com/api/schedules/' + id,
             {
-                method: "DELETE",
+                method: 'DELETE',
             }
         );
 
@@ -629,7 +525,7 @@ export default function AdminPage(props) {
 
     async function loadSchedule(date_s) {
         const response_o = await fetch(
-            "https://korkort24.com/api/schedules/?date=" + date_s
+            'https://korkort24.com/api/schedules/?date=' + date_s
         );
 
         if (response_o.status === 200) {
@@ -642,11 +538,11 @@ export default function AdminPage(props) {
     }
 
     async function saveSchedule(schedule_o) {
-        const response_o = await fetch("https://korkort24.com/api/schedule/", {
-            method: "POST",
+        const response_o = await fetch('https://korkort24.com/api/schedule/', {
+            method: 'POST',
             headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify(schedule_o),
         });
@@ -665,15 +561,15 @@ export default function AdminPage(props) {
                 return moment.moment === momentId;
             });
 
-            if (obj && obj.target.className.includes("bg-primary")) {
-                moment_o.state = moment_o.state.replace(state, "");
+            if (obj && obj.target.className.includes('bg-primary')) {
+                moment_o.state = moment_o.state.replace(state, '');
             } else {
                 moment_o.state = moment_o.state + (state || '');
-                if (state === "👍") {
-                    moment_o.state = moment_o.state.replace("👎", "");
+                if (state === '👍') {
+                    moment_o.state = moment_o.state.replace('👎', '');
                 }
-                if (state === "👎") {
-                    moment_o.state = moment_o.state.replace("👍", "");
+                if (state === '👎') {
+                    moment_o.state = moment_o.state.replace('👍', '');
                 }
             }
 
@@ -691,24 +587,24 @@ export default function AdminPage(props) {
             };
 
             const response_o = await fetch(
-                "https://korkort24.com/api/educationcards/" + entry_o.id,
+                'https://korkort24.com/api/educationcards/' + entry_o.id,
                 {
-                    method: "PUT",
+                    method: 'PUT',
                     headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json",
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({ state: entry_o.state, comment: entry_o.comment }),
                 }
             );
         } else {
             const response_o = await fetch(
-                "https://korkort24.com/api/educationcards/",
+                'https://korkort24.com/api/educationcards/',
                 {
-                    method: "POST",
+                    method: 'POST',
                     headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json",
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
                         member_id: memberId,
@@ -744,29 +640,29 @@ export default function AdminPage(props) {
     }
 
     return (
-        <div className="pb-5">
-            <h1 className="page-header">Admin Page</h1>
+        <div className='pb-5'>
+            <h1 className='page-header'>Admin Page</h1>
 
-            <Tabs defaultActiveKey="questions" id="admin-tabs" className="mb-3">
-                <Tab eventKey="questions" title="Frågor">
-                    <Row className="align-items-center">
-                        <Col xs="auto">
+            <Tabs defaultActiveKey='questions' id='admin-tabs' className='mb-3'>
+                <Tab eventKey='questions' title='Frågor'>
+                    <Row className='align-items-center'>
+                        <Col xs='auto'>
                             <Form.Control
-                                className="mb-2"
+                                className='mb-2'
                                 onChange={(e) => setSection(e.target.value)}
-                                placeholder="Ny kategori"
-                                size="sm"
-                                spellCheck="false"
-                                type="text"
+                                placeholder='Ny kategori'
+                                size='sm'
+                                spellCheck='false'
+                                type='text'
                             />
                         </Col>
 
-                        <Col xs="auto">
+                        <Col xs='auto'>
                             <Button
-                                size="sm"
-                                type="button"
-                                variant="success"
-                                className="mb-2"
+                                size='sm'
+                                type='button'
+                                variant='success'
+                                className='mb-2'
                                 onClick={addSection}
                             >
                                 +
@@ -774,111 +670,102 @@ export default function AdminPage(props) {
                         </Col>
                     </Row>
 
-                    <div className="bg-body p-2">
+                    <div className='bg-body p-2'>
                         {quiz.map((section) => (
-                            <div style={{ fontSize: "20px" }} key={section.name}>
+                            <div style={{ fontSize: '20px' }} key={section.name}>
                                 <span
-                                    className="section-name"
-                                    role="button"
+                                    className='section-name'
+                                    role='button'
                                     onClick={() => {
                                         setShowQuestionsModal(section.name);
                                     }}
                                 >
                                     {section.name}
-                                </span>{" "}
+                                </span>{' '}
                                 <i
                                     onClick={() => {
                                         setSectionNameToDelete(section.name);
                                         setShowDeleteSectionModal(true);
                                     }}
-                                    role="button"
-                                    className="mx-2 bi bi-trash"
+                                    role='button'
+                                    className='mx-2 bi bi-trash'
                                 ></i>
                                 <i
                                     onClick={() => {
                                         setShowAddQuestionModal(section.name);
-                                        setAnswers([""]);
-                                        setQuestion("");
+                                        setAnswers(['']);
+                                        setQuestion('');
                                     }}
-                                    role="button"
-                                    className="bi bi-plus-square-fill text-success"
+                                    role='button'
+                                    className='bi bi-plus-square-fill text-success'
                                 ></i>
                             </div>
                         ))}
                     </div>
 
                     <Form.Group
-                        className="mb-3 mt-3"
-                        controlId="exampleForm.ControlTextarea1"
+                        className='mb-3 mt-3'
+                        controlId='exampleForm.ControlTextarea1'
                     >
                         <Form.Control
                             onChange={(e) => setQuizString(e.target.value)}
-                            id="quiz-string"
-                            as="textarea"
+                            id='quiz-string'
+                            as='textarea'
                             rows={10}
                             value={quizString}
-                            style={{ "font-family": "monospace", "white-space": "pre" }}
+                            style={{ 'font-family': 'monospace', 'white-space': 'pre' }}
                         />
                     </Form.Group>
 
                     <Button
-                        size="sm"
-                        type="button"
-                        variant="success"
-                        className="mb-2"
+                        size='sm'
+                        type='button'
+                        variant='success'
+                        className='mb-2'
                         onClick={saveQuizString}
                     >
                         Spara
                     </Button>
 
-                    <h1 className="text-white">Ladda upp bild</h1>
+                    <h1 className='text-white'>Ladda upp bild</h1>
                     <FileUploader />
                 </Tab>
 
-                <Tab eventKey="info" title="Info"></Tab>
+                <Tab eventKey='info' title='Info'></Tab>
 
-                <Tab eventKey="bookings" title="Bokningar">
+                <Tab eventKey='bookings' title='Bokningar'>
                     <Row>
-                        {/* <Col>
-                            <Form.Control
-                                onChange={(e) => validateTimeSlot(e.target.value)}
-                                placeholder='Längd (min)'
-                                size='sm'
-                                spellCheck='false'
-                                type='text'
-                                value={timeSlotLength} />
-                        </Col> */}
                         <Col>
                             <Form.Control
                                 onChange={(e) => validateStartTime(e.target.value)}
-                                placeholder="Start (hh:mm)"
-                                size="sm"
-                                spellCheck="false"
-                                type="text"
+                                placeholder='Start (hh:mm)'
+                                size='sm'
+                                spellCheck='false'
+                                type='text'
                                 value={startTime}
                             />
                         </Col>
                         <Col>
                             <Form.Control
                                 onChange={(e) => validateEndTime(e.target)}
-                                placeholder="Slut (hh:mm)"
-                                size="sm"
-                                spellCheck="false"
-                                type="text"
+                                placeholder='Slut (hh:mm)'
+                                size='sm'
+                                spellCheck='false'
+                                type='text'
                                 value={endTime}
                             />
                         </Col>
                         <Col>
-                            <Button onClick={addSchedule} size="sm" variant="primary">
+                            <Button onClick={addSchedule} size='sm' variant='primary'>
                                 Skapa
                             </Button>
                         </Col>
                     </Row>
 
-                    <div className="my-2">
+                    <div className='my-2'>
                         {timeSlots.map((timeSlot_o) => (
                             <Button
-                                className="me-2"
+                                className='me-2'
                                 onClick={() =>
                                     addTimeSlotToDay({
                                         start: timeSlot_o.start,
@@ -886,33 +773,33 @@ export default function AdminPage(props) {
                                         length: timeSlot_o.length,
                                     })
                                 }
-                                size="sm"
-                                variant="primary"
+                                size='sm'
+                                variant='primary'
                             >
                                 {timeSlot_o.start +
-                                    " - " +
+                                    ' - ' +
                                     timeSlot_o.end +
-                                    " " +
+                                    ' ' +
                                     timeSlot_o.length +
-                                    " min"}
+                                    ' min'}
                             </Button>
                         ))}
                     </div>
 
-                    <div style={{ display: "inline-block" }}>
+                    <div style={{ display: 'inline-block' }}>
                         {schedule &&
                             schedule.sort(sortByTimespan).map((chosenDate_o) => (
                                 <div
                                     key={chosenDate_o.id}
                                     onClick={() => deleteSchedule(chosenDate_o.id)}
-                                    className="schedule-date"
+                                    className='schedule-date'
                                     style={{
-                                        cursor: "pointer",
-                                        marginBottom: "5px",
-                                        backgroundColor: "white",
-                                        padding: "3px",
-                                        border: "2px solid black",
-                                        borderRadius: "5px",
+                                        cursor: 'pointer',
+                                        marginBottom: '5px',
+                                        backgroundColor: 'white',
+                                        padding: '3px',
+                                        border: '2px solid black',
+                                        borderRadius: '5px',
                                     }}
                                 >
                                     {chosenDate_o.timespan}
@@ -921,17 +808,17 @@ export default function AdminPage(props) {
                     </div>
 
                     <Calendar
-                        style={{ float: "left" }}
+                        style={{ float: 'left' }}
                         onClickDay={handleClickDay}
                         tileClassName={({ date, view }) =>
-                            view === "month" && isEventDate(date) ? "highlight" : null
+                            view === 'month' && isEventDate(date) ? 'highlight' : null
                         }
                     />
                 </Tab>
 
-                <Tab eventKey="education-cards" title="Utbildningskort">
+                <Tab eventKey='education-cards' title='Utbildningskort'>
 
-                    <Accordion defaultActiveKey="0">
+                    <Accordion defaultActiveKey='0'>
                         {members.map(member_o => {
                             let card_o = educationcards.find(card_o => card_o.member_id === member_o.id);
                             console.log(card_o);
@@ -940,29 +827,37 @@ export default function AdminPage(props) {
                                 <Accordion.Item key={member_o.id} eventKey={member_o.id}>
                                     <Accordion.Header>Medlem: {member_o.id} {member_o.firstname} {member_o.lastname}</Accordion.Header>
                                     <Accordion.Body>
-                                        <div key={member_o.id} className="mb-3 p-2 bg-body">
+                                        <div key={member_o.id} className='mb-3 p-2 bg-body'>
                                             <h5>Medlem: {member_o.id} {member_o.firstname} {member_o.lastname}</h5>
-                                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map(
+                                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(
                                                 (moment) => {
                                                     const entry_o = card_o.educationcard.find(
                                                         (e) => e.moment === moment
                                                     );
                                                     return (
                                                         <div key={moment}>
-                                                            <span
-                                                                className="d-inline-flex align-items-center justify-content-center 
-             rounded-circle bg-primary text-white me-2"
-                                                                style={{ width: "40px", height: "40px" }}
+                                                            <div
+                                                                className='d-inline-flex align-items-center justify-content-center 
+             rounded-circle bg-primary text-white me-2'
+                                                                style={{ width: '40px', height: '40px' }}
                                                             >
                                                                 {moment}
-                                                            </span>
-                                                            {["D", "I", "S", "G", "👍", "👎"].map((state) => {
+                                                            </div>
+                                                            <strong style={{fontSize: '20px'}}>
+                                                                {momentHeaders[moment]}
+                                                            </strong>
+                                                            <div style={{paddingLeft: '50px', marginBottom: '10px'}}>
+                                                                {moments[moment] && moments[moment].map((moment_a) => {
+                                                                    return <p key={moment} style={{marginBottom: '0'}}>{moment_a}</p>;
+                                                                })}
+                                                            </div>
+                                                            {['D', 'I', 'S', 'G', '👍', '👎'].map((state) => {
                                                                 const isFilled = entry_o?.state?.includes(state); // ✅ check if letter exists
                                                                 return (
                                                                     <span
                                                                         key={state}
                                                                         className={`moment-styles me-1 d-inline-flex align-items-center justify-content-center rounded 
-                     ${isFilled ? "bg-primary text-white" : ""}`}
+                     ${isFilled ? 'bg-primary text-white' : ''}`}
                                                                         onClick={(e) =>
                                                                             changeState(
                                                                                 entry_o,
@@ -977,7 +872,7 @@ export default function AdminPage(props) {
                                                                     </span>
                                                                 );
                                                             })}
-                                                            <textarea placeholder="Kommentar" onKeyUp={(e) => updateComment({comment: e.target.value, entry: entry_o, momentId: moment, memberId: member_o.id})} style={{marginTop: '5px', marginBottom: '15px', borderRadius: '5px', display: 'block', width: '100%'}}>{entry_o?.comment || ''}</textarea>
+                                                            <textarea placeholder='Kommentar' onKeyUp={(e) => updateComment({comment: e.target.value, entry: entry_o, momentId: moment, memberId: member_o.id})} style={{marginTop: '5px', marginBottom: '15px', borderRadius: '5px', display: 'block', width: '100%'}}>{entry_o?.comment || ''}</textarea>
                                                         </div>
                                                     );
                                                 }
@@ -1004,7 +899,7 @@ export default function AdminPage(props) {
 
 
                     {/* {educationcards.map((card_o) => (
-                        <div key={card_o.id} className="mb-3 p-2 bg-body">
+                        <div key={card_o.id} className='mb-3 p-2 bg-body'>
                             <h5>Medlem: {card_o.member_id}</h5>
                             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map(
                                 (moment) => {
@@ -1014,19 +909,19 @@ export default function AdminPage(props) {
                                     return (
                                         <div key={moment}>
                                             <span
-                                                className="d-inline-flex align-items-center justify-content-center 
-             rounded-circle bg-primary text-white me-2"
-                                                style={{ width: "40px", height: "40px" }}
+                                                className='d-inline-flex align-items-center justify-content-center 
+             rounded-circle bg-primary text-white me-2'
+                                                style={{ width: '40px', height: '40px' }}
                                             >
                                                 {moment}
                                             </span>
-                                            {["D", "I", "S", "G", "👍", "👎"].map((state) => {
+                                            {['D', 'I', 'S', 'G', '👍', '👎'].map((state) => {
                                                 const isFilled = entry_o?.state?.includes(state);
                                                 return (
                                                     <span
                                                         key={state}
                                                         className={`moment-styles me-1 d-inline-flex align-items-center justify-content-center rounded 
-                     ${isFilled ? "bg-primary text-white" : ""}`}
+                     ${isFilled ? 'bg-primary text-white' : ''}`}
                                                         onClick={(e) =>
                                                             changeState(
                                                                 entry_o,
@@ -1061,10 +956,10 @@ export default function AdminPage(props) {
                 <Modal.Footer>
                     <Button
                         onClick={() => deleteSection(sectionNameToDelete)}
-                        size="sm"
-                        variant="primary"
+                        size='sm'
+                        variant='primary'
                     >
-                        Ta bort sektionen "{sectionNameToDelete}"
+                        Ta bort sektionen '{sectionNameToDelete}'
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -1073,7 +968,7 @@ export default function AdminPage(props) {
                 show={showAddQuestionModal}
                 onHide={() => {
                     setShowAddQuestionModal(false);
-                    setQuestion("");
+                    setQuestion('');
                 }}
             >
                 <Modal.Header closeButton>
@@ -1083,41 +978,41 @@ export default function AdminPage(props) {
                     <form onSubmit={saveNewQuestion}>
                         <Form.Control
                             required
-                            className="mb-2"
+                            className='mb-2'
                             onChange={(e) => setQuestion(e.target.value)}
-                            placeholder="Fråga"
-                            size="sm"
-                            spellCheck="false"
-                            type="text"
+                            placeholder='Fråga'
+                            size='sm'
+                            spellCheck='false'
+                            type='text'
                             value={question}
                         />
 
                         <Form.Control
                             onChange={(e) => setImage(e.target.files[0])}
-                            type="file"
-                            size="sm"
-                            className="mb-2"
+                            type='file'
+                            size='sm'
+                            className='mb-2'
                         />
 
                         {answers.map((answer, i) => (
-                            <InputGroup key={i} className="mb-3" size="sm">
-                                <InputGroup.Radio name="answer" required />
+                            <InputGroup key={i} className='mb-3' size='sm'>
+                                <InputGroup.Radio name='answer' required />
                                 <Form.Control
                                     onChange={(e) => {
                                         answers[i] = e.target.value;
                                         setAnswers([...answers]);
                                     }}
-                                    placeholder="Svar"
+                                    placeholder='Svar'
                                     required
-                                    spellCheck="false"
-                                    type="text"
+                                    spellCheck='false'
+                                    type='text'
                                     value={answers[i]}
                                 />
                                 {answers.length === i + 1 && (
                                     <Button
-                                        type="button"
-                                        variant="success"
-                                        onClick={() => setAnswers([...answers, ""])}
+                                        type='button'
+                                        variant='success'
+                                        onClick={() => setAnswers([...answers, ''])}
                                     >
                                         +
                                     </Button>
@@ -1126,10 +1021,10 @@ export default function AdminPage(props) {
                         ))}
 
                         <Button
-                            size="sm"
-                            type="submit"
-                            variant="success"
-                            onClick={() => console.log("lägg till ny fråga")}
+                            size='sm'
+                            type='submit'
+                            variant='success'
+                            onClick={() => console.log('lägg till ny fråga')}
                         >
                             Lägg till
                         </Button>
@@ -1148,13 +1043,13 @@ export default function AdminPage(props) {
                     {quiz
                         .find((category_o) => category_o.name === showQuestionsModal)
                         ?.questions.map((question_o) => (
-                            <div key={question_o.id} className="mb-1">
-                                <h6 className="question">
+                            <div key={question_o.id} className='mb-1'>
+                                <h6 className='question'>
                                     {question_o.name}
                                     <i
                                         onClick={() => deleteQuestion(question_o.id)}
-                                        role="button"
-                                        className="mx-2 bi bi-trash"
+                                        role='button'
+                                        className='mx-2 bi bi-trash'
                                     ></i>
                                 </h6>
                             </div>
