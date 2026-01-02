@@ -44,8 +44,8 @@ export default function AdminPage() {
 
     const [moments, setMoments] = useState([
         [],
-        ['a) Stol och bälte', 'b) Reglage och insiment'],
-        ['a) Start och stannande', 'b) Krypkörning och styrning'],
+        ['a) Stol och bälte', 'b) Reglage och instrument'],
+        ['a) Start och stanna', 'b) Krypkörning och styrning'],
         ['a) Uppväxlning', 'b) Nedväxling'],
         ['a) Motlut', 'b) Medlut'],
         ['a) Backning', 'b) Vändning', 'c) Parkering'],
@@ -57,7 +57,7 @@ export default function AdminPage() {
         ['a) Avsökning och riskbedömning', 'b) Hastighetsanpassning', 'c) Placering', 'd) Påfart och avfart', 'e) Omkörning', 'f) Vändning och parkering'],
         ['a) Avsökning och riskbedömning', 'b) Hastighetsanpassning', 'c) Motorväg', 'd) Motortrafikled', 'd) Mitträckeväg(2-1)'],
         ['a) Avsökning och riskbedömning', 'b) Hastighetsanpassning', 'c) Mörkerdemonstration', 'd) Möte', 'e) Omkörning', 'f) Parkering', 'g) Nedsatt sikt'],
-        ['a) Olika typer av halka', 'b) Utrustning och halksystem'],
+        ['a) Olika typer av halka', 'b) Utrustning och system'],
         ['a) Tillämpad stadskörning', 'b) Tillämpad landsvägskörning', 'c) Utbildningskontroll']
     ]);
     
@@ -143,6 +143,119 @@ export default function AdminPage() {
         setQuiz(updatedQuiz_a);
     }
 
+    async function addTimeSlotToDay(timeSlot_o) {
+
+        schedule[chosenDate] = schedule[chosenDate] || [];
+
+        for (const chosenDateTimeSlot_o of schedule[chosenDate]) {
+            if (chosenDateTimeSlot_o.start === timeSlot_o.start) {
+                return;
+            }
+        }
+        schedule[chosenDate].push(timeSlot_o);
+
+        schedule[chosenDate].sort((a, b) => {
+            if (a.start < b.start) return -1;
+            if (a.start > b.start) return 1;
+            return 0;
+        });
+
+        setSchedule({ ...schedule });
+
+        await saveSchedule({ ...schedule });
+    }
+
+   async function changeState(entry_o, memberId, momentId, state, obj, comment, submoment, isChecked) {
+        
+        if (entry_o) {
+            const member = educationcards.find(
+                (educationcard) => educationcard.member_id == memberId
+            );
+
+            const moment_o = member.educationcard.find((moment) => {
+                return moment.moment === momentId;
+            });
+
+            if(submoment) {
+                if(isChecked) {
+                    moment_o.submoment = moment_o.submoment.replace(submoment, '');
+                } else {
+                    moment_o.submoment = moment_o.submoment + submoment;
+                }
+            } else {
+                if (obj && obj.target.className.includes('bg-primary')) {
+                    moment_o.state = moment_o.state.replace(state, '');
+                } else {
+                    moment_o.state = moment_o.state + (state || '');
+                    if (state === '👍') {
+                        moment_o.state = moment_o.state.replace('👎', '');
+                    }
+                    if (state === '👎') {
+                        moment_o.state = moment_o.state.replace('👍', '');
+                    }
+                }
+            }
+            
+
+            if(comment) {
+                moment_o.comment = comment;
+            }
+
+            setEducationcards([...educationcards]);
+
+            await fetch('https://korkort24.com/api/educationcards/' + entry_o.id,
+                {
+                    method: 'PUT',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ state: entry_o.state, comment: entry_o.comment, submoment: entry_o.submoment }),
+                }
+            );
+
+        } else {
+
+            const response_o = await fetch('https://korkort24.com/api/educationcards/',
+                {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        member_id: memberId,
+                        moment: momentId,
+                        state: state || '',
+                        comment: comment || ''
+                    }),
+                }
+            );
+
+            const responseBody_o = await response_o.json();
+
+            let memberCard_o = educationcards.find(
+                (card) => card.member_id === memberId
+            );
+
+            if (!memberCard_o) {
+                memberCard_o = {
+                    member_id: memberId,
+                    educationcard: []
+                };
+                educationcards.push(memberCard_o);
+            }
+
+            memberCard_o.educationcard.push({
+                id: parseInt(responseBody_o.data.id),
+                moment: momentId,
+                state: state,
+            });
+
+            setEducationcards([...educationcards]);
+        }
+    }
+
     async function deleteQuestion(questionId_s) {
 
         for (const category_o of quiz) {
@@ -153,6 +266,13 @@ export default function AdminPage() {
         setQuiz([...quiz]);
 
         await saveQuiz(quiz);
+    }
+
+    async function deleteSchedule(id) {
+
+        const response_o = await fetch('https://korkort24.com/api/schedules/' + id, {method: 'DELETE'});
+        await response_o.json();
+        await loadSchedule(chosenDate);
     }
 
     async function deleteSection(sectionName_s) {
@@ -213,6 +333,50 @@ export default function AdminPage() {
         );
     }
 
+   function isOverlap(currentIntervals, newInterval) {
+
+        let existingIntervals = currentIntervals.map(
+            (interval) => interval.timespan
+        );
+
+        // Helper function to convert 'hh:mm' to minutes since midnight
+        const toMinutes = (time) => {
+            const [hours, minutes] = time.split(':').map(Number);
+            return hours * 60 + minutes;
+        };
+
+        // Parse new interval
+        const [newStartStr, newEndStr] = newInterval.split('-');
+        const newStart = toMinutes(newStartStr);
+        const newEnd = toMinutes(newEndStr);
+
+        // Check for overlap with existing intervals
+        for (const interval of existingIntervals) {
+            const [startStr, endStr] = interval.split('-');
+            const start = toMinutes(startStr);
+            const end = toMinutes(endStr);
+
+            // Overlap if newStart < end and newEnd > start
+            if (newStart < end && newEnd > start) {
+                return true; // Overlapping
+            }
+        }
+
+        return false; // No overlap
+    }
+
+    function isValidTimeInterval(interval) {
+        const [start, end] = interval.split('-');
+        const [startHours, startMinutes] = start.split(':').map(Number);
+        const [endHours, endMinutes] = end.split(':').map(Number);
+
+        // Convert times to minutes since midnight
+        const startTotalMinutes = startHours * 60 + startMinutes;
+        const endTotalMinutes = endHours * 60 + endMinutes;
+
+        return startTotalMinutes < endTotalMinutes;
+    }
+
     async function loadAvailableTimes() {
 
         const response_o = await fetch('https://korkort24.com/api/times/');
@@ -225,25 +389,6 @@ export default function AdminPage() {
             return 0;
         });
 
-        // let availDates = availTimes.map((availTime) =>
-        //     availTime.from.substring(0, 10)
-        // );
-
-        // availDates = [...new Set(availDates)];
-
-        // availDates.map((availDate) => {
-            
-        //     const year = +availDate.substring(0, 4);
-
-        //     let month = +availDate.substring(5, 7);
-
-        //     month--;
-
-        //     const day = +availDate.substring(8, 10);
-
-        //     return new Date(year, month, day);
-        // });
-
         return availTimes;
     }
 
@@ -253,11 +398,11 @@ export default function AdminPage() {
         const responseBody_o = await response_o.json();
 
         const result = Object.values(
-            responseBody_o.data.reduce((acc, { id, member_id, moment, state, comment }) => {
+            responseBody_o.data.reduce((acc, { id, member_id, moment, state, comment, submoment }) => {
                 if (!acc[member_id]) {
                     acc[member_id] = { member_id, educationcard: [] };
                 }
-                acc[member_id].educationcard.push({ id, moment, state, comment });
+                acc[member_id].educationcard.push({ id, moment, state, comment, submoment });
                 return acc;
             }, {})
         ).map((group) => {
@@ -292,6 +437,18 @@ export default function AdminPage() {
             const responseBody_o = await response_o.json();
             const quiz_o = responseBody_o.data;
             setQuiz(quiz_o);
+        }
+    }
+
+    async function loadSchedule(date_s) {
+
+        const response_o = await fetch('https://korkort24.com/api/schedules/?date=' + date_s);
+
+        if (response_o.status === 200) {
+
+            const responseBody_o = await response_o.json();
+            const schedule_a = responseBody_o.data;
+            setSchedule(schedule_a);
         }
     }
 
@@ -363,6 +520,32 @@ export default function AdminPage() {
         });
     }
 
+    async function saveSchedule(schedule_o) {
+
+        const response_o = await fetch('https://korkort24.com/api/schedule/', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(schedule_o),
+        });
+    }
+
+    function sortByTimespan(a, b) {
+        
+        const [startA] = a.timespan.split('-');
+        const [startB] = b.timespan.split('-');
+
+        const [hoursA, minutesA] = startA.split(':').map(Number);
+        const [hoursB, minutesB] = startB.split(':').map(Number);
+
+        const totalMinutesA = hoursA * 60 + minutesA;
+        const totalMinutesB = hoursB * 60 + minutesB;
+
+        return totalMinutesA - totalMinutesB;
+    }
+
     function updateComment(comment_o) {
 
         if(timeoutRef.current) {
@@ -430,213 +613,6 @@ export default function AdminPage() {
         }
 
         setStartTime(startTime_s);
-    }
-
-    function sortByTimespan(a, b) {
-        
-        const [startA] = a.timespan.split('-');
-        const [startB] = b.timespan.split('-');
-
-        const [hoursA, minutesA] = startA.split(':').map(Number);
-        const [hoursB, minutesB] = startB.split(':').map(Number);
-
-        const totalMinutesA = hoursA * 60 + minutesA;
-        const totalMinutesB = hoursB * 60 + minutesB;
-
-        return totalMinutesA - totalMinutesB;
-    }
-
-    function isValidTimeInterval(interval) {
-        const [start, end] = interval.split('-');
-        const [startHours, startMinutes] = start.split(':').map(Number);
-        const [endHours, endMinutes] = end.split(':').map(Number);
-
-        // Convert times to minutes since midnight
-        const startTotalMinutes = startHours * 60 + startMinutes;
-        const endTotalMinutes = endHours * 60 + endMinutes;
-
-        return startTotalMinutes < endTotalMinutes;
-    }
-
-    async function addTimeSlotToDay(timeSlot_o) {
-        schedule[chosenDate] = schedule[chosenDate] || [];
-
-        for (const chosenDateTimeSlot_o of schedule[chosenDate]) {
-            if (chosenDateTimeSlot_o.start === timeSlot_o.start) {
-                return;
-            }
-        }
-        schedule[chosenDate].push(timeSlot_o);
-
-        schedule[chosenDate].sort((a, b) => {
-            if (a.start < b.start) return -1;
-            if (a.start > b.start) return 1;
-            return 0;
-        });
-
-        setSchedule({ ...schedule });
-
-        await saveSchedule({ ...schedule });
-    }
-
-    function isOverlap(currentIntervals, newInterval) {
-        let existingIntervals = currentIntervals.map(
-            (interval) => interval.timespan
-        );
-
-        // Helper function to convert 'hh:mm' to minutes since midnight
-        const toMinutes = (time) => {
-            const [hours, minutes] = time.split(':').map(Number);
-            return hours * 60 + minutes;
-        };
-
-        // Parse new interval
-        const [newStartStr, newEndStr] = newInterval.split('-');
-        const newStart = toMinutes(newStartStr);
-        const newEnd = toMinutes(newEndStr);
-
-        // Check for overlap with existing intervals
-        for (const interval of existingIntervals) {
-            const [startStr, endStr] = interval.split('-');
-            const start = toMinutes(startStr);
-            const end = toMinutes(endStr);
-
-            // Overlap if newStart < end and newEnd > start
-            if (newStart < end && newEnd > start) {
-                return true; // Overlapping
-            }
-        }
-
-        return false; // No overlap
-    }
-
-    async function deleteSchedule(id) {
-        const response_o = await fetch(
-            'https://korkort24.com/api/schedules/' + id,
-            {
-                method: 'DELETE',
-            }
-        );
-
-        const responseBody_o = await response_o.json();
-
-        await loadSchedule(chosenDate);
-    }
-
-    async function loadSchedule(date_s) {
-        const response_o = await fetch(
-            'https://korkort24.com/api/schedules/?date=' + date_s
-        );
-
-        if (response_o.status === 200) {
-            const responseBody_o = await response_o.json();
-
-            const schedule_a = responseBody_o.data;
-
-            setSchedule(schedule_a);
-        }
-    }
-
-    async function saveSchedule(schedule_o) {
-        const response_o = await fetch('https://korkort24.com/api/schedule/', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(schedule_o),
-        });
-
-        const responseBody_o = await response_o.json();
-    }
-
-    async function changeState(entry_o, memberId, momentId, state, obj, comment) {
-        
-        if (entry_o) {
-            const member = educationcards.find(
-                (educationcard) => educationcard.member_id == memberId
-            );
-
-            const moment_o = member.educationcard.find((moment) => {
-                return moment.moment === momentId;
-            });
-
-            if (obj && obj.target.className.includes('bg-primary')) {
-                moment_o.state = moment_o.state.replace(state, '');
-            } else {
-                moment_o.state = moment_o.state + (state || '');
-                if (state === '👍') {
-                    moment_o.state = moment_o.state.replace('👎', '');
-                }
-                if (state === '👎') {
-                    moment_o.state = moment_o.state.replace('👍', '');
-                }
-            }
-
-            if(comment) {
-                moment_o.comment = comment;
-            }
-
-            setEducationcards([...educationcards]);
-
-            const educationcard_o = {
-                id: entry_o.id,
-                member_id: memberId,
-                moment: momentId,
-                state: entry_o.state,
-            };
-
-            const response_o = await fetch(
-                'https://korkort24.com/api/educationcards/' + entry_o.id,
-                {
-                    method: 'PUT',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ state: entry_o.state, comment: entry_o.comment }),
-                }
-            );
-        } else {
-            const response_o = await fetch(
-                'https://korkort24.com/api/educationcards/',
-                {
-                    method: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        member_id: memberId,
-                        moment: momentId,
-                        state: state || '',
-                        comment: comment || ''
-                    }),
-                }
-            );
-
-            const responseBody_o = await response_o.json();
-
-            let memberCard_o = educationcards.find(
-                (card) => card.member_id === memberId
-            );
-
-            if (!memberCard_o) {
-                memberCard_o = {
-                    member_id: memberId,
-                    educationcard: []
-                };
-                educationcards.push(memberCard_o);
-            }
-
-            memberCard_o.educationcard.push({
-                id: parseInt(responseBody_o.data.id),
-                moment: momentId,
-                state: state,
-            });
-
-            setEducationcards([...educationcards]);
-        }
     }
 
     return (
@@ -830,12 +806,13 @@ export default function AdminPage() {
                                         <div key={member_o.id} className='mb-3 p-2 bg-body'>
                                             <h5>Medlem: {member_o.id} {member_o.firstname} {member_o.lastname}</h5>
                                             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(
-                                                (moment) => {
+                                                (moment, index) => {
                                                     const entry_o = card_o.educationcard.find(
                                                         (e) => e.moment === moment
                                                     );
+                                                    
                                                     return (
-                                                        <div key={moment}>
+                                                        <div key={moment + 'moment' + member_o.id + '-' + index}>
                                                             <div
                                                                 className='d-inline-flex align-items-center justify-content-center 
              rounded-circle bg-primary text-white me-2'
@@ -847,8 +824,15 @@ export default function AdminPage() {
                                                                 {momentHeaders[moment]}
                                                             </strong>
                                                             <div style={{paddingLeft: '50px', marginBottom: '10px'}}>
-                                                                {moments[moment] && moments[moment].map((moment_a) => {
-                                                                    return <p key={moment} style={{marginBottom: '0'}}>{moment_a}</p>;
+                                                                {moments[moment] && moments[moment].map((moment_a, index) => {
+                                                                    console.log(entry_o);
+                                                                    //console.log(entry_o?.submoment + ' ' + moment_a.charAt(0));
+                                                                    //if(entry_o?.submoment) debugger;
+                                                                    let checked = entry_o?.submoment?.includes(moment_a.charAt(0));
+                                                                    
+                                                                    return <p key={moment + 'submoment' + member_o.id + '-' + index} style={{marginBottom: '0'}}>{moment_a} <input onClick={(e) => changeState(entry_o,
+                                                                                card_o.member_id,
+                                                                                moment, null, e, null, moment_a.charAt(0), checked)} type="checkbox" checked={checked} /></p>;
                                                                 })}
                                                             </div>
                                                             {['D', 'I', 'S', 'G', '👍', '👎'].map((state) => {

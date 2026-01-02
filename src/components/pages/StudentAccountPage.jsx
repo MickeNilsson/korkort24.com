@@ -67,8 +67,8 @@ export default function StudentAccountPage({ student }) {
 
     const [moments, setMoments] = useState([
         [],
-        ['a) Stol och bälte', 'b) Reglage och insiment'],
-        ['a) Start och stannande', 'b) Krypkörning och styrning'],
+        ['a) Stol och bälte', 'b) Reglage och instrument'],
+        ['a) Start och stanna', 'b) Krypkörning och styrning'],
         ['a) Uppväxlning', 'b) Nedväxling'],
         ['a) Motlut', 'b) Medlut'],
         ['a) Backning', 'b) Vändning', 'c) Parkering'],
@@ -80,7 +80,7 @@ export default function StudentAccountPage({ student }) {
         ['a) Avsökning och riskbedömning', 'b) Hastighetsanpassning', 'c) Placering', 'd) Påfart och avfart', 'e) Omkörning', 'f) Vändning och parkering'],
         ['a) Avsökning och riskbedömning', 'b) Hastighetsanpassning', 'c) Motorväg', 'd) Motortrafikled', 'd) Mitträckeväg(2-1)'],
         ['a) Avsökning och riskbedömning', 'b) Hastighetsanpassning', 'c) Mörkerdemonstration', 'd) Möte', 'e) Omkörning', 'f) Parkering', 'g) Nedsatt sikt'],
-        ['a) Olika typer av halka', 'b) Utrustning och halksystem'],
+        ['a) Olika typer av halka', 'b) Utrustning och system'],
         ['a) Tillämpad stadskörning', 'b) Tillämpad landsvägskörning', 'c) Utbildningskontroll']
     ]);
 
@@ -1098,7 +1098,7 @@ export default function StudentAccountPage({ student }) {
               (moment) => {
                 const entry_o = educationcard.find((e) => e.moment === moment);
                 return (
-                  <div key={moment}>
+                  <div key={moment + 'moment'}>
                     <div
                       className="d-inline-flex align-items-center justify-content-center 
              rounded-circle bg-primary text-white me-2"
@@ -1112,8 +1112,10 @@ export default function StudentAccountPage({ student }) {
                     <div style={{ paddingLeft: "50px", marginBottom: "10px" }}>
                       {moments[moment] &&
                         moments[moment].map((moment_a) => {
+                          let checked = entry_o?.submoment?.includes(moment_a.charAt(0));
+                          
                           return (
-                            <p key={moment} style={{ marginBottom: "0" }}>{moment_a}</p>
+                            <p key={moment + 'submoment'} style={{ marginBottom: "0" }}>{moment_a} <input disabled={!checked} type="checkbox" checked={checked} /></p>
                           );
                         })}
                     </div>
