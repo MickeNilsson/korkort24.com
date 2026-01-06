@@ -47,6 +47,8 @@ export default function StudentAccountPage({ student }) {
     setEducationcard(educationCard_a);
   }
 
+  const [datesOfWeek, setDatesOfWeek] = useState([]);
+
   const [quiz, setQuiz] = useState([]);
 
   const [timeSlots, setTimeSlots] = useState([]);
@@ -103,15 +105,10 @@ export default function StudentAccountPage({ student }) {
         'Utbildningskontroll'
     ]);
 
+  const WEEKDAYS = ["Mån", "Tis", "Ons", "Tors", "Fre", "Lör", "Sön"];
+
   const handleClose = () => setShow(false);
-  const handleShow = (id) => {
-    setShow(true);
-    console.log("handleShow: " + id);
-    setChosenAvailableTime(
-      availableTimes.find((availableTime) => availableTime.id === id)
-    );
-    //setChosenAvailableTime({id: 1});
-  };
+
   // const events = [
   //     new Date(2025, 1, 20), // Add your event dates here
   //     new Date(2025, 1, 22),
@@ -155,45 +152,36 @@ export default function StudentAccountPage({ student }) {
   };
 
   async function handleClickDay(date) {
+
     let chosenDate_s = date;
 
     if (typeof date === "object") {
+
       let chosenDate_o = new Date(date);
 
       chosenDate_o.setDate(chosenDate_o.getDate() + 1); //.toISOString().substring(0, 10);
 
       chosenDate_s = chosenDate_o.toISOString().substring(0, 10);
     }
-
+   
     setChosenDate(chosenDate_s);
 
     const schedule_a = await loadSchedule(chosenDate_s);
 
-    const appointments_a = await loadAppointments({
-      schedule_id: schedule_a[0].id,
-    });
+    const availableTimeSlots_o = {};
 
-    const availableTimeSlots_a = getAvailableSlots(
-      schedule_a[0],
-      appointments_a,
-      60
-    );
+    for(const schedule_o of schedule_a) {
 
-    setTimeSlots(availableTimeSlots_a);
+        const appointments_a = await loadAppointments({schedule_id: schedule_o.id});
 
-    // console.dir(chosenDate_s);
+        const availableTimeSlots_a = getAvailableSlots(schedule_o, appointments_a, 60);
 
-    // console.log(availableTimes);
+        availableTimeSlots_o[schedule_o['date']] = availableTimeSlots_a;
 
-    // const timeslots = availableTimes.filter(availableTime => {
-    //     console.log(availableTime.from.substring(0, 10) + ' = ' + chosenDate_s);
-    //     return availableTime.from.substring(0, 10) === chosenDate_s;
-    // });
-
-    // console.log(timeslots);
-
-    // setChosenAvailableTimes(timeslots);
-    //console.log(value);
+        availableTimeSlots_o[schedule_o['date'] + '_id'] = schedule_o.id;
+    }
+    
+    setTimeSlots(availableTimeSlots_o);
   }
 
   function getAvailableSlots(schedule, bookings, length) {
@@ -281,6 +269,7 @@ export default function StudentAccountPage({ student }) {
   }, []);
 
   async function loadAppointments(params_o) {
+
     const queryParams_s = new URLSearchParams(params_o).toString();
 
     const response_o = await fetch(
@@ -301,11 +290,15 @@ export default function StudentAccountPage({ student }) {
   }
 
   async function loadSchedule(date_s) {
-    const response_o = await fetch(
-      "https://korkort24.com/api/schedules/?date=" + date_s
-    );
+
+    const dates_a = getDatesOfWeek(date_s);
+
+    setDatesOfWeek(getDatesOfWeek(date_s));
+
+    const response_o = await fetch("https://korkort24.com/api/schedules/?fromDate=" + dates_a[0] + "&toDate=" + dates_a[6]);
 
     if (response_o.status === 200) {
+
       const responseBody_o = await response_o.json();
 
       const schedule_a = responseBody_o.data;
@@ -316,6 +309,32 @@ export default function StudentAccountPage({ student }) {
     }
 
     return [];
+  }
+
+  function getDatesOfWeek(dateString) {
+    const date = new Date(dateString);
+    
+    // Hitta veckodag (0 = Söndag, 1 = Måndag... 6 = Lördag)
+    const dayOfWeek = date.getDay();
+    
+    // Beräkna differens för att nå måndagen (om söndag (0), gå tillbaka 6 dagar)
+    const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+    
+    const monday = new Date(date);
+    monday.setDate(date.getDate() + diffToMonday);
+
+    const weekDates = [];
+
+    for (let i = 0; i < 7; i++) {
+      const current = new Date(monday);
+      current.setDate(monday.getDate() + i);
+      
+      // Formatera tillbaka till YYYY-MM-DD (ISO-standard)
+      const formattedDate = current.toISOString().split('T')[0];
+      weekDates.push(formattedDate);
+    }
+
+    return weekDates;
   }
 
   // async function loadSchedule() {
@@ -527,8 +546,6 @@ export default function StudentAccountPage({ student }) {
   function handleChange(questionId_s, answer_s) {
     chosenAnswers[questionId_s] = answer_s;
 
-    console.log(chosenAnswers);
-
     setChosenAnswers(chosenAnswers);
 
     forceUpdate();
@@ -587,10 +604,11 @@ export default function StudentAccountPage({ student }) {
       });
   }
 
-  async function bookAppointment(timeSlot, scheduleId) {
-    handleClickDay(chosenDate);
+  async function bookAppointment(timeSlot, scheduleId, date_s) {
 
-    const startDateTime_s = chosenDate + "T" + timeSlot + ":00";
+    handleClickDay(date_s);
+
+    const startDateTime_s = date_s + "T" + timeSlot + ":00";
 
     const endDateTime_s = addMinutesToLocalTime(startDateTime_s, 60);
 
@@ -601,7 +619,7 @@ export default function StudentAccountPage({ student }) {
       end: endDateTime_s,
     };
 
-    const response_o = await fetch("https://korkort24.com/api/bookings/", {
+    await fetch("https://korkort24.com/api/bookings/", {
       method: "POST",
       body: JSON.stringify(body_o),
       headers: {
@@ -609,51 +627,52 @@ export default function StudentAccountPage({ student }) {
       },
     });
 
-    const json_o = await response_o.json();
+    setBookedAppointments(await loadAppointments({ member_id: student.id }));
 
-    console.log(json_o);
+
+
 
     // handleClose();
 
     // const updatedAvailableTimes = await fetchAvailableTimes();
 
     // const timeslots = updatedAvailableTimes.filter(availableTime => {
-    //     console.log(availableTime.from.substring(0, 10) + ' = ' + chosenDate);
+
     //     return availableTime.from.substring(0, 10) === chosenDate;
     // });
 
-    // console.log(timeslots);
+
 
     // setChosenAvailableTimes(timeslots);
 
     // setShowConfirmationModal(true);
   }
 
-  function addMinutes(date, minutes) {
-    const copy_o = new Date(date);
-    copy_o.setMinutes(copy_o.getMinutes() + minutes);
-    return copy_o;
-  }
+  // function addMinutes(date, minutes) {
+  //   const copy_o = new Date(date);
+  //   copy_o.setMinutes(copy_o.getMinutes() + minutes);
+  //   return copy_o;
+  // }
 
-  function subtractMinutes(date, minutes) {
-    date.setMinutes(date.getMinutes() - minutes);
-    return date;
-  }
+  // function subtractMinutes(date, minutes) {
+  //   date.setMinutes(date.getMinutes() - minutes);
+  //   return date;
+  // }
 
-  async function addBookedTime(params) {
-    for (const date_o of schedule[params.date]) {
-      if (params.time >= date_o.start && params.time < date_o.end) {
-        date_o.bookings = date_o.bookings || [];
-        date_o.bookings.push({ studentId: student.id, time: params.time });
-      }
-    }
+  // async function addBookedTime(params) {
+  //   for (const date_o of schedule[params.date]) {
+  //     if (params.time >= date_o.start && params.time < date_o.end) {
+  //       date_o.bookings = date_o.bookings || [];
+  //       date_o.bookings.push({ studentId: student.id, time: params.time });
+  //     }
+  //   }
 
-    const schedule_o = JSON.parse(JSON.stringify(schedule));
+  //   const schedule_o = JSON.parse(JSON.stringify(schedule));
 
-    setSchedule(schedule_o);
+  //   setSchedule(schedule_o);
 
-    await saveSchedule(schedule_o);
-  }
+  //   await saveSchedule(schedule_o);
+  // }
 
   function addMinutesToLocalTime(timestamp, minutesToAdd) {
     const date = new Date(timestamp);
@@ -1048,13 +1067,58 @@ export default function StudentAccountPage({ student }) {
               }
             />
 
-            <div style={{ float: "left", paddingBottom: "10px" }}>
+            <table style={{border: '1px solid'}}>
+
+              <thead>
+                <tr>
+                  {datesOfWeek && datesOfWeek.length && datesOfWeek.map((date_s, index_i) => {
+                    return <th key={date_s} style={{textAlign: 'center', width: '50px', borderLeft: '1px solid', borderRight: '1px solid'}}>{WEEKDAYS[index_i]}</th>;
+                  })}
+                </tr>
+                
+              <tr>
+                {datesOfWeek && datesOfWeek.length && datesOfWeek.map((date_s) => {
+                  return <th key={date_s} style={{textAlign: 'center', borderLeft: '1px solid', borderRight: '1px solid'}}>{date_s.substring(8)}</th>;
+                })}
+              </tr>
+              
+              </thead>
+
+              <tbody>
+                <tr>
+                {
+                  datesOfWeek && datesOfWeek.length && datesOfWeek.map((date_s) => {
+                    return <td key={date_s} style={{verticalAlign: 'top'}}>{timeSlots[date_s] ? timeSlots[date_s].map((timeSlot_s, index) => (
+                      <span key={index} onClick={() =>
+                        bookAppointment(timeSlot_s, timeSlots[date_s + '_id'], date_s)
+                      }
+                      className="schedule-date"
+                      style={{
+                        float: "left",
+                        cursor: "pointer",
+                        marginBottom: "5px",
+                        color: "black",
+                        backgroundColor: "white",
+                        padding: "3px",
+                        border: "2px solid black",
+                        borderRadius: "5px",
+                      }}>{timeSlot_s}<br /></span>
+                    )) : ''}</td>
+                  })
+                }
+                </tr>
+              </tbody>
+
+            </table>
+
+           {/*  <div style={{ float: "left", paddingBottom: "10px" }}>
               <h5>{formatDateToSwedish(chosenDate)}</h5>
               {(schedule &&
                 schedule.length &&
                 timeSlots &&
                 timeSlots.length > 0 &&
                 schedule.map((chosenDate_o) => {
+
                   return timeSlots.map((timeSlot_s) => (
                     <span
                       onClick={() =>
@@ -1077,7 +1141,7 @@ export default function StudentAccountPage({ student }) {
                   ));
                 })) ||
                 "Inga lediga tider den här dagen, vänligen välj en annan dag."}
-            </div>
+            </div> */}
           </div>
         </Tab>
 

@@ -16,6 +16,7 @@ import FileUploader from '../inputfields/FileUploader';
 
 export default function AdminPage() {
 
+    const WEEKDAYS = ["Mån", "Tis", "Ons", "Tors", "Fre", "Lör", "Sön"];
     const [answers, setAnswers] = useState([]);
     const [chosenDate, setChosenDate] = useState('');
     const [educationcards, setEducationcards] = useState([]);
@@ -41,6 +42,9 @@ export default function AdminPage() {
         'Halt väglag',
         'Utbildningskontroll'
     ]);
+
+    const [showBookingModal, setShowBookingModal] = useState(false);
+    const [booking, setBooking] = useState({});
 
     const [moments, setMoments] = useState([
         [],
@@ -72,6 +76,11 @@ export default function AdminPage() {
     const [showQuestionsModal, setShowQuestionsModal] = useState(false);
     const [startTime, setStartTime] = useState('');
     const [timeSlots, setTimeSlots] = useState([]);
+    const [datesOfWeek, setDatesOfWeek] = useState([]);
+
+    const [appointments, setAppointments] = useState([]);
+
+    const [schemaTimeSlots, setSchemaTimeSlots] = useState([]);
 
     const timeoutRef = useRef(null);
 
@@ -96,7 +105,7 @@ export default function AdminPage() {
     }, []);
 
     async function addSchedule() {
-
+        
         const body_o = {
             date: chosenDate,
             timespan: startTime + '-' + endTime,
@@ -314,13 +323,119 @@ export default function AdminPage() {
         );
     }
 
-    async function handleClickDay(date_o) {
+    // async function handleClickDay(date_o) {
 
-        const date_s = date_o.toLocaleString().substring(0, 10);
+    //     const date_s = date_o.toLocaleString().substring(0, 10);
 
-        setChosenDate(date_s);
+    //     setChosenDate(date_s);
 
-        await loadSchedule(date_s);
+    //     await loadSchedule(date_s);
+    // }
+
+    async function handleClickDay(date) {
+        
+        let chosenDate_s = date;
+
+        if (typeof date === "object") {
+
+            let chosenDate_o = new Date(date);
+
+            chosenDate_o.setDate(chosenDate_o.getDate() + 1); //.toISOString().substring(0, 10);
+
+            chosenDate_s = chosenDate_o.toISOString().substring(0, 10);
+        }
+       
+        setChosenDate(chosenDate_s);
+
+        const schedule_a = await loadSchedule(chosenDate_s);
+
+        const availableTimeSlots_o = {};
+       
+        for(const schedule_o of schedule_a) {
+
+            const appointments_a = await loadAppointments({schedule_id: schedule_o.id});
+
+            const availableTimeSlots_a = getAvailableSlots(schedule_o, appointments_a, 60);
+
+            availableTimeSlots_o[schedule_o['date']] = availableTimeSlots_a;
+
+            availableTimeSlots_o[schedule_o['date'] + '_id'] = schedule_o.id;
+        }
+        
+        setSchemaTimeSlots(availableTimeSlots_o);
+    }
+
+    function getAvailableSlots(schedule, bookings, length) {
+
+        const [startStr, endStr] = schedule.timespan.split("-");
+        const date = schedule.date;
+
+        const startTime = new Date(`${date}T${startStr}`);
+        const endTime = new Date(`${date}T${endStr}`);
+
+        const slotDurationMs = length * 60 * 1000;
+
+        const availableSlots = [];
+
+        for (
+        let slotStart = new Date(startTime);
+        slotStart.getTime() + slotDurationMs <= endTime.getTime();
+        slotStart = new Date(slotStart.getTime() + slotDurationMs)
+        ) {
+            const slotEnd = new Date(slotStart.getTime() + slotDurationMs);
+
+            let booking_o;
+
+            const hasOverlap = bookings.some((booking) => {
+
+                const bookingStart = new Date(booking.start);
+
+                const bookingEnd = new Date(booking.end);
+
+                if(slotStart < bookingEnd && slotEnd > bookingStart) {
+                    booking_o = booking;
+                }
+
+                return slotStart < bookingEnd && slotEnd > bookingStart;
+                //return slotStart < bookingEnd && slotEnd > bookingStart;
+            });
+
+            const timeSlot_o = {
+                time: slotStart.toTimeString().slice(0, 5)
+            };
+
+            if (hasOverlap) {
+                
+                timeSlot_o.booking = booking_o;
+            }
+
+            //availableSlots.push(slotStart.toTimeString().slice(0, 5)); // Format "HH:MM"
+            availableSlots.push(timeSlot_o); // Format "HH:MM"
+        }
+
+        return availableSlots;
+    }
+
+    async function loadAppointments(params_o) {
+
+        const queryParams_s = new URLSearchParams(params_o).toString();
+
+        const response_o = await fetch(
+        "https://korkort24.com/api/bookings/?" + queryParams_s
+        );
+
+        if (response_o.status === 200) {
+
+            const responseBody_o = await response_o.json();
+
+            const appointments_a = responseBody_o.data;
+
+            setAppointments(appointments_a);
+
+            return appointments_a;
+        }
+
+        return [];
     }
 
     function isEventDate(date) {
@@ -335,9 +450,9 @@ export default function AdminPage() {
 
    function isOverlap(currentIntervals, newInterval) {
 
-        let existingIntervals = currentIntervals.map(
-            (interval) => interval.timespan
-        );
+        // let existingIntervals = currentIntervals.map(
+        //     (interval) => interval.timespan
+        // );
 
         // Helper function to convert 'hh:mm' to minutes since midnight
         const toMinutes = (time) => {
@@ -351,14 +466,18 @@ export default function AdminPage() {
         const newEnd = toMinutes(newEndStr);
 
         // Check for overlap with existing intervals
-        for (const interval of existingIntervals) {
-            const [startStr, endStr] = interval.split('-');
-            const start = toMinutes(startStr);
-            const end = toMinutes(endStr);
+        for (const interval of currentIntervals) {
 
-            // Overlap if newStart < end and newEnd > start
-            if (newStart < end && newEnd > start) {
-                return true; // Overlapping
+            if(interval.date === chosenDate) {
+
+                const [startStr, endStr] = interval.timespan.split('-');
+                const start = toMinutes(startStr);
+                const end = toMinutes(endStr);
+
+                // Overlap if newStart < end and newEnd > start
+                if (newStart < end && newEnd > start) {
+                    return true; // Overlapping
+                }
             }
         }
 
@@ -440,16 +559,65 @@ export default function AdminPage() {
         }
     }
 
+    // async function loadSchedule(date_s) {
+
+    //     const response_o = await fetch('https://korkort24.com/api/schedules/?date=' + date_s);
+
+    //     if (response_o.status === 200) {
+
+    //         const responseBody_o = await response_o.json();
+    //         const schedule_a = responseBody_o.data;
+    //         setSchedule(schedule_a);
+    //     }
+    // }
+
     async function loadSchedule(date_s) {
 
-        const response_o = await fetch('https://korkort24.com/api/schedules/?date=' + date_s);
+        const dates_a = getDatesOfWeek(date_s);
+
+        setDatesOfWeek(getDatesOfWeek(date_s));
+
+        const response_o = await fetch("https://korkort24.com/api/schedules/?fromDate=" + dates_a[0] + "&toDate=" + dates_a[6]);
 
         if (response_o.status === 200) {
 
             const responseBody_o = await response_o.json();
+
             const schedule_a = responseBody_o.data;
+
             setSchedule(schedule_a);
+
+            return schedule_a;
         }
+
+        return [];
+    }
+
+    function getDatesOfWeek(dateString) {
+
+        const date = new Date(dateString);
+        
+        // Hitta veckodag (0 = Söndag, 1 = Måndag... 6 = Lördag)
+        const dayOfWeek = date.getDay();
+        
+        // Beräkna differens för att nå måndagen (om söndag (0), gå tillbaka 6 dagar)
+        const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+        
+        const monday = new Date(date);
+        monday.setDate(date.getDate() + diffToMonday);
+
+        const weekDates = [];
+
+        for (let i = 0; i < 7; i++) {
+        const current = new Date(monday);
+        current.setDate(monday.getDate() + i);
+        
+        // Formatera tillbaka till YYYY-MM-DD (ISO-standard)
+        const formattedDate = current.toISOString().split('T')[0];
+        weekDates.push(formattedDate);
+        }
+
+        return weekDates;
     }
 
     async function saveNewQuestion(e) {
@@ -790,6 +958,50 @@ export default function AdminPage() {
                             view === 'month' && isEventDate(date) ? 'highlight' : null
                         }
                     />
+
+                    <table style={{border: '1px solid', color: 'white'}}>
+
+              <thead>
+                <tr>
+                  {datesOfWeek && datesOfWeek.length && datesOfWeek.map((date_s, index_i) => {
+                    return <th key={date_s} style={{textAlign: 'center', width: '50px', borderLeft: '1px solid', borderRight: '1px solid'}}>{WEEKDAYS[index_i]}</th>;
+                  })}
+                </tr>
+                
+              <tr>
+                {datesOfWeek && datesOfWeek.length && datesOfWeek.map((date_s) => {
+                  return <th key={date_s} style={{textAlign: 'center', borderLeft: '1px solid', borderRight: '1px solid'}}>{date_s.substring(8)}</th>;
+                })}
+              </tr>
+              
+              </thead>
+
+              <tbody>
+                <tr>
+                {
+                  datesOfWeek && datesOfWeek.length && datesOfWeek.map((date_s) => {
+                    return <td key={date_s} style={{verticalAlign: 'top'}}>{schemaTimeSlots[date_s] ? schemaTimeSlots[date_s].map((timeSlot_o, index) => (
+                        <span key={index}
+                            onClick={() => {if(timeSlot_o.booking) {setBooking(timeSlot_o.booking); setShowBookingModal(true);}}}
+                            className="schedule-date"
+                            style={{
+                                float: "left",
+                                cursor: "pointer",
+                                marginBottom: "5px",
+                                color: "black",
+                                backgroundColor: timeSlot_o.booking ? "yellow" : "white",
+                                padding: "3px",
+                                border: "2px solid black",
+                                borderRadius: "5px",
+                            }}>{timeSlot_o.time}<br />
+                        </span>
+                    )) : ''}</td>
+                  })
+                }
+                </tr>
+              </tbody>
+
+            </table>
                 </Tab>
 
                 <Tab eventKey='education-cards' title='Utbildningskort'>
@@ -827,7 +1039,7 @@ export default function AdminPage() {
                                                                 {moments[moment] && moments[moment].map((moment_a, index) => {
                                                                     console.log(entry_o);
                                                                     //console.log(entry_o?.submoment + ' ' + moment_a.charAt(0));
-                                                                    //if(entry_o?.submoment) debugger;
+                                                                    //if(entry_o?.submoment) 
                                                                     let checked = entry_o?.submoment?.includes(moment_a.charAt(0));
                                                                     
                                                                     return <p key={moment + 'submoment' + member_o.id + '-' + index} style={{marginBottom: '0'}}>{moment_a} <input onClick={(e) => changeState(entry_o,
@@ -1040,6 +1252,21 @@ export default function AdminPage() {
                         ))}
                 </Modal.Body>
             </Modal>
+
+            <Modal
+                show={showBookingModal}
+                onHide={() => setShowBookingModal(false)}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Bokning</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Member ID: {booking.member_id}</p>
+                    <p>Start: {booking.start}</p>
+                    <p>Slut: {booking.end}</p>
+                </Modal.Body>
+            </Modal>
+
         </div>
     );
 }

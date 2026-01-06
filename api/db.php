@@ -91,6 +91,39 @@ class DB {
         return $result_o;
     }
 
+    public function selectSchedules($fromDate_s, $toDate_s) {
+
+        $result_o = new stdClass();
+
+        try {
+            
+            $sql_s = "SELECT * FROM k24_schedule WHERE k24_schedule.date >= '" . $fromDate_s . "' AND k24_schedule.date <= '" . $toDate_s . "'";
+
+            $stmt_o = $this->pdo_o->prepare($sql_s);
+
+            $stmt_o->execute();
+
+            $data_a = [];
+
+            while($row_o = $stmt_o->fetch()) {
+
+                array_push($data_a, $row_o);
+            }
+
+            $result_o->{'result'} = 'ok';
+            $result_o->{'data'} = $data_a;
+
+            return $result_o;
+
+        } catch(Exception $e) {
+
+            $result_o->{'result'} = 'error';
+            $result_o->{'message'} = $e->getMessage();
+
+            return $result_o;
+        }
+    }
+
     public function select($table_s, $params_a) {
 
         $result_o = new stdClass();
