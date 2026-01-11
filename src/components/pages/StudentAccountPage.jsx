@@ -67,7 +67,7 @@ export default function StudentAccountPage({ student }) {
 
   const [educationcard, setEducationcard] = useState([]);
 
-    const [moments, setMoments] = useState([
+  const moments = [
         [],
         ['a) Stol och bälte', 'b) Reglage och instrument'],
         ['a) Start och stanna', 'b) Krypkörning och styrning'],
@@ -84,9 +84,9 @@ export default function StudentAccountPage({ student }) {
         ['a) Avsökning och riskbedömning', 'b) Hastighetsanpassning', 'c) Mörkerdemonstration', 'd) Möte', 'e) Omkörning', 'f) Parkering', 'g) Nedsatt sikt'],
         ['a) Olika typer av halka', 'b) Utrustning och system'],
         ['a) Tillämpad stadskörning', 'b) Tillämpad landsvägskörning', 'c) Utbildningskontroll']
-    ]);
+  ];
 
-    const [momentHeaders, setMomentHeaders] = useState([
+    const momentHeaders = [
         '',
         'Körställning',
         'Inledande manövrering',
@@ -103,7 +103,7 @@ export default function StudentAccountPage({ student }) {
         'Mörker',
         'Halt väglag',
         'Utbildningskontroll'
-    ]);
+    ];
 
   const WEEKDAYS = ["Mån", "Tis", "Ons", "Tors", "Fre", "Lör", "Sön"];
 
@@ -782,7 +782,7 @@ export default function StudentAccountPage({ student }) {
             <h2>Hej {student.firstname}!</h2>
             <h3>Dina bokningar</h3>
             {bookedAppointments.map((appointment) => (
-              <div className="mt-3 d-flex align-items-center">
+              <div key={appointment.id} className="mt-3 d-flex align-items-center">
                 <span
                   className="me-3"
                   style={{
@@ -816,6 +816,7 @@ export default function StudentAccountPage({ student }) {
 
         <Tab eventKey="questions" title="Frågor" className="p-3">
           <Form.Select
+            id="select-quiz"
             className="mb-2"
             onChange={(e) => showQuiz(e.target)}
             size="sm"
@@ -1041,7 +1042,7 @@ export default function StudentAccountPage({ student }) {
         </Tab>
 
         <Tab eventKey="info" title="Info">
-          <Form.Select onChange={(e) => showInfo(e.target)} size="sm">
+          <Form.Select id="select-info" onChange={(e) => showInfo(e.target)} size="sm">
             <option>Välj en text</option>
             <option>B-Körkort</option>
           </Form.Select>
@@ -1067,49 +1068,51 @@ export default function StudentAccountPage({ student }) {
               }
             />
 
-            <table style={{border: '1px solid'}}>
+            <table style={{ border: '1px solid' }}>
+  <thead>
+    <tr>
+      {/* Ändrat till .length > 0 för att undvika att siffran renderas */}
+      {datesOfWeek && datesOfWeek.length > 0 && datesOfWeek.map((date_s, index_i) => {
+        return <th key={date_s} style={{ textAlign: 'center', width: '50px', borderLeft: '1px solid', borderRight: '1px solid' }}>{WEEKDAYS[index_i]}</th>;
+      })}
+    </tr>
 
-              <thead>
-                <tr>
-                  {datesOfWeek && datesOfWeek.length && datesOfWeek.map((date_s, index_i) => {
-                    return <th key={date_s} style={{textAlign: 'center', width: '50px', borderLeft: '1px solid', borderRight: '1px solid'}}>{WEEKDAYS[index_i]}</th>;
-                  })}
-                </tr>
-                
-              <tr>
-                {datesOfWeek && datesOfWeek.length && datesOfWeek.map((date_s) => {
-                  return <th key={date_s} style={{textAlign: 'center', borderLeft: '1px solid', borderRight: '1px solid'}}>{date_s.substring(8)}</th>;
-                })}
-              </tr>
-              
-              </thead>
+    <tr>
+      {datesOfWeek && datesOfWeek.length > 0 && datesOfWeek.map((date_s) => {
+        return <th key={date_s} style={{ textAlign: 'center', borderLeft: '1px solid', borderRight: '1px solid' }}>{date_s.substring(8)}</th>;
+      })}
+    </tr>
+  </thead>
 
-              <tbody>
-                <tr>
-                {
-                  datesOfWeek && datesOfWeek.length && datesOfWeek.map((date_s) => {
-                    return <td key={date_s} style={{verticalAlign: 'top'}}>{timeSlots[date_s] ? timeSlots[date_s].map((timeSlot_s, index) => (
-                      <span key={index} onClick={() =>
-                        bookAppointment(timeSlot_s, timeSlots[date_s + '_id'], date_s)
-                      }
-                      className="schedule-date"
-                      style={{
-                        float: "left",
-                        cursor: "pointer",
-                        marginBottom: "5px",
-                        color: "black",
-                        backgroundColor: "white",
-                        padding: "3px",
-                        border: "2px solid black",
-                        borderRadius: "5px",
-                      }}>{timeSlot_s}<br /></span>
-                    )) : ''}</td>
-                  })
+  <tbody>
+    <tr>
+      {
+        datesOfWeek && datesOfWeek.length > 0 && datesOfWeek.map((date_s) => {
+          return (
+            <td key={date_s} style={{ verticalAlign: 'top' }}>
+              {timeSlots[date_s] ? timeSlots[date_s].map((timeSlot_s, index) => (
+                <span key={index} onClick={() =>
+                  bookAppointment(timeSlot_s, timeSlots[date_s + '_id'], date_s)
                 }
-                </tr>
-              </tbody>
-
-            </table>
+                  className="schedule-date"
+                  style={{
+                    float: "left",
+                    cursor: "pointer",
+                    marginBottom: "5px",
+                    color: "black",
+                    backgroundColor: "white",
+                    padding: "3px",
+                    border: "2px solid black",
+                    borderRadius: "5px",
+                  }}>{timeSlot_s}<br /></span>
+              )) : null /* Ändrat från '' till null */}
+            </td>
+          );
+        })
+      }
+    </tr>
+  </tbody>
+</table>
 
            {/*  <div style={{ float: "left", paddingBottom: "10px" }}>
               <h5>{formatDateToSwedish(chosenDate)}</h5>
@@ -1175,11 +1178,10 @@ export default function StudentAccountPage({ student }) {
                     </strong>
                     <div style={{ paddingLeft: "50px", marginBottom: "10px" }}>
                       {moments[moment] &&
-                        moments[moment].map((moment_a) => {
+                        moments[moment].map((moment_a, index) => {
                           let checked = entry_o?.submoment?.includes(moment_a.charAt(0));
-                          
                           return (
-                            <p key={moment + 'submoment'} style={{ marginBottom: "0" }}>{moment_a} <input disabled={!checked} type="checkbox" checked={checked} /></p>
+                            <p key={moment + 'submoment' + index} style={{ marginBottom: "0" }}>{moment_a} <input id={moment + 'submoment' + index} disabled={!checked} type="checkbox" checked={checked} /></p>
                           );
                         })}
                     </div>
