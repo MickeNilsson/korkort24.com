@@ -1,18 +1,10 @@
 <?php
 
-require_once '../set-headers.php';
-
-require_once '../activate-error-reporting.php';
-
-require_once '../get-settings.php';
+require_once '../headers.php';
 
 require_once '../init-pdo.php';
 
-setHeaders();
-
-activateErrorReporting();
-
-$settings_a = getSettings();
+require_once '../settings.php';
 
 $pdo_o = initPdo($settings_a);
 

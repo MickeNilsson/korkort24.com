@@ -1,5 +1,3 @@
-// Node modules
-import axios from "axios";
 import { useEffect, useReducer, useRef, useState } from "react";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
@@ -536,15 +534,13 @@ export default function StudentAccountPage({ student }) {
         return array.slice(0, numberOfElements);
     }
 
-    function showInfo() {
-        axios
-            .get("https://korkort24.com/api/info/")
+    async function showInfo() {
 
-            .then((response_o) => {
-                if (response_o && response_o.data) {
-                    setInfo(response_o.data[0]);
-                }
-            });
+        const response_o = await fetch("https://korkort24.com/api/info/");
+
+        const responseBody_o = await response_o.json();
+
+        setInfo(responseBody_o[0]);        
     }
 
     async function bookAppointment(timeSlot, scheduleId, date_s) {
