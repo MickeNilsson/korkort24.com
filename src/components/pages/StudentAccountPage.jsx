@@ -29,10 +29,8 @@ export default function StudentAccountPage({ student }) {
         await fetchAvailableTimes();
         const today_o = new Date();
         const currentDate_s = today_o.toISOString().split("T")[0];
-        setChosenDate(currentDate_s);
         await loadSchedule(currentDate_s);
         setBookedAppointments(await loadAppointments({ member_id: student.id }));
-        //await handleClickDay(currentDate_s);
         await loadEducationCard();
     }
 
@@ -65,8 +63,6 @@ export default function StudentAccountPage({ student }) {
     const [value, onChange] = useState(new Date());
 
     const [show, setShow] = useState(false);
-
-    const [chosenDate, setChosenDate] = useState("");
 
     const [educationcard, setEducationcard] = useState([]);
 
@@ -162,12 +158,6 @@ export default function StudentAccountPage({ student }) {
 
     const handleClose = () => setShow(false);
 
-    // const events = [
-    //     new Date(2025, 1, 20), // Add your event dates here
-    //     new Date(2025, 1, 22),
-    //     new Date(2025, 1, 25),
-    // ];
-
     const options = {
         weekday: "long",
         year: "numeric",
@@ -176,24 +166,6 @@ export default function StudentAccountPage({ student }) {
     };
 
     const [events, setEvents] = useState([]);
-
-    // const availableTimes = [
-    //     {
-    //         id: 1,
-    //         from: '2025-01-20T10:00:00',
-    //         to: '2025-01-20T10:30:00'
-    //     },
-    //     {
-    //         id: 2,
-    //         from: '2025-01-20T12:00:00',
-    //         to: '2025-01-20T12:30:00'
-    //     },
-    //     {
-    //         id: 3,
-    //         from: '2025-01-22T09:00:00',
-    //         to: '2025-01-22T10:00:00'
-    //     }
-    // ];
 
     const isEventDate = (date) => {
         return events.some(
@@ -210,12 +182,10 @@ export default function StudentAccountPage({ student }) {
         if (typeof date === "object") {
             let chosenDate_o = new Date(date);
 
-            chosenDate_o.setDate(chosenDate_o.getDate() + 1); //.toISOString().substring(0, 10);
+            chosenDate_o.setDate(chosenDate_o.getDate() + 1);
 
             chosenDate_s = chosenDate_o.toISOString().substring(0, 10);
         }
-
-        setChosenDate(chosenDate_s);
 
         const schedule_a = await loadSchedule(chosenDate_s);
 
@@ -277,8 +247,6 @@ export default function StudentAccountPage({ student }) {
     const [info, setInfo] = useState({});
 
     const [quizzes, setQuizzes] = useState([]);
-
-    const [quizTitles, setQuizTitles] = useState([]);
 
     const [quizType, setQuizType] = useState("");
 
