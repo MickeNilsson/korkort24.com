@@ -272,11 +272,7 @@ export default function StudentAccountPage({ student }) {
 
     const quizState_o = useRef({});
 
-    const [availableTimes, setAvailableTimes] = useState([]);
-
     const [chosenAvailableTime, setChosenAvailableTime] = useState();
-
-    const [appointments, setAppointments] = useState([]);
 
     const [bookedAppointments, setBookedAppointments] = useState([]);
 
@@ -298,8 +294,6 @@ export default function StudentAccountPage({ student }) {
             const responseBody_o = await response_o.json();
 
             const appointments_a = responseBody_o.data;
-
-            setAppointments(appointments_a);
 
             return appointments_a;
         }
@@ -355,28 +349,6 @@ export default function StudentAccountPage({ student }) {
     }
 
     async function fetchAvailableTimes() {
-        // const availTimes = [
-        //     {
-        //         id: 1,
-        //         from: '2025-01-23T10:00:00',
-        //         to: '2025-01-23T10:30:00'
-        //     },
-        //     {
-        //         id: 2,
-        //         from: '2025-01-20T12:00:00',
-        //         to: '2025-01-20T12:30:00'
-        //     },
-        //     {
-        //         id: 3,
-        //         from: '2025-01-21T09:00:00',
-        //         to: '2025-01-21T10:00:00'
-        //     },
-        //     {
-        //         id: 4,
-        //         from: '2025-01-20T09:00:00',
-        //         to: '2025-01-20T10:30:00'
-        //     }
-        // ];
 
         const response = await fetch("https://korkort24.com/api/times/");
 
@@ -395,8 +367,6 @@ export default function StudentAccountPage({ student }) {
         );
 
         availDates = [...new Set(availDates)];
-
-        setAvailableTimes(availTimes);
 
         const eve = availDates.map((availDate) => {
             const year = +availDate.substring(0, 4);
@@ -460,13 +430,13 @@ export default function StudentAccountPage({ student }) {
         switch (quizId_s) {
             case "0": // The user didn't chose any quiz
                 setActiveQuiz(null);
-
                 break;
 
-            default:
+            default: {
                 const chosenQuiz_o = quiz.find((quiz_o) => quiz_o.id === quizId_s);
-
                 setActiveQuiz(chosenQuiz_o);
+            }
+                
         }
     }
 
@@ -505,9 +475,9 @@ export default function StudentAccountPage({ student }) {
     }
 
     function userPickedAnswer() {
+
         const questionId_s = activeQuiz.questions[activeQuestionIndex].id;
 
-        //paginationItems[questionId_s] = 'rgb(101, 181, 218)';
         paginationItems[questionId_s] = "rgba(0,0,0,0)";
 
         setPaginationItems(paginationItems);
@@ -515,25 +485,8 @@ export default function StudentAccountPage({ student }) {
         forceUpdate();
     }
 
-    function updateQuiz(answer) {
-        for (const quiz_o of quizzes) {
-            if (activeQuiz.id === quiz_o.id) {
-                quiz_o.questions[activeQuestionIndex].chosenAnswer = answer;
-
-                break;
-            }
-        }
-
-        setQuizzes(quizzes);
-    }
-
-    function updateQuizState(question_o, answer_o) {
-        const questionId_s = question_o.id;
-
-        quizState_o.current[questionId_s] = answer_o;
-    }
-
     function handleChange(questionId_s, answer_s) {
+
         chosenAnswers[questionId_s] = answer_s;
 
         setChosenAnswers(chosenAnswers);
@@ -806,7 +759,6 @@ export default function StudentAccountPage({ student }) {
                                     </span>
                                 )}
 
-                                {/* <i role='button' className='bi bi-x-circle text-white fs-3 float-end'></i> */}
                             </div>
                         </div>
                     )}
@@ -910,10 +862,6 @@ export default function StudentAccountPage({ student }) {
                                     (answer_o, index) => {
                                         const questionId_s =
                                             activeQuiz.questions[activeQuestionIndex].id;
-
-                                        //const answer_s = answer.answer
-
-                                        //const isCorrect_b = answer.isCorrect;
 
                                         return (
                                             <Form.Check
@@ -1184,43 +1132,6 @@ export default function StudentAccountPage({ student }) {
                                             {entry_o?.comment || " x"}
                                         </div>
                                     </div>
-
-                                    //       <div style={{ marginBottom: "10px" }} key={moment}>
-                                    //         <span
-                                    //           className="d-inline-flex align-items-center justify-content-center
-                                    //  rounded-circle bg-primary text-white me-2"
-                                    //           style={{ width: "40px", height: "40px" }}
-                                    //         >
-                                    //           {moment}
-                                    //         </span>
-                                    //         {["D", "I", "S", "G", "👍", "👎"].map((state) => {
-                                    //           const isFilled = entry_o?.state?.includes(state); // ✅ check if letter exists
-                                    //           if (state === "👍" || state === "👎") {
-                                    //             if (!isFilled) {
-                                    //               return;
-                                    //             }
-                                    //             if (isFilled) {
-                                    //               if (state === "👍") {
-                                    //                 state = "✅";
-                                    //               }
-                                    //               if (state === "👎") {
-                                    //                 state = "❌";
-                                    //               }
-                                    //             }
-                                    //           }
-
-                                    //           return (
-                                    //             <span
-                                    //               key={state}
-                                    //               className={`moment-styles me-1 d-inline-flex align-items-center justify-content-center rounded
-                                    //          ${isFilled ? "bg-primary text-white" : ""}`}
-                                    //             >
-                                    //               {state}
-                                    //             </span>
-                                    //           );
-                                    //         })}
-                                    //         {entry_o && <div>{entry_o.comment}</div>}
-                                    //       </div>
                                 );
                             },
                         )}
