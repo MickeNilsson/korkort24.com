@@ -1209,7 +1209,12 @@ export default function StudentAccountPage({ student }) {
                 <Modal.Header closeButton>
                     <Modal.Title>Avboka din bokning</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Vill du verkligen avboka din bokning?</Modal.Body>
+                <Modal.Body>
+                    <p>Vill du verkligen avboka din bokning?</p>
+
+                    <p>Bokning: <strong>{bookedAppointments.find(appointment => appointment.id === cancelAppointmentId)?.start.substring(0, 16).replace('T', ' ')}</strong></p>
+                    
+                </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowCancelModal(false)}>
                         Avbryt
