@@ -30,6 +30,7 @@ export default function StudentAccountPage({ student }) {
         await loadSchedule(currentDate_s);
         setBookedAppointments(await loadAppointments({ member_id: student.id }));
         await loadEducationCard();
+        handleClickDay(today_o.setHours(0, 0, 0, 0));
     }
 
     async function loadEducationCard() {
@@ -177,6 +178,7 @@ export default function StudentAccountPage({ student }) {
     };
 
     async function handleClickDay(date) {
+       
         let chosenDate_s = date;
 
         if (typeof date === "object") {
