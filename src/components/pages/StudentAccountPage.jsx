@@ -46,6 +46,8 @@ export default function StudentAccountPage({ student }) {
         setEducationcard(educationCard_a);
     }
 
+    const [bookAppointmentParams, setBookAppointmentParams] = useState({});
+
     const [datesOfWeek, setDatesOfWeek] = useState([]);
 
     const [quiz, setQuiz] = useState([]);
@@ -60,7 +62,7 @@ export default function StudentAccountPage({ student }) {
 
     const [value, onChange] = useState(new Date());
 
-    const [show, setShow] = useState(false);
+    const [showConfirmBookingModal, setShowConfirmBookingModal] = useState(false);
 
     const [educationcard, setEducationcard] = useState([]);
 
@@ -154,7 +156,7 @@ export default function StudentAccountPage({ student }) {
 
     const WEEKDAYS = ["Mån", "Tis", "Ons", "Tors", "Fre", "Lör", "Sön"];
 
-    const handleClose = () => setShow(false);
+    const handleClose = () => setShowConfirmBookingModal(false);
 
     const options = {
         weekday: "long",
@@ -244,8 +246,6 @@ export default function StudentAccountPage({ student }) {
 
     const [info, setInfo] = useState({});
 
-    const [quizzes, setQuizzes] = useState([]);
-
     const [quizType, setQuizType] = useState("");
 
     const [activeQuiz, setActiveQuiz] = useState(null);
@@ -267,8 +267,6 @@ export default function StudentAccountPage({ student }) {
     const timer_i = useRef(3000);
 
     const hasFetchedQuiz = useRef(false);
-
-    const quizState_o = useRef({});
 
     const [chosenAvailableTime, setChosenAvailableTime] = useState();
 
@@ -543,7 +541,12 @@ export default function StudentAccountPage({ student }) {
         setInfo(responseBody_o[0]);        
     }
 
-    async function bookAppointment(timeSlot, scheduleId, date_s) {
+    async function bookAppointment() {
+
+        setShowConfirmBookingModal(false);
+
+        const {timeSlot, scheduleId, date_s} = bookAppointmentParams;
+        
         handleClickDay(date_s);
 
         const startDateTime_s = date_s + "T" + timeSlot + ":00";
@@ -564,6 +567,8 @@ export default function StudentAccountPage({ student }) {
                 "Content-Type": "application/json",
             },
         });
+
+        setShowConfirmationModal(true);
 
         setBookedAppointments(await loadAppointments({ member_id: student.id }));
     }
@@ -663,7 +668,7 @@ export default function StudentAccountPage({ student }) {
     return (
         <>
             <h1 style={{ color: "white" }}>
-                {student.firstname} {student.lastname}'s konto
+                {student.firstname} {student.lastname}&apos;s konto
             </h1>
 
             <Tabs
@@ -1019,12 +1024,20 @@ export default function StudentAccountPage({ student }) {
                                                             ? timeSlots[date_s].map((timeSlot_s, index) => (
                                                                 <span
                                                                     key={index}
-                                                                    onClick={() =>
-                                                                        bookAppointment(
-                                                                            timeSlot_s,
-                                                                            timeSlots[date_s + "_id"],
-                                                                            date_s,
-                                                                        )
+                                                                    onClick={() => {
+                                                                        const startDateTime_s = date_s + 'T' + timeSlot_s + ':00';
+                                                                        setChosenAvailableTime({
+                                                                            from: startDateTime_s,
+                                                                            to: addMinutesToLocalTime(startDateTime_s, 60)
+                                                                        });
+                                                                        setBookAppointmentParams({
+                                                                            timeSlot: timeSlot_s,
+                                                                            scheduleId: timeSlots[date_s + "_id"],
+                                                                            date_s: date_s
+                                                                        });
+                                                                        setShowConfirmBookingModal(true);
+                                                                    }
+                                                                        
                                                                     }
                                                                     className="schedule-date"
                                                                     style={{
@@ -1135,7 +1148,7 @@ export default function StudentAccountPage({ student }) {
                 </Tab>
             </Tabs>
 
-            <Modal show={show} onHide={handleClose}>
+            <Modal show={showConfirmBookingModal} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Boka coaching</Modal.Title>
                 </Modal.Header>
