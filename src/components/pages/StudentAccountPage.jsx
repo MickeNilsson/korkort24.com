@@ -8,6 +8,8 @@ import Pagination from "react-bootstrap/Pagination";
 import Form from "react-bootstrap/Form";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import { momentHeaders, moments } from "../../constants/moment";
+import { WEEKDAYS } from "../../constants/misc";
 
 import PropTypes from "prop-types";
 
@@ -21,18 +23,7 @@ StudentAccountPage.propTypes = {
 };
 
 export default function StudentAccountPage({ student }) {
-    async function init() {
-        hasFetchedQuiz.current = true;
-        await fetchQuiz();
-        await fetchAvailableTimes();
-        const today_o = new Date();
-        const currentDate_s = today_o.toISOString().split("T")[0];
-        await loadSchedule(currentDate_s);
-        setBookedAppointments(await loadAppointments({ member_id: student.id }));
-        await loadEducationCard();
-        handleClickDay(today_o.setHours(0, 0, 0, 0));
-    }
-
+    
     async function loadEducationCard() {
         const response_o = await fetch(
             "https://korkort24.com/api/educationcards/?member_id=" + student.id,
@@ -66,96 +57,6 @@ export default function StudentAccountPage({ student }) {
     const [showConfirmBookingModal, setShowConfirmBookingModal] = useState(false);
 
     const [educationcard, setEducationcard] = useState([]);
-
-    const moments = [
-        [],
-        ["a) Stol och bälte", "b) Reglage och instrument"],
-        ["a) Start och stanna", "b) Krypkörning och styrning"],
-        ["a) Uppväxlning", "b) Nedväxling"],
-        ["a) Motlut", "b) Medlut"],
-        ["a) Backning", "b) Vändning", "c) Parkering"],
-        ["a) Bilen", "b) Last och passagerare", "c) Släp", "d) Säkerhetskontroll"],
-        [
-            "a) Avsökning och riskbedömning",
-            "b) Samordning och motorik",
-            "c) Acceleration",
-            "d) Hård bromsning",
-        ],
-        [
-            "a) Avsökning och riskbedömning",
-            "b) Hastighetsanpassning",
-            "c) Placering",
-            "d) Väjningsregler",
-        ],
-        [
-            "a) Avsökning och riskbedömning",
-            "b) Hastighetsanpassning",
-            "c) Placering",
-            "d) Väjningsregler",
-            "e) Järnvägskorsning",
-        ],
-        [
-            "a) Avsökning och riskbedömning",
-            "b) Hastighetsanpassning",
-            "c) Placering",
-            "d) Väjningsregler",
-            "e) Trafiksignal",
-            "f) Enkelriktad trafik",
-            "g) Cirkulationsplats",
-            "h) Vändning och parkering",
-        ],
-        [
-            "a) Avsökning och riskbedömning",
-            "b) Hastighetsanpassning",
-            "c) Placering",
-            "d) Påfart och avfart",
-            "e) Omkörning",
-            "f) Vändning och parkering",
-        ],
-        [
-            "a) Avsökning och riskbedömning",
-            "b) Hastighetsanpassning",
-            "c) Motorväg",
-            "d) Motortrafikled",
-            "d) Mitträckeväg(2-1)",
-        ],
-        [
-            "a) Avsökning och riskbedömning",
-            "b) Hastighetsanpassning",
-            "c) Mörkerdemonstration",
-            "d) Möte",
-            "e) Omkörning",
-            "f) Parkering",
-            "g) Nedsatt sikt",
-        ],
-        ["a) Olika typer av halka", "b) Utrustning och system"],
-        [
-            "a) Tillämpad stadskörning",
-            "b) Tillämpad landsvägskörning",
-            "c) Utbildningskontroll",
-        ],
-    ];
-
-    const momentHeaders = [
-        "",
-        "Körställning",
-        "Inledande manövrering",
-        "Växling",
-        "Lutning",
-        "Manövrering",
-        "Funktion och kontroll",
-        "Samordning och bromsning",
-        "Mindre samhälle",
-        "Mindre landsväg",
-        "Stad",
-        "Landsväg",
-        "Högfartsväg",
-        "Mörker",
-        "Halt väglag",
-        "Utbildningskontroll",
-    ];
-
-    const WEEKDAYS = ["Mån", "Tis", "Ons", "Tors", "Fre", "Lör", "Sön"];
 
     const handleClose = () => setShowConfirmBookingModal(false);
 
@@ -276,9 +177,22 @@ export default function StudentAccountPage({ student }) {
 
     // Fetch quiz when user has logged in to student account
     useEffect(() => {
+        const init = async () => {
+            hasFetchedQuiz.current = true;
+            await fetchQuiz();
+            await fetchAvailableTimes();
+            const today_o = new Date();
+            const currentDate_s = today_o.toISOString().split("T")[0];
+            await loadSchedule(currentDate_s);
+            setBookedAppointments(await loadAppointments({ member_id: student.id }));
+            await loadEducationCard();
+            handleClickDay(today_o.setHours(0, 0, 0, 0));
+        };
+
         if (!hasFetchedQuiz.current) {
             init();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     async function loadAppointments(params_o) {

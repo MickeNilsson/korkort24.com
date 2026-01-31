@@ -13,9 +13,11 @@ import { useEffect, useRef, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import FileUploader from "../inputfields/FileUploader";
+import { momentHeaders, moments } from "../../constants/moment";
+import { WEEKDAYS } from "../../constants/misc";
 
 export default function AdminPage() {
-  const WEEKDAYS = ["Mån", "Tis", "Ons", "Tors", "Fre", "Lör", "Sön"];
+  
   const [answers, setAnswers] = useState([]);
   const [chosenDate, setChosenDate] = useState("");
   const [educationcards, setEducationcards] = useState([]);
@@ -23,97 +25,8 @@ export default function AdminPage() {
   const [events, setEvents] = useState([]);
   const [image, setImage] = useState({});
   const [members, setMembers] = useState([]);
-  const momentHeaders = [
-    "",
-    "Körställning",
-    "Inledande manövrering",
-    "Växling",
-    "Lutning",
-    "Manövrering",
-    "Funktion och kontroll",
-    "Samordning och bromsning",
-    "Mindre samhälle",
-    "Mindre landsväg",
-    "Stad",
-    "Landsväg",
-    "Högfartsväg",
-    "Mörker",
-    "Halt väglag",
-    "Utbildningskontroll",
-  ];
-
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [booking, setBooking] = useState({});
-
-  const moments = [
-    [],
-    ["a) Stol och bälte", "b) Reglage och instrument"],
-    ["a) Start och stanna", "b) Krypkörning och styrning"],
-    ["a) Uppväxlning", "b) Nedväxling"],
-    ["a) Motlut", "b) Medlut"],
-    ["a) Backning", "b) Vändning", "c) Parkering"],
-    ["a) Bilen", "b) Last och passagerare", "c) Släp", "d) Säkerhetskontroll"],
-    [
-      "a) Avsökning och riskbedömning",
-      "b) Samordning och motorik",
-      "c) Acceleration",
-      "d) Hård bromsning",
-    ],
-    [
-      "a) Avsökning och riskbedömning",
-      "b) Hastighetsanpassning",
-      "c) Placering",
-      "d) Väjningsregler",
-    ],
-    [
-      "a) Avsökning och riskbedömning",
-      "b) Hastighetsanpassning",
-      "c) Placering",
-      "d) Väjningsregler",
-      "e) Järnvägskorsning",
-    ],
-    [
-      "a) Avsökning och riskbedömning",
-      "b) Hastighetsanpassning",
-      "c) Placering",
-      "d) Väjningsregler",
-      "e) Trafiksignal",
-      "f) Enkelriktad trafik",
-      "g) Cirkulationsplats",
-      "h) Vändning och parkering",
-    ],
-    [
-      "a) Avsökning och riskbedömning",
-      "b) Hastighetsanpassning",
-      "c) Placering",
-      "d) Påfart och avfart",
-      "e) Omkörning",
-      "f) Vändning och parkering",
-    ],
-    [
-      "a) Avsökning och riskbedömning",
-      "b) Hastighetsanpassning",
-      "c) Motorväg",
-      "d) Motortrafikled",
-      "d) Mitträckeväg(2-1)",
-    ],
-    [
-      "a) Avsökning och riskbedömning",
-      "b) Hastighetsanpassning",
-      "c) Mörkerdemonstration",
-      "d) Möte",
-      "e) Omkörning",
-      "f) Parkering",
-      "g) Nedsatt sikt",
-    ],
-    ["a) Olika typer av halka", "b) Utrustning och system"],
-    [
-      "a) Tillämpad stadskörning",
-      "b) Tillämpad landsvägskörning",
-      "c) Utbildningskontroll",
-    ],
-  ];
-
   const [question, setQuestion] = useState("");
   const [quiz, setQuiz] = useState([]);
   const [quizString, setQuizString] = useState("");
