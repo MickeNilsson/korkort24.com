@@ -143,12 +143,26 @@ body {
     background-color: #cbecbf;
 }
 
-.main-content {
+.main-content-x {
     height: 1000px;
     padding-top: 100px;
     background-image: url('./assets/background2000x931.jpg');
     background-repeat: no-repeat;
     background-size: cover;
+}
+
+.main-content {
+    min-height: 100vh;
+    padding-top: 100px;
+    background-image: url('./assets/background2000x931.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    
+    /* Denna rad gör magin: */
+    background-attachment: fixed;
+    
+    /* Valfritt: Centrera bilden för bättre kontroll */
+    background-position: center;
 }
 
 .login-card {
