@@ -583,9 +583,9 @@ export default function StudentAccountPage({ student }) {
 
     return (
         <>
-            <h1 style={{ color: "white" }}>
+            {/* <h1 style={{ color: "white" }}>
                 {student.firstname} {student.lastname}&apos;s konto
-            </h1>
+            </h1> */}
 
             <Tabs
                 defaultActiveKey="home"
@@ -594,8 +594,8 @@ export default function StudentAccountPage({ student }) {
             >
                 <Tab eventKey="home" title="Hem">
                     <div className="p-2 mt-3 text-white">
-                        <h2>Hej {student.firstname}!</h2>
-                        <h3>Dina bokningar</h3>
+                        {/* <h2>Hej {student.firstname}!</h2> */}
+                        <h4>Dina bokningar</h4>
                         {bookedAppointments.map((appointment) => (
                             <div
                                 key={appointment.id}
@@ -874,7 +874,7 @@ export default function StudentAccountPage({ student }) {
 
                 <Tab eventKey="driving" title="Coaching">
                     <div className="p-2 mt-3 text-white">
-                        <h2>Boka coaching</h2>
+                        <h4>Boka coaching</h4>
 
                         <Calendar
                             onChange={onChange}
@@ -984,7 +984,7 @@ export default function StudentAccountPage({ student }) {
 
                 <Tab eventKey="downloads" title="Nedladdningar">
                     <div className="p-2 mt-3 text-white">
-                        <h2>Nedladdningar</h2>
+                        <h4>Nedladdningar</h4>
 
                         <a href="https://korkort24.com/docs/test.pdf" download>
                             test.pdf
@@ -993,8 +993,8 @@ export default function StudentAccountPage({ student }) {
                 </Tab>
 
                 <Tab eventKey="educationcard" title="Utbildningskort">
-                    <div className="p-2 mt-3 text-white">
-                        <h2>Utbildningskort</h2>
+                    <div className="p-2 mt-3 text-white" style={{overflowY: 'scroll', maxHeight: '80vh'}}>
+                        <h4 className="mb-3">Utbildningskort</h4>
                         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(
                             (moment) => {
                                 const entry_o = educationcard.find((e) => e.moment === moment);

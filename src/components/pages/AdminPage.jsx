@@ -672,6 +672,7 @@ export default function AdminPage() {
 
       <Tabs defaultActiveKey="questions" id="admin-tabs" className="mb-3">
         <Tab eventKey="questions" title="Frågor">
+          <div className="p-2 mt-3" style={{overflowX: 'hidden', overflowY: 'scroll', maxHeight: '80vh'}}>
           <Row className="align-items-center">
             <Col xs="auto">
               <Form.Control
@@ -755,13 +756,15 @@ export default function AdminPage() {
             Spara
           </Button>
 
-          <h1 className="text-white">Ladda upp bild</h1>
+          <h4 className="text-white">Ladda upp bild</h4>
           <FileUploader />
+          </div>
         </Tab>
 
         <Tab eventKey="info" title="Info"></Tab>
 
         <Tab eventKey="bookings" title="Bokningar">
+          <div className="p-2 mt-3 text-white" style={{overflowX: 'hidden', overflowY: 'scroll', maxHeight: '80vh'}}>
           <Row>
             <Col>
               <Form.Control
@@ -800,7 +803,7 @@ export default function AdminPage() {
             // }
           />
 
-          <table style={{ border: "1px solid", color: "white" }}>
+          <table style={{ border: "1px solid", color: "white", marginBottom: "40px" }}>
             <thead>
               <tr>
                 {/* Genom att lägga till > 0 säkerställer vi att resultatet blir true/false, inte en siffra */}
@@ -880,9 +883,11 @@ export default function AdminPage() {
               </tr>
             </tbody>
           </table>
+          </div>
         </Tab>
 
         <Tab eventKey="education-cards" title="Utbildningskort">
+          <div className="p-2 mt-3 text-white" style={{overflowY: 'scroll', maxHeight: '80vh'}}>
           <Accordion defaultActiveKey="0">
             {members.map((member_o) => {
               let card_o = educationcards.find(
@@ -1028,6 +1033,7 @@ export default function AdminPage() {
               );
             })}
           </Accordion>
+          </div>
         </Tab>
       </Tabs>
 
