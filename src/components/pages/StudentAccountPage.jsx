@@ -203,9 +203,18 @@ export default function StudentAccountPage({ student }) {
         );
 
         if (response_o.status === 200) {
+
             const responseBody_o = await response_o.json();
 
-            const appointments_a = responseBody_o.data;
+            let appointments_a = responseBody_o.data;
+
+            const nu = new Date();
+
+            const offset = nu.getTimezoneOffset() * 60000; // MS-skillnad till UTC
+
+            const lokalTid = new Date(nu - offset).toISOString().split('.')[0];
+
+            appointments_a = appointments_a.filter(appointment_o => appointment_o.start > lokalTid);
 
             return appointments_a;
         }
