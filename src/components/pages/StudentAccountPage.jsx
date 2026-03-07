@@ -1046,7 +1046,7 @@ export default function StudentAccountPage({ student }) {
                                             return (
                                                 <span
                                                     key={state}
-                                                    className={`moment-styles me-1 d-inline-flex align-items-center justify-content-center rounded 
+                                                    className={`moment-styles-student me-1 d-inline-flex align-items-center justify-content-center rounded 
                      ${isFilled ? "bg-primary text-white" : ""}`}
                                                 >
                                                     {state}
