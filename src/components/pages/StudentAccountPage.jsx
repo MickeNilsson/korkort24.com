@@ -943,7 +943,7 @@ export default function StudentAccountPage({ student }) {
                                         datesOfWeek.length > 0 &&
                                         datesOfWeek.map((date_s) => {
                                             return (
-                                                <td key={date_s} style={{ verticalAlign: "top", borderRight: "1px solid" }}>
+                                                <td key={date_s} style={{ verticalAlign: "top", borderRight: "1px solid", textAlign: "center" }}>
                                                     {
                                                         timeSlots[date_s]
                                                             ? timeSlots[date_s].map((timeSlot_s, index) => (
@@ -980,7 +980,7 @@ export default function StudentAccountPage({ student }) {
                                                                     <br />
                                                                 </span>
                                                             ))
-                                                            : null /* Ändrat från '' till null */
+                                                            : <span>Inga lediga tider</span> /* Ändrat från '' till null */
                                                     }
                                                 </td>
                                             );
