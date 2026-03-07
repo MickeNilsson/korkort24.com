@@ -78,6 +78,28 @@ export default function StudentAccountPage({ student }) {
         );
     };
 
+    async function forceDownload(url, filename) {
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error('Nätverksfel');
+
+            const blob = await response.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+
+            // Städa upp för att spara minne
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(blobUrl);
+        } catch (error) {
+            console.error("Nedladdning misslyckades:", error);
+        }
+    }
+
     async function handleClickDay(date) {
        
         let chosenDate_s = date;
@@ -187,6 +209,11 @@ export default function StudentAccountPage({ student }) {
             setBookedAppointments(await loadAppointments({ member_id: student.id }));
             await loadEducationCard();
             handleClickDay(today_o.setHours(0, 0, 0, 0));
+
+            document.querySelector('#test-pdf').addEventListener('click', (e) => {
+                e.preventDefault();
+                forceDownload(e.target.href, 'https://korkort24.com/docs/test.pdf');
+            });
         };
 
         if (!hasFetchedQuiz.current) {
@@ -995,7 +1022,7 @@ export default function StudentAccountPage({ student }) {
                     <div className="p-2 mt-3 text-white">
                         <h4>Nedladdningar</h4>
 
-                        <a href="https://korkort24.com/docs/test.pdf" download>
+                        <a id="test-pdf" href="https://korkort24.com/docs/test.pdf" download="test.pdf">
                             test.pdf
                         </a>
                     </div>
