@@ -895,8 +895,8 @@ export default function StudentAccountPage({ student }) {
                         />
 
                         <table style={{ border: "1px solid" }}>
-                            <thead>
-                                <tr>
+                            <thead style={{borderBottom: "1px solid"}}>
+                                <tr style={{backgroundColor: "white", color: "black"}}>
                                     {/* Ändrat till .length > 0 för att undvika att siffran renderas */}
                                     {datesOfWeek &&
                                         datesOfWeek.length > 0 &&
@@ -908,7 +908,7 @@ export default function StudentAccountPage({ student }) {
                                                         textAlign: "center",
                                                         width: "50px",
                                                         borderLeft: "1px solid",
-                                                        borderRight: "1px solid",
+                                                        borderRight: "1px solid"
                                                     }}
                                                 >
                                                     {WEEKDAYS[index_i]}
@@ -917,7 +917,7 @@ export default function StudentAccountPage({ student }) {
                                         })}
                                 </tr>
 
-                                <tr>
+                                <tr style={{backgroundColor: "black"}}>
                                     {datesOfWeek &&
                                         datesOfWeek.length > 0 &&
                                         datesOfWeek.map((date_s) => {
@@ -943,7 +943,7 @@ export default function StudentAccountPage({ student }) {
                                         datesOfWeek.length > 0 &&
                                         datesOfWeek.map((date_s) => {
                                             return (
-                                                <td key={date_s} style={{ verticalAlign: "top" }}>
+                                                <td key={date_s} style={{ verticalAlign: "top", borderRight: "1px solid" }}>
                                                     {
                                                         timeSlots[date_s]
                                                             ? timeSlots[date_s].map((timeSlot_s, index) => (
