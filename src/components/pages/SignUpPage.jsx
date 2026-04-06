@@ -34,6 +34,8 @@ export default function SignUpPage({setPage, setStudent}) {
 
     const [showValidation, setShowValidation] = useState(false);
 
+    const [newAccountCreated, setNewAccountCreated] = useState(false);
+
     function handleSubmit(event_o) {
 
         event_o.preventDefault();
@@ -54,13 +56,17 @@ export default function SignUpPage({setPage, setStudent}) {
           
                 if(response_o.status === 201) {
 
-                    setStudent({firstname, lastname, email});
+                    setStudentAccountCreationPending(false);
 
-                    setPage(<StudentAccountPage student={{firstname, lastname, email}} />);
+                    setNewAccountCreated(true);
+
+                    //setStudent({firstname, lastname, email});
+
+                    //setPage(<StudentAccountPage student={{firstname, lastname, email}} />);
                 }
               })
               .catch(function (error_o) {
-                debugger;
+                
                 setStudentAccountCreationPending(false);
 
                 switch(error_o.response.status) {
@@ -80,7 +86,11 @@ export default function SignUpPage({setPage, setStudent}) {
     }
 
     return (
-        <Card className='login-card'>
+        <>
+            {newAccountCreated ? <Card style={{marginBottom: '20px', backgroundColor: 'rgba(0, 0, 0, 0.5)', color: 'white', textAlign: 'center'}}>
+                <Card.Body>Du ska nu ha fått ett konfirmationsmail. Vänligen klicka dess aktiveringslänk för att aktivera ditt konto.</Card.Body>
+            </Card> :
+            <Card className='login-card'>
 
             <Card.Body>
 
@@ -132,5 +142,9 @@ export default function SignUpPage({setPage, setStudent}) {
             </Card.Body>
 
         </Card>
+            
+            }
+        </>
+        
     );
 }

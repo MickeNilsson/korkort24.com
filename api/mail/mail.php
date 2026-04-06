@@ -10,18 +10,21 @@ use PHPMailer\PHPMailer\Exception;
 // header('Access-Control-Allow-Headers: Content-Type');
 // header('Content-Type: application/json; charset=utf-8');
 
-require 'PHPMailer.php';
-require 'SMTP.php';
-require 'Exception.php';
-require 'mail-settings.php';
+
 
 //Create an instance; passing `true` enables exceptions
-$mail_o = new PHPMailer(true);
+//$mail_o = new PHPMailer(true);
 
 function send($email_s, $mailBody_s) {
 
-    global $mail_o;
-    global $mailSettings_a;
+    require_once 'PHPMailer.php';
+    require_once 'SMTP.php';
+    require_once 'Exception.php';
+    require_once 'mail-settings.php';
+
+    //global $mail_o;
+    $mail_o = new PHPMailer(true);
+    //global $mailSettings_a;
 
     try {
         //Server settings
@@ -47,7 +50,7 @@ function send($email_s, $mailBody_s) {
     
         //Content
         $mail_o->isHTML(true);                                  //Set email format to HTML
-        $mail_o->Subject = 'Uppdatering av lösenordet på korkort24.com';
+        $mail_o->Subject = 'Händelse på korkort24.com';
         $mail_o->Body    = $mailBody_s;
         //$mail_o->AltBody = 'Meddelande: ' . $_POST['message'];
     

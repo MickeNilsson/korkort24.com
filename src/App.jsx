@@ -26,10 +26,16 @@ export default function App() {
             hasInitialised.current = true;
 
             const uuid_s = getQueryVariable('uuid');
+
+            const accountConfirmation_s = getQueryVariable('acc_conf');
             
             if(uuid_s) {
 
                 setPage(<ResetPasswordPage uuid={uuid_s} />);
+
+            } else if(accountConfirmation_s) {
+
+                setPage(<StartPage setPage={setPage} setStudent={setStudent} accConf={accountConfirmation_s} />);
 
             } else {
 

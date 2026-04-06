@@ -32,6 +32,10 @@ export default function LoginPage({ setPage, student, setStudent }) {
 
     const [showValidation, setShowValidation] = useState(false);
 
+    const [member, setMember] = useState({});
+
+    const [newConformationMailSent, setNewConfirmationMailSent] = useState(false);
+
     function handleSubmit(event_o) {
 
         event_o.preventDefault();
@@ -61,15 +65,26 @@ export default function LoginPage({ setPage, student, setStudent }) {
 
                 if (response_o.status === 200 && response_o.data.data && response_o.data.data.length === 1) {
 
-                    if(response_o.data.data[0].firstname === 'Admin') {
+                    setMember(response_o.data.data[0]);
 
-                        setPage(<AdminPage />);
+                    if(response_o.data.data[0].confirmed === 0) {
+
+                        setAwaitingLogInResponse(false);
+
+                        setResponseErrorMessage('Medlemskontot har inte blivit bekräftat än.');
 
                     } else {
 
-                        setStudent(response_o.data.data[0]);
+                        if(response_o.data.data[0].firstname === 'Admin') {
 
-                        setPage(<StudentAccountPage student={response_o.data.data[0]} />);
+                            setPage(<AdminPage />);
+
+                        } else {
+
+                            setStudent(response_o.data.data[0]);
+
+                            setPage(<StudentAccountPage student={response_o.data.data[0]} />);
+                        }
                     }
                     
                 } else {
@@ -91,6 +106,17 @@ export default function LoginPage({ setPage, student, setStudent }) {
         }
 
         setShowValidation(true);
+    }
+
+    function resendConfirmationMail() {
+
+        alert(JSON.stringify(member));
+        axios.get('https://korkort24.com/api/members/resend.php?id=' + member.id)
+
+            .then(function (response_o) {
+
+                setNewConfirmationMailSent(true);
+            });
     }
 
     function sendResetPasswordRequest() {
@@ -188,7 +214,7 @@ export default function LoginPage({ setPage, student, setStudent }) {
 
                             <LoginButton disabled={!emailFieldIsValid || !passwordFieldIsValid || AwaitingLogInResponse} />
 
-                            <small className='text-danger'>{responseErrorMessage}</small>
+                            <small className='text-danger'>{responseErrorMessage}{responseErrorMessage === 'Medlemskontot har inte blivit bekräftat än.' && (!newConformationMailSent ? <span className='forgot-pw text-danger' onClick={() => resendConfirmationMail()}> Klicka här för att skicka ett nytt bekräftelse-mail.</span> : <span className='text-danger'> Ett nytt bekräftelse-mail är skickat.</span>)}</small>
 
                         </Form>
                     </>

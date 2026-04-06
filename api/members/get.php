@@ -45,6 +45,8 @@ function get($pdo_o) {
 
     array_push($fields_a, 'id');
 
+    array_push($fields_a, 'confirmed');
+
     $sql_s = 'SELECT ' . implode(',', $fields_a) . ' FROM k24_member';
 
     if(count($where_a) > 0) {
