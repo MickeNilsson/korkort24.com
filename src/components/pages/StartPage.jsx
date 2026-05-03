@@ -8,7 +8,7 @@ export default function StartPage({setPage, setStudent, accConf}) {
         <div style={{textAlign: 'center'}}>
             <div className='under-construction'>OBS! Denna webbplats är under konstruktion. Beräknas vara klar någon gång under 2026.</div>
             <Card style={{marginBottom: '20px', backgroundColor: 'rgba(0, 0, 0, 0.5)', color: 'white'}}>
-                <Card.Body>{accConf ? 'Välkommen att logga in' : 'På den här webbplatsen får du lära dig allt om hur man hanterar en bil. Du får värdefull teori och praktik i en smart kombination som kommer att ta dig från zero to hero på nolltid. En meriterad yrkesförare och utbildad trafikpedagog följer din utveckling och ger dig värdefulla råd och tips.'}</Card.Body>
+                <Card.Body>{accConf ? 'Ditt konto är nu bekräftat. Välkommen att logga in.' : 'På den här webbplatsen får du lära dig allt om hur man hanterar en bil. Du får värdefull teori och praktik i en smart kombination som kommer att ta dig från zero to hero på nolltid. En meriterad yrkesförare och utbildad trafikpedagog följer din utveckling och ger dig värdefulla råd och tips.'}</Card.Body>
             </Card>
             {accConf ? '' : <SignUpPageButton setPage={setPage} setStudent={setStudent} size='lg' />}
         </div>

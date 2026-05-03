@@ -46,9 +46,12 @@ function post($pdo_o) {
 
         $mail = '<p>Hej ' . $payload_o->{'firstname'} . '!</p><p>För att aktivera ditt konto på Korkort24, vänligen klicka på denna aktiveringslänk: <a href="https://korkort24.com/api/members/activate.php?id=' . $params_a['uuid'] . '">korkort24.com/activate</a> </p><br><br>Med vänliga hälsningar Körkort24';
 
-        //send('mail@mikael-nilsson.se',  $mail);
-
         send($payload_o->{'email'},  $mail);
+
+        $mail = '<p>En ny medlem har registrerat ett konto på korkort24.com.</p><p><strong>Datum:</strong> ' . date(DATE_RFC2822) . '</p><p><strong>Förnamn:</strong> ' . $payload_o->{'firstname'} . '</p>'
+              . '<p><strong>Efternamn:</strong> ' . $payload_o->{'lastname'} . '</p><p><strong>E-post:</strong> ' . $payload_o->{'email'} . '</p>';
+
+        send('mail@mikael-nilsson.se',  $mail);
 
     } else {
 

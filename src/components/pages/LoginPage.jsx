@@ -110,7 +110,6 @@ export default function LoginPage({ setPage, student, setStudent }) {
 
     function resendConfirmationMail() {
 
-        alert(JSON.stringify(member));
         axios.get('https://korkort24.com/api/members/resend.php?id=' + member.id)
 
             .then(function (response_o) {

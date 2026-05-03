@@ -9,39 +9,62 @@ use PHPMailer\PHPMailer\Exception;
 // header('Access-Control-Allow-Methods: POST');
 // header('Access-Control-Allow-Headers: Content-Type');
 // header('Content-Type: application/json; charset=utf-8');
+require 'PHPMailer.php';
+require 'SMTP.php';
+require 'Exception.php';
+require 'mail-settings.php';
 
-
+$mail_o = new PHPMailer(true);
+$mail_o->isSMTP();                                            //Send using SMTP
+$mail_o->Host     = $mailSettings_a['host'];                     //Set the SMTP server to send through
+$mail_o->SMTPAuth = true;                                   //Enable SMTP authentication
+$mail_o->Username = $mailSettings_a['username'];                     //SMTP username
+$mail_o->Password = $mailSettings_a['password'];                               //SMTP password
+$mail_o->Port     = $mailSettings_a['port'];                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+$mail_o->CharSet  = $mailSettings_a['charset'];
+$mail_o->setFrom('noreply@korkort24.com', 'Körkort24');
+$mail_o->isHTML(true);                                  //Set email format to HTML
 
 //Create an instance; passing `true` enables exceptions
 //$mail_o = new PHPMailer(true);
 
 function send($email_s, $mailBody_s) {
 
-    require_once 'PHPMailer.php';
-    require_once 'SMTP.php';
-    require_once 'Exception.php';
-    require_once 'mail-settings.php';
+
 
     //global $mail_o;
-    $mail_o = new PHPMailer(true);
+    //$mail_o = new PHPMailer(true);
     //global $mailSettings_a;
+    
 
     try {
+        
+        global $mail_o;
         //Server settings
         //$mail_o->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-        $mail_o->isSMTP();                                            //Send using SMTP
-        $mail_o->Host     = $mailSettings_a['host'];                     //Set the SMTP server to send through
-        $mail_o->SMTPAuth = true;                                   //Enable SMTP authentication
-        $mail_o->Username = $mailSettings_a['username'];                     //SMTP username
-        $mail_o->Password = $mailSettings_a['password'];                               //SMTP password
+        
+        
+        
+        // $mail_o->isSMTP();                                            //Send using SMTP
+        // $mail_o->Host     = $mailSettings_a['host'];                     //Set the SMTP server to send through
+        // $mail_o->SMTPAuth = true;                                   //Enable SMTP authentication
+        // $mail_o->Username = $mailSettings_a['username'];                     //SMTP username
+        // $mail_o->Password = $mailSettings_a['password'];                               //SMTP password
+        // $mail_o->Port     = $mailSettings_a['port'];                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+        // $mail_o->CharSet  = $mailSettings_a['charset'];
+        // $mail_o->setFrom('noreply@korkort24.com', 'Körkort24');
+        // $mail_o->addAddress($email_s);     //Add a recipient
+        // $mail_o->isHTML(true);                                  //Set email format to HTML
+
+
+        
         //$mail_o->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-        $mail_o->Port     = $mailSettings_a['port'];                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-        $mail_o->CharSet  = $mailSettings_a['charset'];
+        
         //Recipients
         //$mail_o->setFrom('mail@mikael-nilsson.se', 'Körkort24');
-        $mail_o->setFrom('noreply@korkort24.com', 'Körkort24');
-        $mail_o->addAddress($email_s);     //Add a recipient
-        //$mail_o->addCC('cc@example.com');
+        
+        //$mail_o->addAddress('mail@mikael-nilsson.se');
+        //$mail_o->addCC('mail@mikael-nilsson.se');
         //$mail_o->addBCC('bcc@example.com');
     
         //Attachments
@@ -49,7 +72,9 @@ function send($email_s, $mailBody_s) {
         //$mail_o->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
     
         //Content
-        $mail_o->isHTML(true);                                  //Set email format to HTML
+        
+        $mail_o->ClearAddresses();
+        $mail_o->addAddress($email_s);
         $mail_o->Subject = 'Händelse på korkort24.com';
         $mail_o->Body    = $mailBody_s;
         //$mail_o->AltBody = 'Meddelande: ' . $_POST['message'];
