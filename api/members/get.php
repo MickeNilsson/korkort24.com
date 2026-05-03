@@ -30,9 +30,16 @@ function get($pdo_o) {
                     break;
 
                 case 'email':
-                case 'password':
 
                     array_push($where_a, $queryParam_s . ' = :' . $queryParam_s);
+
+                    $params_a[$queryParam_s] = $value_s;
+
+                    break;
+
+                case 'password':
+
+                    array_push($where_a, 'BINARY ' . $queryParam_s . ' = :' . $queryParam_s);
 
                     $params_a[$queryParam_s] = $value_s;
 
