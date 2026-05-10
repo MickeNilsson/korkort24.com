@@ -53,6 +53,8 @@ function post($pdo_o) {
 
         send('mail@mikael-nilsson.se',  $mail);
 
+        send('johan.gardelin@hotmail.se', $mail);
+
     } else {
 
         $response_o->{'error'} = 'E-mail already exists';
