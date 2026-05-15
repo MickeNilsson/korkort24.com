@@ -22,8 +22,20 @@ function delete($queryParams_a, $db_o) {
     $formatter = new IntlDateFormatter('sv_SE', IntlDateFormatter::FULL, IntlDateFormatter::SHORT);
     $start = ucfirst($formatter->format($date));
     
-
-    send('mail@mikael-nilsson.se', 'Bokningen med ID ' . $booking['id'] . ' med starttid ' . $start . ' som bokades av ' . $member_a['firstname'] .  ' ' . $member_a['lastname'] . ' med ID ' . $member_a['id'] . ' och e-postadress ' . $member_a['email'] . ' är avbokad.');
+    $messageToAdmin_s = 'Bokningen med ID <strong>' . $booking['id'] . '</strong> med starttid <strong>' . $start . '</strong> som bokades av <strong>' . $member_a['firstname'] .  ' ' . $member_a['lastname'] . '</strong> med ID <strong>' . $member_a['id'] . '</strong> och e-postadress <strong>' . $member_a['email'] . '</strong> är avbokad.';
+    
+    $mails_a = [
+        [
+            'address' => 'mail@mikael-nilsson.se',
+            'message' => $messageToAdmin_s
+        ],
+        [
+            'address' => 'johan.gardelin@hotmail.se',
+            'message' => $messageToAdmin_s
+        ]
+    ];
+    
+    send($mails_a);
 
     return $result_o;
 }

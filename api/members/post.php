@@ -44,16 +44,34 @@ function post($pdo_o) {
 
         $response_o->{'id'} = $pdo_o->lastInsertId();
 
-        $mail = '<p>Hej ' . $payload_o->{'firstname'} . '!</p><p>För att aktivera ditt konto på Korkort24, vänligen klicka på denna aktiveringslänk: <a href="https://korkort24.com/api/members/activate.php?id=' . $params_a['uuid'] . '">korkort24.com/activate</a> </p><br><br>Med vänliga hälsningar Körkort24';
+        $messageToMember_s = '<p>Hej ' . $payload_o->{'firstname'} . '!</p><p>För att aktivera ditt konto på Korkort24, vänligen klicka på denna aktiveringslänk: <a href="https://korkort24.com/api/members/activate.php?id=' . $params_a['uuid'] . '">korkort24.com/activate</a> </p><br><br>Med vänliga hälsningar Körkort24';
 
-        send($payload_o->{'email'},  $mail);
+        //send($payload_o->{'email'},  $mail);
 
-        $mail = '<p>En ny medlem har registrerat ett konto på korkort24.com.</p><p><strong>Datum:</strong> ' . date(DATE_RFC2822) . '</p><p><strong>Förnamn:</strong> ' . $payload_o->{'firstname'} . '</p>'
-              . '<p><strong>Efternamn:</strong> ' . $payload_o->{'lastname'} . '</p><p><strong>E-post:</strong> ' . $payload_o->{'email'} . '</p>';
+        $messageToAdmin_s = '<p>En ny medlem har registrerat ett konto på korkort24.com.</p><p><strong>Datum:</strong> ' . date(DATE_RFC2822) . '</p><p><strong>Förnamn:</strong> ' . $payload_o->{'firstname'} . '</p>'
+                   . '<p><strong>Efternamn:</strong> ' . $payload_o->{'lastname'} . '</p><p><strong>E-post:</strong> ' . $payload_o->{'email'} . '</p>';
 
-        send('mail@mikael-nilsson.se',  $mail);
+        $mails_a = [
+            [
+                'address' => 'mail@mikael-nilsson.se',
+                'message' => $messageToAdmin_s
+            ],
+            [
+                'address' => 'johan.gardelin@hotmail.se',
+                'message' => $messageToAdmin_s
+            ],
+            [
+                'address' => $payload_o->{'email'},
+                'message' => $messageToMember_s
+            ]
+        ];
 
-        send('johan.gardelin@hotmail.se', $mail);
+        // [
+        //         'address' => 'johan.gardelin@hotmail.se',
+        //         'message' => $message_s
+        //     ]
+
+        send($mails_a);
 
     } else {
 

@@ -130,8 +130,11 @@ export default function StudentAccountPage({ student }) {
             availableTimeSlots_o[schedule_o["date"]] = availableTimeSlots_a;
 
             availableTimeSlots_o[schedule_o["date"] + "_id"] = schedule_o.id;
-        }
 
+            availableTimeSlots_o[schedule_o["date"] + "_duration"] = schedule_o.duration;
+        }
+        console.log('availableTimeSlots_o');
+        console.log(availableTimeSlots_o);
         setTimeSlots(availableTimeSlots_o);
     }
 
@@ -497,7 +500,7 @@ export default function StudentAccountPage({ student }) {
 
         setShowConfirmBookingModal(false);
 
-        const {timeSlot, scheduleId, date_s} = bookAppointmentParams;
+        const {timeSlot, scheduleId, date_s, duration} = bookAppointmentParams;
         
         handleClickDay(date_s);
 
@@ -510,6 +513,7 @@ export default function StudentAccountPage({ student }) {
             member_id: student.id,
             start: startDateTime_s,
             end: endDateTime_s,
+            duration: duration
         };
 
         await fetch("https://korkort24.com/api/bookings/", {
@@ -980,12 +984,14 @@ export default function StudentAccountPage({ student }) {
                                                                         const startDateTime_s = date_s + 'T' + timeSlot_s + ':00';
                                                                         setChosenAvailableTime({
                                                                             from: startDateTime_s,
-                                                                            to: addMinutesToLocalTime(startDateTime_s, 60)
+                                                                            to: addMinutesToLocalTime(startDateTime_s, 60),
+                                                                            duration: timeSlots[date_s + "_duration"]
                                                                         });
                                                                         setBookAppointmentParams({
                                                                             timeSlot: timeSlot_s,
                                                                             scheduleId: timeSlots[date_s + "_id"],
-                                                                            date_s: date_s
+                                                                            date_s: date_s,
+                                                                            duration: timeSlots[date_s + "_duration"]
                                                                         });
                                                                         setShowConfirmBookingModal(true);
                                                                     }
@@ -1112,10 +1118,8 @@ export default function StudentAccountPage({ student }) {
                             options,
                         )}{" "}
                     kl.{" "}
-                    {chosenAvailableTime &&
-                        chosenAvailableTime.from.substring(11, 16) +
-                        " - " +
-                        chosenAvailableTime.to.substring(11, 16)}
+                    {chosenAvailableTime && chosenAvailableTime.from.substring(11, 16)}
+                    {", " + chosenAvailableTime?.duration + " minuter."}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose}>
@@ -1142,10 +1146,8 @@ export default function StudentAccountPage({ student }) {
                             options,
                         )}{" "}
                     kl.{" "}
-                    {chosenAvailableTime &&
-                        chosenAvailableTime.from.substring(11, 16) +
-                        " - " +
-                        chosenAvailableTime.to.substring(11, 16)}
+                    {chosenAvailableTime && chosenAvailableTime.from.substring(11, 16)}
+                    {", " + chosenAvailableTime?.duration + " minuter."}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button

@@ -22,6 +22,7 @@ export default function AdminPage() {
   const [chosenDate, setChosenDate] = useState("");
   const [educationcards, setEducationcards] = useState([]);
   const [endTime, setEndTime] = useState("");
+  const [duration, setDuration] = useState("");
   const [events, setEvents] = useState([]);
   const [image, setImage] = useState({});
   const [members, setMembers] = useState([]);
@@ -68,6 +69,7 @@ export default function AdminPage() {
     const body_o = {
       date: chosenDate,
       timespan: startTime + "-" + endTime,
+      duration: parseInt(duration)
     };
 
     if (!isValidTimeInterval(body_o.timespan)) {
@@ -91,7 +93,7 @@ export default function AdminPage() {
 
     await response_o.json();
 
-    await loadSchedule(chosenDate);
+    handleClickDay(chosenDate);
   }
 
   async function addSection() {
@@ -260,6 +262,7 @@ export default function AdminPage() {
   }
 
   async function handleClickDay(date) {
+    
     let chosenDate_s = date;
 
     if (typeof date === "object") {
@@ -269,6 +272,7 @@ export default function AdminPage() {
 
       chosenDate_s = chosenDate_o.toISOString().substring(0, 10);
     }
+    console.log(chosenDate_s);
 
     setChosenDate(chosenDate_s);
 
@@ -635,6 +639,17 @@ export default function AdminPage() {
   }
 
   /**
+   * Validates and saves the current duration. Only numbers are allowed.
+   *
+   * @param {*} duration_s
+   */
+  function validateDuration(inputField_o) {
+    let duration_s = inputField_o.value;
+
+    setDuration(duration_s);
+  }
+
+  /**
    * Validates and saves the current end time. Only numbers are allowed. A colon is added automatically.
    *
    * @param {*} endTime_s
@@ -765,7 +780,7 @@ export default function AdminPage() {
 
         <Tab eventKey="bookings" title="Bokningar">
           <div className="p-2 mt-3 text-white" style={{overflowX: 'hidden', overflowY: 'scroll', maxHeight: '80vh'}}>
-          <Row>
+          <Row style={{marginBottom: '20px'}}>
             <Col>
               <Form.Control
                 id="start-time"
@@ -786,6 +801,17 @@ export default function AdminPage() {
                 spellCheck="false"
                 type="text"
                 value={endTime}
+              />
+            </Col>
+            <Col>
+              <Form.Control
+                id="duration"
+                onChange={(e) => validateDuration(e.target)}
+                placeholder="Längd (min)"
+                size="sm"
+                spellCheck="false"
+                type="text"
+                value={duration}
               />
             </Col>
             <Col>

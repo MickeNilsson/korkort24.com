@@ -9,26 +9,23 @@ use PHPMailer\PHPMailer\Exception;
 // header('Access-Control-Allow-Methods: POST');
 // header('Access-Control-Allow-Headers: Content-Type');
 // header('Content-Type: application/json; charset=utf-8');
-require 'PHPMailer.php';
-require 'SMTP.php';
-require 'Exception.php';
-require 'mail-settings.php';
 
-$mail_o = new PHPMailer(true);
-$mail_o->isSMTP();                                            //Send using SMTP
-$mail_o->Host     = $mailSettings_a['host'];                     //Set the SMTP server to send through
-$mail_o->SMTPAuth = true;                                   //Enable SMTP authentication
-$mail_o->Username = $mailSettings_a['username'];                     //SMTP username
-$mail_o->Password = $mailSettings_a['password'];                               //SMTP password
-$mail_o->Port     = $mailSettings_a['port'];                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
-$mail_o->CharSet  = $mailSettings_a['charset'];
-$mail_o->setFrom('noreply@korkort24.com', 'Körkort24');
-$mail_o->isHTML(true);                                  //Set email format to HTML
+
+// $mail_o = new PHPMailer(true);
+// $mail_o->isSMTP();                                            //Send using SMTP
+// $mail_o->Host     = $mailSettings_a['host'];                     //Set the SMTP server to send through
+// $mail_o->SMTPAuth = true;                                   //Enable SMTP authentication
+// $mail_o->Username = $mailSettings_a['username'];                     //SMTP username
+// $mail_o->Password = $mailSettings_a['password'];                               //SMTP password
+// $mail_o->Port     = $mailSettings_a['port'];                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+// $mail_o->CharSet  = $mailSettings_a['charset'];
+// $mail_o->setFrom('noreply@korkort24.com', 'Körkort24');
+// $mail_o->isHTML(true);                                  //Set email format to HTML
 
 //Create an instance; passing `true` enables exceptions
 //$mail_o = new PHPMailer(true);
 
-function send($email_s, $mailBody_s) {
+function send($mails_a) {
 
 
 
@@ -38,8 +35,26 @@ function send($email_s, $mailBody_s) {
     
 
     try {
+
+        require_once 'PHPMailer.php';
+        require_once 'SMTP.php';
+        require_once 'Exception.php';
+        require_once 'mail-settings.php';
         
-        global $mail_o;
+   
+
+        $mail_o = new PHPMailer(true);
+        $mail_o->isSMTP();                                            //Send using SMTP
+        $mail_o->Host     = $mailSettings_a['host'];                     //Set the SMTP server to send through
+        $mail_o->SMTPAuth = true;                                   //Enable SMTP authentication
+        $mail_o->Username = $mailSettings_a['username'];                     //SMTP username
+        $mail_o->Password = $mailSettings_a['password'];                               //SMTP password
+        $mail_o->Port     = $mailSettings_a['port'];                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+        $mail_o->CharSet  = $mailSettings_a['charset'];
+        $mail_o->setFrom('noreply@korkort24.com', 'Körkort24');
+        $mail_o->isHTML(true);    
+
+
         //Server settings
         //$mail_o->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
         
@@ -73,13 +88,24 @@ function send($email_s, $mailBody_s) {
     
         //Content
         
-        $mail_o->ClearAddresses();
-        $mail_o->addAddress($email_s);
+        
         $mail_o->Subject = 'Händelse på korkort24.com';
-        $mail_o->Body    = $mailBody_s;
+
+        
+        
         //$mail_o->AltBody = 'Meddelande: ' . $_POST['message'];
-    
-        $mail_o->send();
+
+
+        // Iterera dessa tre rader med t ex två olika e-postadresser:
+
+
+        foreach($mails_a as $mail_a) {
+            $mail_o->clearAddresses();
+            $mail_o->addAddress($mail_a['address']);
+            $mail_o->Body = $mail_a['message'];
+            $mail_o->send();
+        }
+        
 
     } catch (Exception $e) {
         $response_aa = [
