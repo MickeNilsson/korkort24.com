@@ -101,7 +101,7 @@ export default function StudentAccountPage({ student }) {
     }
 
     async function handleClickDay(date) {
-       
+     
         let chosenDate_s = date;
 
         if (typeof date === "object") {
@@ -135,6 +135,16 @@ export default function StudentAccountPage({ student }) {
         }
         console.log('availableTimeSlots_o');
         console.log(availableTimeSlots_o);
+
+
+        const currentDate_s = new Date().toISOString().split('T')[0];
+        if(availableTimeSlots_o[currentDate_s]) {
+            
+            const currentTime_i = parseInt((new Date().toISOString().split('T')[1]).substring(0, 2)) + 2;
+            const currentTime_s = (currentTime_i < 10 ? '0' + currentTime_i : currentTime_i) + ':00';
+            const tempTimeSlots_a = (availableTimeSlots_o[currentDate_s]).filter(ts => ts > currentTime_s);
+            availableTimeSlots_o[currentDate_s] = tempTimeSlots_a;
+        }
         setTimeSlots(availableTimeSlots_o);
     }
 
@@ -209,12 +219,14 @@ export default function StudentAccountPage({ student }) {
             await fetchQuiz();
             await fetchAvailableTimes();
             const today_o = new Date();
-            const currentDate_s = today_o.toISOString().split("T")[0];
+            //const currentDate_s = today_o.toISOString().split("T")[0];
             
-            await loadSchedule(currentDate_s);
+            //await loadSchedule(currentDate_s);
             setBookedAppointments(await loadAppointments({ member_id: student.id }));
             await loadEducationCard();
-            //handleClickDay(today_o.setHours(0, 0, 0, 0));
+            //const todayDate_s = today_o.setHours(0, 0, 0, 0);
+            //debugger;
+            handleClickDay(today_o);
 
             document.querySelector('#test-pdf').addEventListener('click', (e) => {
                 e.preventDefault();
@@ -259,13 +271,19 @@ export default function StudentAccountPage({ student }) {
         
         const dates_a = getDatesOfWeek(date_s);
 
-        setDatesOfWeek(getDatesOfWeek(date_s));
+        setDatesOfWeek(dates_a);
+
+        // Get today's date formatted exactly as "YYYY-MM-DD"
+        const todayStr = new Date().toISOString().split('T')[0]; 
+
+        // Filter strings directly
+        const upcomingDates = dates_a.filter(dateStr => dateStr >= todayStr);
 
         const response_o = await fetch(
             "https://korkort24.com/api/schedules/?fromDate=" +
-            dates_a[0] +
+            upcomingDates[0] +
             "&toDate=" +
-            dates_a[6],
+            upcomingDates[upcomingDates.length - 1],
         );
 
         if (response_o.status === 200) {
