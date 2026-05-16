@@ -200,6 +200,8 @@ export default function StudentAccountPage({ student }) {
 
     const [bookedAppointments, setBookedAppointments] = useState([]);
 
+    const minDate = new Date();
+
     // Fetch quiz when user has logged in to student account
     useEffect(() => {
         const init = async () => {
@@ -917,6 +919,7 @@ export default function StudentAccountPage({ student }) {
                         <h4>Boka coaching</h4>
 
                         <Calendar
+                            minDate={minDate}
                             onChange={onChange}
                             onClickDay={handleClickDay}
                             value={value}
