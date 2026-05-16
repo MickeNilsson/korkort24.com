@@ -111,7 +111,7 @@ export default function StudentAccountPage({ student }) {
 
             chosenDate_s = chosenDate_o.toISOString().substring(0, 10);
         }
-
+        
         const schedule_a = await loadSchedule(chosenDate_s);
 
         const availableTimeSlots_o = {};
@@ -210,10 +210,11 @@ export default function StudentAccountPage({ student }) {
             await fetchAvailableTimes();
             const today_o = new Date();
             const currentDate_s = today_o.toISOString().split("T")[0];
+            
             await loadSchedule(currentDate_s);
             setBookedAppointments(await loadAppointments({ member_id: student.id }));
             await loadEducationCard();
-            handleClickDay(today_o.setHours(0, 0, 0, 0));
+            //handleClickDay(today_o.setHours(0, 0, 0, 0));
 
             document.querySelector('#test-pdf').addEventListener('click', (e) => {
                 e.preventDefault();
@@ -255,6 +256,7 @@ export default function StudentAccountPage({ student }) {
     }
 
     async function loadSchedule(date_s) {
+        
         const dates_a = getDatesOfWeek(date_s);
 
         setDatesOfWeek(getDatesOfWeek(date_s));
