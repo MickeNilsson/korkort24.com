@@ -817,6 +817,7 @@ export default function StudentAccountPage({ student }) {
                                     <div style={{ marginTop: "10px" }}></div>
                                 )}
 
+                                <div style={{"height": "calc(100vh - 260px)", "overflow-y": "auto", "width": "100%"}}>
                                 <h4 className="text-white" style={{ display: "inline-block" }}>
                                     {activeQuiz.questions[activeQuestionIndex].name}
                                 </h4>
@@ -911,6 +912,7 @@ export default function StudentAccountPage({ student }) {
                                         Avsluta testet och visa resultatet
                                     </Button>
                                 )}
+                                </div>
                             </div>
                         </div>
                     )}
