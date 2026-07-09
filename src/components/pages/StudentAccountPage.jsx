@@ -1101,6 +1101,9 @@ export default function StudentAccountPage({ student }) {
                                         </div>
                                         {["D", "I", "S", "G", "👍", "👎"].map((state) => {
                                             const isFilled = entry_o?.state?.includes(state); // ✅ check if letter exists
+                                            if((state === "👍" || state === "👎") && !isFilled) {
+                                                return null;
+                                            }
                                             return (
                                                 <span
                                                     key={state}
