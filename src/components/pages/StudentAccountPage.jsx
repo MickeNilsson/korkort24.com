@@ -863,7 +863,6 @@ export default function StudentAccountPage({ student }) {
                                                     }
                                                     type="radio"
                                                     style={{
-                                                        cursor: "pointer",
                                                         opacity: "1.0",
                                                         borderRadius: "5px",
                                                         backgroundColor:
