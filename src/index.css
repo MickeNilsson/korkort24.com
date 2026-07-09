@@ -194,9 +194,14 @@ body {
     cursor: pointer;
 }
 
+.answer {
+    width: fit-content;
+    padding-right: 5px;
+    padding-left: 30px;
+}
+
 .answer:hover {
-    background-color: rgb(101, 181, 218);
-    cursor: pointer;
+    background-color: rgb(80, 139, 167);
 }
 
 .forgot-pw {
