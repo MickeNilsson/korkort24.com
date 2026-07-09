@@ -79,8 +79,9 @@ body {
     background-color: green;
 }
 
-.page-link {
-    background-color: rgba(0, 0, 0, 0);
+span.page-link {
+    /* background-color: rgba(0, 0, 0, 0); */
+    font-weight: bold;
 }
 
 .question-image {
