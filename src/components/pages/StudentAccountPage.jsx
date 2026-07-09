@@ -100,6 +100,7 @@ export default function StudentAccountPage({ student }) {
     }
 
     async function handleClickDay(date) {
+        
         let chosenDate_s = date;
 
         if (typeof date === "object") {
@@ -544,6 +545,8 @@ export default function StudentAccountPage({ student }) {
         setShowConfirmationModal(true);
 
         setBookedAppointments(await loadAppointments({ member_id: student.id }));
+
+        handleClickDay(date_s);
     }
 
     function addMinutesToLocalTime(timestamp, minutesToAdd) {
