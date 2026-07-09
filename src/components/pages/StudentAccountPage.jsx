@@ -15,15 +15,14 @@ import PropTypes from "prop-types";
 
 // Här definierar du vad "student" ska innehålla
 StudentAccountPage.propTypes = {
-  student: PropTypes.shape({
-    firstname: PropTypes.string,
-    lastname: PropTypes.string,
-    id: PropTypes.number
-  }).isRequired,
+    student: PropTypes.shape({
+        firstname: PropTypes.string,
+        lastname: PropTypes.string,
+        id: PropTypes.number,
+    }).isRequired,
 };
 
 export default function StudentAccountPage({ student }) {
-    
     async function loadEducationCard() {
         const response_o = await fetch(
             "https://korkort24.com/api/educationcards/?member_id=" + student.id,
@@ -81,12 +80,12 @@ export default function StudentAccountPage({ student }) {
     async function forceDownload(url, filename) {
         try {
             const response = await fetch(url);
-            if (!response.ok) throw new Error('Nätverksfel');
+            if (!response.ok) throw new Error("Nätverksfel");
 
             const blob = await response.blob();
             const blobUrl = window.URL.createObjectURL(blob);
 
-            const link = document.createElement('a');
+            const link = document.createElement("a");
             link.href = blobUrl;
             link.download = filename;
             document.body.appendChild(link);
@@ -101,7 +100,6 @@ export default function StudentAccountPage({ student }) {
     }
 
     async function handleClickDay(date) {
-     
         let chosenDate_s = date;
 
         if (typeof date === "object") {
@@ -111,7 +109,7 @@ export default function StudentAccountPage({ student }) {
 
             chosenDate_s = chosenDate_o.toISOString().substring(0, 10);
         }
-        
+
         const schedule_a = await loadSchedule(chosenDate_s);
 
         const availableTimeSlots_o = {};
@@ -131,18 +129,21 @@ export default function StudentAccountPage({ student }) {
 
             availableTimeSlots_o[schedule_o["date"] + "_id"] = schedule_o.id;
 
-            availableTimeSlots_o[schedule_o["date"] + "_duration"] = schedule_o.duration;
+            availableTimeSlots_o[schedule_o["date"] + "_duration"] =
+                schedule_o.duration;
         }
-        console.log('availableTimeSlots_o');
+        console.log("availableTimeSlots_o");
         console.log(availableTimeSlots_o);
 
-
-        const currentDate_s = new Date().toISOString().split('T')[0];
-        if(availableTimeSlots_o[currentDate_s]) {
-            
-            const currentTime_i = parseInt((new Date().toISOString().split('T')[1]).substring(0, 2)) + 2;
-            const currentTime_s = (currentTime_i < 10 ? '0' + currentTime_i : currentTime_i) + ':00';
-            const tempTimeSlots_a = (availableTimeSlots_o[currentDate_s]).filter(ts => ts > currentTime_s);
+        const currentDate_s = new Date().toISOString().split("T")[0];
+        if (availableTimeSlots_o[currentDate_s]) {
+            const currentTime_i =
+                parseInt(new Date().toISOString().split("T")[1].substring(0, 2)) + 2;
+            const currentTime_s =
+                (currentTime_i < 10 ? "0" + currentTime_i : currentTime_i) + ":00";
+            const tempTimeSlots_a = availableTimeSlots_o[currentDate_s].filter(
+                (ts) => ts > currentTime_s,
+            );
             availableTimeSlots_o[currentDate_s] = tempTimeSlots_a;
         }
         setTimeSlots(availableTimeSlots_o);
@@ -220,7 +221,7 @@ export default function StudentAccountPage({ student }) {
             await fetchAvailableTimes();
             const today_o = new Date();
             //const currentDate_s = today_o.toISOString().split("T")[0];
-            
+
             //await loadSchedule(currentDate_s);
             setBookedAppointments(await loadAppointments({ member_id: student.id }));
             await loadEducationCard();
@@ -228,9 +229,9 @@ export default function StudentAccountPage({ student }) {
             //debugger;
             handleClickDay(today_o);
 
-            document.querySelector('#test-pdf').addEventListener('click', (e) => {
+            document.querySelector("#test-pdf").addEventListener("click", (e) => {
                 e.preventDefault();
-                forceDownload(e.target.href, 'https://korkort24.com/docs/test.pdf');
+                forceDownload(e.target.href, "https://korkort24.com/docs/test.pdf");
             });
         };
 
@@ -248,7 +249,6 @@ export default function StudentAccountPage({ student }) {
         );
 
         if (response_o.status === 200) {
-
             const responseBody_o = await response_o.json();
 
             let appointments_a = responseBody_o.data;
@@ -257,9 +257,11 @@ export default function StudentAccountPage({ student }) {
 
             const offset = nu.getTimezoneOffset() * 60000; // MS-skillnad till UTC
 
-            const lokalTid = new Date(nu - offset).toISOString().split('.')[0];
+            const lokalTid = new Date(nu - offset).toISOString().split(".")[0];
 
-            appointments_a = appointments_a.filter(appointment_o => appointment_o.start > lokalTid);
+            appointments_a = appointments_a.filter(
+                (appointment_o) => appointment_o.start > lokalTid,
+            );
 
             return appointments_a;
         }
@@ -268,16 +270,15 @@ export default function StudentAccountPage({ student }) {
     }
 
     async function loadSchedule(date_s) {
-        
         const dates_a = getDatesOfWeek(date_s);
 
         setDatesOfWeek(dates_a);
 
         // Get today's date formatted exactly as "YYYY-MM-DD"
-        const todayStr = new Date().toISOString().split('T')[0]; 
+        const todayStr = new Date().toISOString().split("T")[0];
 
         // Filter strings directly
-        const upcomingDates = dates_a.filter(dateStr => dateStr >= todayStr);
+        const upcomingDates = dates_a.filter((dateStr) => dateStr >= todayStr);
 
         const response_o = await fetch(
             "https://korkort24.com/api/schedules/?fromDate=" +
@@ -322,7 +323,6 @@ export default function StudentAccountPage({ student }) {
     }
 
     async function fetchAvailableTimes() {
-
         const response = await fetch("https://korkort24.com/api/times/");
 
         let availTimes = await response.json();
@@ -409,7 +409,6 @@ export default function StudentAccountPage({ student }) {
                 const chosenQuiz_o = quiz.find((quiz_o) => quiz_o.id === quizId_s);
                 setActiveQuiz(chosenQuiz_o);
             }
-                
         }
     }
 
@@ -448,7 +447,6 @@ export default function StudentAccountPage({ student }) {
     }
 
     function userPickedAnswer() {
-
         const questionId_s = activeQuiz.questions[activeQuestionIndex].id;
 
         paginationItems[questionId_s] = "rgba(0,0,0,0)";
@@ -459,7 +457,6 @@ export default function StudentAccountPage({ student }) {
     }
 
     function handleChange(questionId_s, answer_s) {
-
         chosenAnswers[questionId_s] = answer_s;
 
         setChosenAnswers(chosenAnswers);
@@ -510,20 +507,18 @@ export default function StudentAccountPage({ student }) {
     }
 
     async function showInfo() {
-
         const response_o = await fetch("https://korkort24.com/api/info/");
 
         const responseBody_o = await response_o.json();
 
-        setInfo(responseBody_o[0]);        
+        setInfo(responseBody_o[0]);
     }
 
     async function bookAppointment() {
-
         setShowConfirmBookingModal(false);
 
-        const {timeSlot, scheduleId, date_s, duration} = bookAppointmentParams;
-        
+        const { timeSlot, scheduleId, date_s, duration } = bookAppointmentParams;
+
         handleClickDay(date_s);
 
         const startDateTime_s = date_s + "T" + timeSlot + ":00";
@@ -535,7 +530,7 @@ export default function StudentAccountPage({ student }) {
             member_id: student.id,
             start: startDateTime_s,
             end: endDateTime_s,
-            duration: duration
+            duration: duration,
         };
 
         await fetch("https://korkort24.com/api/bookings/", {
@@ -737,7 +732,6 @@ export default function StudentAccountPage({ student }) {
                                         {timer}
                                     </span>
                                 )}
-
                             </div>
                         </div>
                     )}
@@ -817,101 +811,111 @@ export default function StudentAccountPage({ student }) {
                                     <div style={{ marginTop: "10px" }}></div>
                                 )}
 
-                                <div style={{"height": "calc(100vh - 260px)", "overflow-y": "auto", "width": "100%"}}>
-                                <h4 className="text-white" style={{ display: "inline-block" }}>
-                                    {activeQuiz.questions[activeQuestionIndex].name}
-                                </h4>
-
-                                {activeQuiz.questions[activeQuestionIndex].image && (
-                                    <Image
-                                        style={{
-                                            maxWidth: "100%",
-                                            marginBottom: "10px",
-                                            marginTop: "10px",
-                                            display: "block",
-                                        }}
-                                        src={
-                                            "https://korkort24.com/api/quizimages/" +
-                                            activeQuiz.questions[activeQuestionIndex].image
-                                        }
-                                        rounded
-                                    />
-                                )}
-
-                                {activeQuiz.questions[activeQuestionIndex].answers.map(
-                                    (answer_o, index) => {
-                                        const questionId_s =
-                                            activeQuiz.questions[activeQuestionIndex].id;
-
-                                        return (
-                                            <Form.Check
-                                                disabled={revealAnswer}
-                                                key={questionId_s + index}
-                                                id={questionId_s + index}
-                                                name="answer"
-                                                onClick={() => console.log("asdf")}
-                                                onChange={() => {
-                                                    userPickedAnswer();
-                                                    handleChange(questionId_s, answer_o);
-                                                }}
-                                                defaultChecked={
-                                                    chosenAnswers[questionId_s] === answer_o
-                                                }
-                                                type="radio"
-                                                style={{
-                                                    opacity: "1.0",
-                                                    borderRadius: "5px",
-                                                    backgroundColor:
-                                                        (chosenAnswers[questionId_s] === answer_o &&
-                                                            paginationItems[questionId_s]) ||
-                                                        "",
-                                                }}
-                                                className="text-white answer"
-                                                label={answer_o.name}
-                                            />
-                                        );
-                                    },
-                                )}
-
-                                {revealAnswer && (
-                                    <div className="text-white fs-3 mt-3">
-                                        {score} rätt{score > 1 ? "a" : ""} svar av{" "}
-                                        {activeQuiz.questions.length}{" "}
-                                        {quizType === "timed" ? (
-                                            score > 51 ? (
-                                                <span className="text-success"></span>
-                                            ) : (
-                                                <span className="text-danger"></span>
-                                            )
-                                        ) : (
-                                            ""
-                                        )}{" "}
-                                        <Button
-                                            onClick={() => {
-                                                setRevealAnswer(false);
-                                                setQuizType("");
-                                                setChosenAnswers([]);
-                                                setPaginationItems([]);
-                                                setActiveQuestionIndex(0);
-                                            }}
-                                            className="float-end"
-                                            size="sm"
-                                            variant="primary"
-                                        >
-                                            Stäng
-                                        </Button>
-                                    </div>
-                                )}
-
-                                {!revealAnswer && (
-                                    <Button
-                                        className="mt-3"
-                                        variant="primary"
-                                        onClick={correctTest}
+                                <div
+                                    style={{
+                                        height: "calc(100vh - 260px)",
+                                        "overflow-y": "auto",
+                                        width: "100%",
+                                    }}
+                                >
+                                    <h4
+                                        className="text-white"
+                                        style={{ display: "inline-block" }}
                                     >
-                                        Avsluta testet och visa resultatet
-                                    </Button>
-                                )}
+                                        {activeQuiz.questions[activeQuestionIndex].name}
+                                    </h4>
+
+                                    {activeQuiz.questions[activeQuestionIndex].image && (
+                                        <Image
+                                            style={{
+                                                maxWidth: "100%",
+                                                marginBottom: "10px",
+                                                marginTop: "10px",
+                                                display: "block",
+                                            }}
+                                            src={
+                                                "https://korkort24.com/api/quizimages/" +
+                                                activeQuiz.questions[activeQuestionIndex].image
+                                            }
+                                            rounded
+                                        />
+                                    )}
+
+                                    {activeQuiz.questions[activeQuestionIndex].answers.map(
+                                        (answer_o, index) => {
+                                            const questionId_s =
+                                                activeQuiz.questions[activeQuestionIndex].id;
+
+                                            return (
+                                                <Form.Check
+                                                    disabled={revealAnswer}
+                                                    key={questionId_s + index}
+                                                    id={questionId_s + index}
+                                                    name="answer"
+                                                    onClick={() => console.log("asdf")}
+                                                    onChange={() => {
+                                                        userPickedAnswer();
+                                                        handleChange(questionId_s, answer_o);
+                                                    }}
+                                                    defaultChecked={
+                                                        chosenAnswers[questionId_s] === answer_o
+                                                    }
+                                                    type="radio"
+                                                    style={{
+                                                        cursor: "pointer",
+                                                        opacity: "1.0",
+                                                        borderRadius: "5px",
+                                                        backgroundColor:
+                                                            (chosenAnswers[questionId_s] === answer_o &&
+                                                                paginationItems[questionId_s]) ||
+                                                            "",
+                                                    }}
+                                                    className="text-white answer"
+                                                    label={answer_o.name}
+                                                />
+                                            );
+                                        },
+                                    )}
+
+                                    {revealAnswer && (
+                                        <div className="text-white fs-3 mt-3">
+                                            {score} rätt{score > 1 ? "a" : ""} svar av{" "}
+                                            {activeQuiz.questions.length}{" "}
+                                            {quizType === "timed" ? (
+                                                score > 51 ? (
+                                                    <span className="text-success"></span>
+                                                ) : (
+                                                    <span className="text-danger"></span>
+                                                )
+                                            ) : (
+                                                ""
+                                            )}{" "}
+                                            <Button
+                                                onClick={() => {
+                                                    setRevealAnswer(false);
+                                                    setQuizType("");
+                                                    setChosenAnswers([]);
+                                                    setPaginationItems([]);
+                                                    setActiveQuestionIndex(0);
+                                                }}
+                                                className="float-end"
+                                                size="sm"
+                                                variant="primary"
+                                            >
+                                                Stäng
+                                            </Button>
+                                        </div>
+                                    )}
+
+                                    {!revealAnswer && (
+                                        <Button
+                                            className="mt-3"
+                                            variant="primary"
+                                            onClick={correctTest}
+                                        >
+                                            Avsluta testet och visa resultatet
+                                        </Button>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -923,6 +927,7 @@ export default function StudentAccountPage({ student }) {
                         id="select-info"
                         onChange={(e) => showInfo(e.target)}
                         size="sm"
+                        style={{cursor: "pointer"}}
                     >
                         <option>Välj en text</option>
                         <option>B-Körkort</option>
@@ -951,8 +956,8 @@ export default function StudentAccountPage({ student }) {
                         />
 
                         <table style={{ border: "1px solid" }}>
-                            <thead style={{borderBottom: "1px solid"}}>
-                                <tr style={{backgroundColor: "white", color: "black"}}>
+                            <thead style={{ borderBottom: "1px solid" }}>
+                                <tr style={{ backgroundColor: "white", color: "black" }}>
                                     {/* Ändrat till .length > 0 för att undvika att siffran renderas */}
                                     {datesOfWeek &&
                                         datesOfWeek.length > 0 &&
@@ -964,7 +969,7 @@ export default function StudentAccountPage({ student }) {
                                                         textAlign: "center",
                                                         width: "50px",
                                                         borderLeft: "1px solid",
-                                                        borderRight: "1px solid"
+                                                        borderRight: "1px solid",
                                                     }}
                                                 >
                                                     {WEEKDAYS[index_i]}
@@ -973,7 +978,7 @@ export default function StudentAccountPage({ student }) {
                                         })}
                                 </tr>
 
-                                <tr style={{backgroundColor: "black"}}>
+                                <tr style={{ backgroundColor: "black" }}>
                                     {datesOfWeek &&
                                         datesOfWeek.length > 0 &&
                                         datesOfWeek.map((date_s) => {
@@ -999,29 +1004,38 @@ export default function StudentAccountPage({ student }) {
                                         datesOfWeek.length > 0 &&
                                         datesOfWeek.map((date_s) => {
                                             return (
-                                                <td key={date_s} style={{ verticalAlign: "top", borderRight: "1px solid", textAlign: "center" }}>
+                                                <td
+                                                    key={date_s}
+                                                    style={{
+                                                        verticalAlign: "top",
+                                                        borderRight: "1px solid",
+                                                        textAlign: "center",
+                                                    }}
+                                                >
                                                     {
-                                                        timeSlots[date_s]
-                                                            ? timeSlots[date_s].map((timeSlot_s, index) => (
+                                                        timeSlots[date_s] ? (
+                                                            timeSlots[date_s].map((timeSlot_s, index) => (
                                                                 <span
                                                                     key={index}
                                                                     onClick={() => {
-                                                                        const startDateTime_s = date_s + 'T' + timeSlot_s + ':00';
+                                                                        const startDateTime_s =
+                                                                            date_s + "T" + timeSlot_s + ":00";
                                                                         setChosenAvailableTime({
                                                                             from: startDateTime_s,
-                                                                            to: addMinutesToLocalTime(startDateTime_s, 60),
-                                                                            duration: timeSlots[date_s + "_duration"]
+                                                                            to: addMinutesToLocalTime(
+                                                                                startDateTime_s,
+                                                                                60,
+                                                                            ),
+                                                                            duration: timeSlots[date_s + "_duration"],
                                                                         });
                                                                         setBookAppointmentParams({
                                                                             timeSlot: timeSlot_s,
                                                                             scheduleId: timeSlots[date_s + "_id"],
                                                                             date_s: date_s,
-                                                                            duration: timeSlots[date_s + "_duration"]
+                                                                            duration: timeSlots[date_s + "_duration"],
                                                                         });
                                                                         setShowConfirmBookingModal(true);
-                                                                    }
-                                                                        
-                                                                    }
+                                                                    }}
                                                                     className="schedule-date"
                                                                     style={{
                                                                         float: "left",
@@ -1038,7 +1052,9 @@ export default function StudentAccountPage({ student }) {
                                                                     <br />
                                                                 </span>
                                                             ))
-                                                            : <span>Inga lediga tider</span> /* Ändrat från '' till null */
+                                                        ) : (
+                                                            <span>Inga lediga tider</span>
+                                                        ) /* Ändrat från '' till null */
                                                     }
                                                 </td>
                                             );
@@ -1053,14 +1069,21 @@ export default function StudentAccountPage({ student }) {
                     <div className="p-2 mt-3 text-white">
                         <h4>Nedladdningar</h4>
 
-                        <a id="test-pdf" href="https://korkort24.com/docs/test.pdf" download="test.pdf">
+                        <a
+                            id="test-pdf"
+                            href="https://korkort24.com/docs/test.pdf"
+                            download="test.pdf"
+                        >
                             test.pdf
                         </a>
                     </div>
                 </Tab>
 
                 <Tab eventKey="educationcard" title="Utbildningskort">
-                    <div className="p-2 mt-3 text-white" style={{overflowY: 'scroll', maxHeight: '80vh'}}>
+                    <div
+                        className="p-2 mt-3 text-white"
+                        style={{ overflowY: "scroll", maxHeight: "80vh" }}
+                    >
                         <h4 className="mb-3">Utbildningskort</h4>
                         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(
                             (moment) => {
@@ -1101,7 +1124,7 @@ export default function StudentAccountPage({ student }) {
                                         </div>
                                         {["D", "I", "S", "G", "👍", "👎"].map((state) => {
                                             const isFilled = entry_o?.state?.includes(state); // ✅ check if letter exists
-                                            if((state === "👍" || state === "👎") && !isFilled) {
+                                            if ((state === "👍" || state === "👎") && !isFilled) {
                                                 return null;
                                             }
                                             return (
@@ -1194,8 +1217,15 @@ export default function StudentAccountPage({ student }) {
                 <Modal.Body>
                     <p>Vill du verkligen avboka din bokning?</p>
 
-                    <p>Bokning: <strong>{bookedAppointments.find(appointment => appointment.id === cancelAppointmentId)?.start.substring(0, 16).replace('T', ' ')}</strong></p>
-                    
+                    <p>
+                        Bokning:{" "}
+                        <strong>
+                            {bookedAppointments
+                                .find((appointment) => appointment.id === cancelAppointmentId)
+                                ?.start.substring(0, 16)
+                                .replace("T", " ")}
+                        </strong>
+                    </p>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowCancelModal(false)}>
