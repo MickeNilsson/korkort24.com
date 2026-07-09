@@ -190,8 +190,13 @@ body {
     opacity: 1 !important;
 }
 
+.form-check-label:hover, .form-check-input:hover {
+    cursor: pointer;
+}
+
 .answer:hover {
     background-color: rgb(101, 181, 218);
+    cursor: pointer;
 }
 
 .forgot-pw {

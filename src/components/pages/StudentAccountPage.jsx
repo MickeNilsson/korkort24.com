@@ -815,7 +815,7 @@ export default function StudentAccountPage({ student }) {
                                 <div
                                     style={{
                                         height: "calc(100vh - 260px)",
-                                        "overflow-y": "auto",
+                                        overflowY: "auto",
                                         width: "100%",
                                     }}
                                 >
