@@ -695,6 +695,7 @@ export default function StudentAccountPage({ student }) {
                         className="mb-2"
                         onChange={(e) => showQuiz(e.target)}
                         size="sm"
+                        style={{cursor: "pointer"}}
                     >
                         <option data-quiz-id="0">Välj ett frågeformulär</option>
                         {quiz.map((quiz_o) => (
