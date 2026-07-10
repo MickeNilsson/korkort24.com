@@ -507,7 +507,13 @@ export default function StudentAccountPage({ student }) {
         return array.slice(0, numberOfElements);
     }
 
-    async function showInfo() {
+    async function showInfo(option_o) {
+
+        if(option_o.value === "0") {
+            setInfo('');
+            return;
+        }
+
         const response_o = await fetch("https://korkort24.com/api/info/");
 
         const responseBody_o = await response_o.json();
@@ -932,8 +938,8 @@ export default function StudentAccountPage({ student }) {
                         size="sm"
                         style={{cursor: "pointer"}}
                     >
-                        <option>Välj en text</option>
-                        <option>B-Körkort</option>
+                        <option value="0">Välj en text</option>
+                        <option value="1">B-Körkort</option>
                     </Form.Select>
 
                     {info.text && (
