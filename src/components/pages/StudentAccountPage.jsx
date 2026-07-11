@@ -100,7 +100,7 @@ export default function StudentAccountPage({ student }) {
     }
 
     async function handleClickDay(date) {
-        
+
         let chosenDate_s = date;
 
         if (typeof date === "object") {
@@ -509,7 +509,7 @@ export default function StudentAccountPage({ student }) {
 
     async function showInfo(option_o) {
 
-        if(option_o.value === "0") {
+        if (option_o.value === "0") {
             setInfo('');
             return;
         }
@@ -704,7 +704,7 @@ export default function StudentAccountPage({ student }) {
                         className="mb-2"
                         onChange={(e) => showQuiz(e.target)}
                         size="sm"
-                        style={{cursor: "pointer"}}
+                        style={{ cursor: "pointer" }}
                     >
                         <option data-quiz-id="0">Välj ett frågeformulär</option>
                         {quiz.map((quiz_o) => (
@@ -936,7 +936,7 @@ export default function StudentAccountPage({ student }) {
                         id="select-info"
                         onChange={(e) => showInfo(e.target)}
                         size="sm"
-                        style={{cursor: "pointer"}}
+                        style={{ cursor: "pointer" }}
                     >
                         <option value="0">Välj en text</option>
                         <option value="1">B-Körkort</option>
@@ -954,123 +954,129 @@ export default function StudentAccountPage({ student }) {
                     <div className="p-2 mt-3 text-white">
                         <h4>Boka coaching</h4>
 
-                        <Calendar
-                            minDate={minDate}
-                            onChange={onChange}
-                            onClickDay={handleClickDay}
-                            value={value}
-                            tileClassName={({ date, view }) =>
-                                view === "month" && isEventDate(date) ? "highlight" : null
-                            }
-                        />
+                        <div style={{
+                            height: "calc(100vh - 260px)",
+                            overflowY: "auto",
+                            width: "100%",
+                        }}>
+                            <Calendar
+                                minDate={minDate}
+                                onChange={onChange}
+                                onClickDay={handleClickDay}
+                                value={value}
+                                tileClassName={({ date, view }) =>
+                                    view === "month" && isEventDate(date) ? "highlight" : null
+                                }
+                            />
 
-                        <table style={{ border: "1px solid" }}>
-                            <thead style={{ borderBottom: "1px solid" }}>
-                                <tr style={{ backgroundColor: "white", color: "black" }}>
-                                    {/* Ändrat till .length > 0 för att undvika att siffran renderas */}
-                                    {datesOfWeek &&
-                                        datesOfWeek.length > 0 &&
-                                        datesOfWeek.map((date_s, index_i) => {
-                                            return (
-                                                <th
-                                                    key={date_s}
-                                                    style={{
-                                                        textAlign: "center",
-                                                        width: "50px",
-                                                        borderLeft: "1px solid",
-                                                        borderRight: "1px solid",
-                                                    }}
-                                                >
-                                                    {WEEKDAYS[index_i]}
-                                                </th>
-                                            );
-                                        })}
-                                </tr>
+                            <table style={{ border: "1px solid" }}>
+                                <thead style={{ borderBottom: "1px solid" }}>
+                                    <tr style={{ backgroundColor: "white", color: "black" }}>
+                                        {/* Ändrat till .length > 0 för att undvika att siffran renderas */}
+                                        {datesOfWeek &&
+                                            datesOfWeek.length > 0 &&
+                                            datesOfWeek.map((date_s, index_i) => {
+                                                return (
+                                                    <th
+                                                        key={date_s}
+                                                        style={{
+                                                            textAlign: "center",
+                                                            width: "50px",
+                                                            borderLeft: "1px solid",
+                                                            borderRight: "1px solid",
+                                                        }}
+                                                    >
+                                                        {WEEKDAYS[index_i]}
+                                                    </th>
+                                                );
+                                            })}
+                                    </tr>
 
-                                <tr style={{ backgroundColor: "black" }}>
-                                    {datesOfWeek &&
-                                        datesOfWeek.length > 0 &&
-                                        datesOfWeek.map((date_s) => {
-                                            return (
-                                                <th
-                                                    key={date_s}
-                                                    style={{
-                                                        textAlign: "center",
-                                                        borderLeft: "1px solid",
-                                                        borderRight: "1px solid",
-                                                    }}
-                                                >
-                                                    {date_s.substring(8)}
-                                                </th>
-                                            );
-                                        })}
-                                </tr>
-                            </thead>
+                                    <tr style={{ backgroundColor: "black" }}>
+                                        {datesOfWeek &&
+                                            datesOfWeek.length > 0 &&
+                                            datesOfWeek.map((date_s) => {
+                                                return (
+                                                    <th
+                                                        key={date_s}
+                                                        style={{
+                                                            textAlign: "center",
+                                                            borderLeft: "1px solid",
+                                                            borderRight: "1px solid",
+                                                        }}
+                                                    >
+                                                        {date_s.substring(8)}
+                                                    </th>
+                                                );
+                                            })}
+                                    </tr>
+                                </thead>
 
-                            <tbody>
-                                <tr>
-                                    {datesOfWeek &&
-                                        datesOfWeek.length > 0 &&
-                                        datesOfWeek.map((date_s) => {
-                                            return (
-                                                <td
-                                                    key={date_s}
-                                                    style={{
-                                                        verticalAlign: "top",
-                                                        borderRight: "1px solid",
-                                                        textAlign: "center",
-                                                    }}
-                                                >
-                                                    {
-                                                        timeSlots[date_s] ? (
-                                                            timeSlots[date_s].map((timeSlot_s, index) => (
-                                                                <span
-                                                                    key={index}
-                                                                    onClick={() => {
-                                                                        const startDateTime_s =
-                                                                            date_s + "T" + timeSlot_s + ":00";
-                                                                        setChosenAvailableTime({
-                                                                            from: startDateTime_s,
-                                                                            to: addMinutesToLocalTime(
-                                                                                startDateTime_s,
-                                                                                60,
-                                                                            ),
-                                                                            duration: timeSlots[date_s + "_duration"],
-                                                                        });
-                                                                        setBookAppointmentParams({
-                                                                            timeSlot: timeSlot_s,
-                                                                            scheduleId: timeSlots[date_s + "_id"],
-                                                                            date_s: date_s,
-                                                                            duration: timeSlots[date_s + "_duration"],
-                                                                        });
-                                                                        setShowConfirmBookingModal(true);
-                                                                    }}
-                                                                    className="schedule-date"
-                                                                    style={{
-                                                                        float: "left",
-                                                                        cursor: "pointer",
-                                                                        marginBottom: "5px",
-                                                                        color: "black",
-                                                                        backgroundColor: "white",
-                                                                        padding: "3px",
-                                                                        border: "2px solid black",
-                                                                        borderRadius: "5px",
-                                                                    }}
-                                                                >
-                                                                    {timeSlot_s}
-                                                                    <br />
-                                                                </span>
-                                                            ))
-                                                        ) : (
-                                                            <span>Inga lediga tider</span>
-                                                        ) /* Ändrat från '' till null */
-                                                    }
-                                                </td>
-                                            );
-                                        })}
-                                </tr>
-                            </tbody>
-                        </table>
+                                <tbody>
+                                    <tr>
+                                        {datesOfWeek &&
+                                            datesOfWeek.length > 0 &&
+                                            datesOfWeek.map((date_s) => {
+                                                return (
+                                                    <td
+                                                        key={date_s}
+                                                        style={{
+                                                            verticalAlign: "top",
+                                                            borderRight: "1px solid",
+                                                            textAlign: "center",
+                                                        }}
+                                                    >
+                                                        {
+                                                            timeSlots[date_s] ? (
+                                                                timeSlots[date_s].map((timeSlot_s, index) => (
+                                                                    <span
+                                                                        key={index}
+                                                                        onClick={() => {
+                                                                            const startDateTime_s =
+                                                                                date_s + "T" + timeSlot_s + ":00";
+                                                                            setChosenAvailableTime({
+                                                                                from: startDateTime_s,
+                                                                                to: addMinutesToLocalTime(
+                                                                                    startDateTime_s,
+                                                                                    60,
+                                                                                ),
+                                                                                duration: timeSlots[date_s + "_duration"],
+                                                                            });
+                                                                            setBookAppointmentParams({
+                                                                                timeSlot: timeSlot_s,
+                                                                                scheduleId: timeSlots[date_s + "_id"],
+                                                                                date_s: date_s,
+                                                                                duration: timeSlots[date_s + "_duration"],
+                                                                            });
+                                                                            setShowConfirmBookingModal(true);
+                                                                        }}
+                                                                        className="schedule-date"
+                                                                        style={{
+                                                                            float: "left",
+                                                                            cursor: "pointer",
+                                                                            marginBottom: "5px",
+                                                                            color: "black",
+                                                                            backgroundColor: "white",
+                                                                            padding: "3px",
+                                                                            border: "2px solid black",
+                                                                            borderRadius: "5px",
+                                                                        }}
+                                                                    >
+                                                                        {timeSlot_s}
+                                                                        <br />
+                                                                    </span>
+                                                                ))
+                                                            ) : (
+                                                                <span>Inga lediga tider</span>
+                                                            ) /* Ändrat från '' till null */
+                                                        }
+                                                    </td>
+                                                );
+                                            })}
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </Tab>
 
