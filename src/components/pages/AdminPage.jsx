@@ -7,6 +7,7 @@ import {
     Modal,
     Row,
     Tab,
+    Table,
     Tabs,
 } from "react-bootstrap";
 import { useEffect, useRef, useState } from "react";
@@ -45,12 +46,25 @@ export default function AdminPage() {
 
     const hasInitialized = useRef(false);
 
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+    const [filterOnMember, setFilterOnMember] = useState("0");
+    const [bookings, setBookings] = useState([]);
+
+    const options = {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    };
+
     useEffect(() => {
         if (!hasInitialized.value) {
             (async () => {
                 hasInitialized.value = true;
                 const today_o = new Date();
                 const currentDate_s = today_o.toISOString().split("T")[0];
+                setStartDate(currentDate_s);
                 setChosenDate(currentDate_s);
 
                 await loadAvailableTimes();
@@ -459,7 +473,8 @@ export default function AdminPage() {
             "https://korkort24.com/api/members/?fields=firstname,lastname",
         );
         const responseBody_o = await response_o.json();
-        setMembers(responseBody_o.data);
+        const members_a = responseBody_o.data.slice(1);
+        setMembers(members_a);
     }
 
     async function loadJsonQuiz() {
@@ -678,6 +693,77 @@ export default function AdminPage() {
         setStartTime(startTime_s);
     }
 
+    function validateStartDate(startDate_s) {
+        console.log('startDate_s: ' + startDate_s);
+        setStartDate(startDate_s);
+        // startTime_s = startTime_s.replace(/[^0-9]/g, "");
+
+        // if (startTime_s.length > 2) {
+        //     startTime_s =
+        //         startTime_s.substring(0, 2) + ":" + startTime_s.substring(2, 4);
+        // }
+
+        // setStartTime(startTime_s);
+    }
+
+    function validateEndDate(endDate_s) {
+        console.log('endDate_s: ' + endDate_s);
+        setEndDate(endDate_s);
+        // startTime_s = startTime_s.replace(/[^0-9]/g, "");
+
+        // if (startTime_s.length > 2) {
+        //     startTime_s =
+        //         startTime_s.substring(0, 2) + ":" + startTime_s.substring(2, 4);
+        // }
+
+        // setStartTime(startTime_s);
+    }
+
+    async function searchBookings() {
+        console.log('start date: ' + startDate + ' end date: ' + endDate + ' medlem: ' + filterOnMember);
+
+        let queryParams_s = '';
+
+        if (startDate) {
+
+            queryParams_s += (queryParams_s === '' ? '?' : '&') + 'start=' + startDate + 'T00:00:01';
+        }
+
+        if (endDate) {
+
+            queryParams_s += (queryParams_s === '' ? '?' : '&') + 'end=' + endDate + 'T23:59:59';
+        }
+
+        if (filterOnMember && filterOnMember !== "0") {
+
+            queryParams_s += (queryParams_s === '' ? '?' : '&') + 'member_id=' + filterOnMember;
+        }
+
+        console.log('queryParams_s: ' + queryParams_s);
+
+        const url_s = 'https://korkort24.com/api/bookings/' + queryParams_s;
+
+        const response_o = await fetch(url_s);
+
+        if (response_o.status === 200) {
+
+            const responseBody_o = await response_o.json();
+
+            const bookings_a = responseBody_o.data;
+
+            console.log('bookings_a: ' + bookings_a);
+
+            setBookings(bookings_a);
+        }
+    }
+
+
+
+    function validateMember(memberId_s) {
+        console.log(memberId_s);
+        setFilterOnMember(memberId_s);
+    }
+
     return (
         <div className="pb-5">
             <h1 className="page-header">Admin Page</h1>
@@ -788,7 +874,61 @@ export default function AdminPage() {
                             maxHeight: "80vh",
                         }}
                     >
-                        <Row style={{ marginBottom: "20px" }}>
+                        <Row>
+                            <Col>
+                                <Form.Control
+                                    id="start-date"
+                                    onChange={(e) => validateStartDate(e.target.value)}
+                                    size="sm"
+                                    spellCheck="false"
+                                    type="date"
+                                    value={startDate}
+                                />
+                            </Col>
+                            <Col>
+                                <Form.Control
+                                    id="end-date"
+                                    onChange={(e) => validateEndDate(e.target.value)}
+                                    size="sm"
+                                    spellCheck="false"
+                                    type="date"
+                                    value={endDate}
+                                />
+                            </Col>
+                            <Col>
+                                <Form.Select aria-label="Default select example" size="sm" onChange={(e) => validateMember(e.target.value)}>
+                                    <option value="0">Alla elever</option>
+                                    {members.map(member => <option key={member.id} value={member.id}>{member.firstname}</option>)}
+                                </Form.Select>
+                            </Col>
+                            <Col>
+                                <Button onClick={searchBookings} size="sm" variant="primary">
+                                    Sök
+                                </Button>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                {bookings && !!bookings.length &&
+                                    <Table striped bordered hover style={{ marginBottom: 0, marginTop: "16px" }}>
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Namn</th>
+                                                <th>Tid</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {bookings.map(booking_o => <tr key={booking_o.id}><td>{booking_o.id}</td><td>{(members.find(member => member.id === booking_o.member_id)).firstname} {(members.find(member => member.id === booking_o.member_id)).lastname}</td><td>{new Date(booking_o.start).toLocaleDateString(
+                            "sv",
+                            options,
+                        )} kl. {booking_o.start.substring(11, 16)}</td></tr>)}
+                                        </tbody>
+                                    </Table>
+                                }
+                            </Col>
+                        </Row>
+                        <Row style={{ marginBottom: "20px", marginTop: "20px" }}>
                             <Col>
                                 <Form.Control
                                     id="start-time"

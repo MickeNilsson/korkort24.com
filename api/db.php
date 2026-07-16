@@ -134,7 +134,17 @@ class DB {
 
             foreach($params_a as $columnName_s => $value_s) {
 
-                array_push($whereClause_a, $table_s . '.' . $columnName_s . ' = ' . ':' .  $columnName_s);
+                $comparisonOperator_s = ' = ';
+
+                if(str_contains($columnName_s, 'start')) {
+                    $comparisonOperator_s = ' >= ';
+                }
+
+                if(str_contains($columnName_s, 'end')) {
+                    $comparisonOperator_s = ' <= ';
+                }
+
+                array_push($whereClause_a, $table_s . '.' . $columnName_s . $comparisonOperator_s . ':' .  $columnName_s);
             }
 
             $whereClause_s = implode(' AND ', $whereClause_a);
