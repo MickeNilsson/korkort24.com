@@ -65,6 +65,7 @@ export default function AdminPage() {
                 const today_o = new Date();
                 const currentDate_s = today_o.toISOString().split("T")[0];
                 setStartDate(currentDate_s);
+                setEndDate(addOneMonth(currentDate_s));
                 setChosenDate(currentDate_s);
 
                 await loadAvailableTimes();
@@ -76,6 +77,22 @@ export default function AdminPage() {
             })();
         }
     });
+
+    function addOneMonth(datumStrang) {
+  // 1. Skapa ett Date-objekt från strängen
+  const datum = new Date(datumStrang);
+
+  // 2. Hämta den aktuella månaden och lägg till 1
+  datum.setMonth(datum.getMonth() + 1);
+
+  // 3. Formatera tillbaka till YYYY-MM-DD
+  const ar = datum.getFullYear();
+  // padding med nolla om månaden/dagen är ensiffrig (t.ex. "05")
+  const manad = String(datum.getMonth() + 1).padStart(2, '0');
+  const dag = String(datum.getDate()).padStart(2, '0');
+
+  return `${ar}-${manad}-${dag}`;
+}
 
     async function addSchedule() {
         const body_o = {
